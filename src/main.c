@@ -2,52 +2,59 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void limparbuffer() {
-  int c;
-  while ((c = getchar()) != '\n' && c != EOF)
-    ;
-}
-
-void esperarTecla() {
-  puts("\nCarregue numa tecla para continuar ...");
-  getchar();
-}
-
-void menuAdministrador() {
+void menuAdministrador()
+{
   int opcao;
-  do {
+  do
+  {
     system("cls");
-    printf("======== MENU ADMINISTRADOR ========\n");
-    printf("1  - Adicionar ticket\n");
-    printf("1  - Listar todos os tickets\n");
-    printf("2  - Filtrar tickets por estado\n");
-    printf("3  - Filtrar tickets por prioridade\n");
-    printf("4  - Filtrar tickets por tipo\n");
-    printf("5  - Ordenar tickets por data\n");
-    printf("6  - Ordenar tickets por prioridade\n");
-    printf("7  - Ordenar tickets por tecnico\n");
-    printf("9  - Remover ticket\n");
-    printf("10 - Editar ticket\n");
-    printf("11 - Adicionar/Remover/Editar categorias\n");
-    printf("12 - Validar tecnicos pendentes\n");
-    printf("13 - Ver historico de um ticket\n");
-    printf("14 - Tempo medio de resolucao por tecnico\n");
-    printf("15 - Tempo medio de resolucao por categoria\n");
-    printf("16 - Gerar relatorio semanal/mensal\n");
-    printf("17 - Alertas de tickets fora do SLA\n");
-    printf("0  - Logout\n");
-    printf("====================================\n");
+    puts("======== MENU ADMINISTRADOR ========");
+    puts("1  - Adicionar ticket");
+    puts("2  - Listar todos os tickets");
+    puts("3  - Filtrar tickets por estado");
+    puts("4  - Filtrar tickets por prioridade");
+    puts("5  - Filtrar tickets por tipo");
+    puts("6  - Ordenar tickets por data");
+    puts("7  - Ordenar tickets por prioridade");
+    puts("8  - Ordenar tickets por tecnico");
+    puts("9  - Remover ticket");
+    puts("10 - Editar ticket");
+    puts("11 - Adicionar/Remover/Editar categorias");
+    puts("12 - Validar tecnicos pendentes");
+    puts("13 - Ver historico de um ticket");
+    puts("14 - Tempo medio de resolucao por tecnico");
+    puts("15 - Tempo medio de resolucao por categoria");
+    puts("16 - Gerar relatorio semanal/mensal");
+    puts("17 - Alertas de tickets fora do SLA");
+    puts("0  - Logout");
+    puts("====================================");
     printf("Opcao: ");
     scanf("%d", &opcao);
     limparbuffer();
 
-    switch (opcao) {
+    switch (opcao)
+    {
       // precisa de "{}" por causa da declaraçao da variavel
-    case 1: {
+    case 1:
+    {
       INFO_TICKET ticket;
+
       printf("**ADICIONAR TICKET**\n");
-      printf("Tipo (1-Hardware, 2-Software, 3-Rede, 4-Acesso, 5-Outro): ");
-      scanf("%d", &ticket.tipo);
+      do
+      {
+        printf("Tipo (1-Hardware, 2-Software, 3-Rede, 4-Acesso, 5-Outro): ");
+
+        if (scanf("%d", &ticket.tipo) != 1 || (ticket.tipo < TIPO_HARDWARE || ticket.tipo > TIPO_OUTRO)) // Se o retorno for diferente de 1 é porque não leu um inteiro.
+        {
+          puts("Tipo de TICKET não válido.");
+          limparbuffer();
+        }
+        else
+        {
+          break; // Input válido, sai do ciclo
+        }
+      } while (1);
+
       limparbuffer();
 
       printf("Descricao: ");
@@ -69,15 +76,20 @@ void menuAdministrador() {
       break;
     }
     case 2: /* editarTicket() */
+      editarTicket();
       break;
     case 3:
       listarTickets();
       esperarTecla();
       break;
     case 4:
-      verTicketPorID();
+      // verTicketPorID(); comentei devido ao erro dado
       esperarTecla();
     case 5: /* removerTicket() */
+      int idToRemove;
+      printf("Introduza o ticket que deseja remover: ");
+      scanf("%d", &idToRemove);
+      removerTicket(idToRemove);
       break;
     case 6: /* ordenarPorData() */
       break;
@@ -115,9 +127,11 @@ void menuAdministrador() {
   } while (opcao != 0);
 }
 
-void menuTecnico(char *username) {
+void menuTecnico(char *username)
+{
   int opcao;
-  do {
+  do
+  {
     system("cls");
     printf("Utilizador: %s\n\n", username);
     printf("======== MENU TECNICO ========\n");
@@ -134,7 +148,8 @@ void menuTecnico(char *username) {
     scanf("%d", &opcao);
     limparbuffer();
 
-    switch (opcao) {
+    switch (opcao)
+    {
     case 1: /* verMeusTickets(username) */
       break;
     case 2: /* aceitarTicket(username) */
@@ -159,7 +174,8 @@ void menuTecnico(char *username) {
   } while (opcao != 0);
 }
 
-int main() {
+int main()
+{
   system("cls");
   char username[MAX_STR], pass[MAX_STR], newPassword[MAX_STR];
   int opcao;
@@ -168,7 +184,8 @@ int main() {
 
   criarAdmin();
 
-  while (1) {
+  while (1)
+  {
     printf("======== SISTEMA DE HELPDESK ========\n");
 
     printf("\n1 - Login\n");
@@ -183,7 +200,8 @@ int main() {
     if (opcao == 0)
       break;
 
-    switch (opcao) {
+    switch (opcao)
+    {
     case 1:
       printf("**LOGIN**\n");
       printf("Username: ");
@@ -196,35 +214,44 @@ int main() {
 
       int perfil = login(username, pass);
 
-      if (perfil == -1) {
+      if (perfil == -1)
+      {
         printf("\nCredenciais invalidas!\n");
         esperarTecla();
-      } else if (perfil == PERFIL_ADMIN) {
-        if (isLogged == 1) {
+      }
+      else if (perfil == PERFIL_ADMIN)
+      {
+        if (isLogged == 1)
+        {
           puts("Utilizador logado com sucesso");
         }
         esperarTecla();
         system("cls");
 
-        if (isLogged != 1) {
+        if (isLogged != 1)
+        {
           puts("\n=== Primeiro login: altere a password! ===\n");
           printf("Nova password: ");
           fgets(newPassword, MAX_STR, stdin);
           newPassword[strcspn(newPassword, "\n")] = 0;
 
-          if (alterarPassword(username, newPassword) == 0) {
+          if (alterarPassword(username, newPassword) == 0)
+          {
             puts("Password alterada com sucesso!");
             isLogged = 1;
             puts("\nInicio de sessao automatico...");
             esperarTecla();
             system("cls");
-          } else {
+          }
+          else
+          {
             puts("Ocorreu um erro ao alterar palavra-passe");
           }
         }
         menuAdministrador();
-
-      } else if (perfil == PERFIL_TECNICO) {
+      }
+      else if (perfil == PERFIL_TECNICO)
+      {
         menuTecnico(username);
       }
       system("cls");
@@ -246,7 +273,8 @@ int main() {
 
       utilizador.perfil = PERFIL_TECNICO;
 
-      if (registarUtilizador(utilizador) == -1) {
+      if (registarUtilizador(utilizador) == -1)
+      {
         printf("ERRO: Registo mal sucedido\n");
       }
       puts("Utilizador criado com sucesso");
@@ -264,9 +292,12 @@ int main() {
       fgets(newPassword, MAX_STR, stdin);
       newPassword[strcspn(newPassword, "\n")] = 0;
 
-      if (alterarPassword(username, newPassword) == 0) {
+      if (alterarPassword(username, newPassword) == 0)
+      {
         puts("Password alterada com sucesso!");
-      } else {
+      }
+      else
+      {
         puts("Ocorreu um erro ao alterar palavra-passe");
       }
       esperarTecla();

@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
-SRC = src/main.c src/funcoes_users.c src/funcoes_ticket.c
+SRC = src/main.c src/funcoes_users.c src/funcoes_ticket.c src/funcoes_utilitarias.c
 OUT = exe
 
 all:

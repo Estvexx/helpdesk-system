@@ -40,7 +40,7 @@ typedef struct elemUtilizador {
     struct elemUtilizador *next;
 } ELEMENTO_UTILIZADOR;
 
-typedef struct historico{
+typedef struct historico {
     DataHora data;
     char utilizador[MAX_STR];
     char descricao[300];
@@ -90,11 +90,17 @@ int login(char *username, char *password);  // Feito
 
 // ======================= PARTE TICKETS =======================
 int criarTicket(INFO_TICKET ticket); // Feito
-int editarTicket(INFO_TICKET ticket);
-int removerTicket(int id);
+int editarTicket(); //Ainda alterações necessárias (preciso tirar duvidas ctg)
+int removerTicket(int id); //Retorna 1 se for cancelado pelo utilizador
 void listarTickets(); // feito
-void verTicketPorID(); // feito
+void verTicketPorID(int id); // feito
 int quantidadeTickets(); // feito
 int atribuirTecnico(int ticket_id, int tecnico_id);
 int atualizarEstado(int ticket_id, int novo_estado);
 
+void printInfosTicket(INFO_TICKET ticket);
+
+// ======================= PARTE UTILITARIAS =======================
+
+void limparbuffer();
+void esperarTecla();

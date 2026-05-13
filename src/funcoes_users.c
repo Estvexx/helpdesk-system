@@ -6,9 +6,11 @@ ELEMENTO_UTILIZADOR *head = NULL;
 
 // ======================= PARTE USERS =======================
 
-int criarAdmin() {
+int criarAdmin()
+{
   ELEMENTO_UTILIZADOR *novo = malloc(sizeof(ELEMENTO_UTILIZADOR));
-  if (novo == NULL) {
+  if (novo == NULL)
+  {
     puts("Erro ao alocar a memóra");
     return -1;
   }
@@ -23,14 +25,17 @@ int criarAdmin() {
   return 0;
 }
 
-int registarUtilizador(INFO_UTILIZADOR info) {
-  if (existeUserbyUsername(info.username) == 1) {
+int registarUtilizador(INFO_UTILIZADOR info)
+{
+  if (existeUserbyUsername(info.username) == 1)
+  {
     puts("Username ja existe!");
     return -1;
   }
 
   ELEMENTO_UTILIZADOR *new = malloc(sizeof(ELEMENTO_UTILIZADOR));
-  if (new == NULL) {
+  if (new == NULL)
+  {
     puts("Erro ao alocar a memória");
     return -1;
   }
@@ -48,10 +53,13 @@ int registarUtilizador(INFO_UTILIZADOR info) {
 }
 
 // Retorna 0 se encontra e -1 senão
-int existeUserbyUsername(char *username) {
+int existeUserbyUsername(char *username)
+{
   ELEMENTO_UTILIZADOR *temp = head;
-  while (temp != NULL) {
-    if (strcmp(temp->info.username, username) == 0) {
+  while (temp != NULL)
+  {
+    if (strcmp(temp->info.username, username) == 0)
+    {
       return 0;
     }
     temp = temp->next;
@@ -59,28 +67,37 @@ int existeUserbyUsername(char *username) {
   return -1;
 }
 
-int quantidadeUsers() {
+int quantidadeUsers()
+{
   ELEMENTO_UTILIZADOR *temp = head;
   int count = 0;
 
-  while (temp != NULL) {
+  while (temp != NULL)
+  {
     count++;
     temp = temp->next;
   }
   return count;
 }
 
-int login(char *username, char *password) {
-  if (existeUserbyUsername(username) != 0) {
+int login(char *username, char *password)
+{
+  if (existeUserbyUsername(username) != 0)
+  {
     return -1;
   }
 
   ELEMENTO_UTILIZADOR *temp = head;
-  while (temp != NULL) {
-    if (strcmp(temp->info.username, username) == 0) {
-      if (strcmp(temp->info.password, password) == 0) {
+  while (temp != NULL)
+  {
+    if (strcmp(temp->info.username, username) == 0)
+    {
+      if (strcmp(temp->info.password, password) == 0)
+      {
         return temp->info.perfil;
-      } else {
+      }
+      else
+      {
         return -1;
       }
     }
@@ -89,10 +106,13 @@ int login(char *username, char *password) {
   return -1;
 }
 
-int alterarPassword(char *username, char *newPassword) {
+int alterarPassword(char *username, char *newPassword)
+{
   ELEMENTO_UTILIZADOR *temp = head;
-  while (temp != NULL) {
-    if (strcmp(temp->info.username, username) == 0) {
+  while (temp != NULL)
+  {
+    if (strcmp(temp->info.username, username) == 0)
+    {
       strcpy(temp->info.password, newPassword);
       return 0;
     }
