@@ -2,13 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void limparBuffer()
+void clearBuffer()
 {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
-void esperarTecla()
+void waitForKey()
 {
     puts("\nCarregue numa tecla para continuar ...");
     getchar();

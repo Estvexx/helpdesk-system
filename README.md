@@ -1,4 +1,4 @@
-# Nome do Projeto
+# name do Projeto
 
 Breve descrição do que o projeto faz numa ou duas frases.
 

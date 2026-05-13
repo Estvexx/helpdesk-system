@@ -6,101 +6,109 @@
 
 #define MAX_STR 100
 
-#define TIPO_HARDWARE 1
-#define TIPO_SOFTWARE 2
-#define TIPO_REDE 3
-#define TIPO_ACESSO 4
-#define TIPO_OUTRO 5
+#define TYPE_HARDWARE 1 // TIPO_HARDWARE 
+#define TYPE_SOFTWARE 2 // TIPO_SOFTWARE 
+#define TYPE_NETWORK  3 // TIPO_REDE 
+#define TYPE_ACCESS   4 // TIPO_ACESSO 
+#define TYPE_OTHER    5 // TIPO_OUTRO 
 
-#define ESTADO_ABERTO 1
-#define ESTADO_EM_ATENDIMENTO 2
-#define ESTADO_ESPERA_UTILIZADOR 3
-#define ESTADO_RESOLVIDO 4
-#define ESTADO_FECHADO 5
+#define STATUS_OPEN            1 // ESTADO_ABERTO 
+#define STATUS_IN_PROGRESS     2 // ESTADO_EM_ATENDIMENTO 
+#define STATUS_WAITING_USER    3 // ESTADO_ESPERA_UTILIZADOR 
+#define STATUS_RESOLVED        4 // ESTADO_RESOLVIDO 
+#define STATUS_CLOSED          5 // ESTADO_FECHADO 
 
 #define PERFIL_ADMIN 1
 #define PERFIL_TECNICO 2
 
-typedef struct data {
-    int dia, mes, ano;
-    int hora, min;
-} DataHora;
+/* 
+#define ROLE_ADMIN      1
+#define ROLE_TECHNICIAN 2
 
-typedef struct utilizador {
+Achas que ficaria mal assim?
+*/
+
+typedef struct datetime {
+    int day, month, year;
+    int hour, min;
+} DateTime;
+
+
+typedef struct user {
     int id;
-    char nome[MAX_STR];
+    char name[MAX_STR];
     char username[MAX_STR];
     char password[MAX_STR];
     int perfil;        // ADMIN ou TECNICO
-    int validado;      // 0 = pendente, 1 = validado
-} INFO_UTILIZADOR;
+    int isValidated; // 0 = pendente, 1 = validado
+} USER_INFO;
 
-typedef struct elemUtilizador {
-    INFO_UTILIZADOR info;
-    struct elemUtilizador *next;
-} ELEMENTO_UTILIZADOR;
+typedef struct elemUser {
+    USER_INFO info;
+    struct elemUser *next;
+} ELEM_USER;
 
-typedef struct historico {
-    DataHora data;
-    char utilizador[MAX_STR];
-    char descricao[300];
-    char tipo_acao[30];
-    char tecnico_anterior[30];
-    char tecnico_atual[30];
-    char estado_anterior[30];
-    char estado_atual[30];  
-} INFO_HISTORICO;
+typedef struct history {
+    DateTime date;
+    char user[MAX_STR];
+    char description[300];
+    char actionType[30];
+    char previousTechnician[30];
+    char currentTechnician[30];
+    char previousStatus[30];
+    char currentStatus[30];  
+} HISTORY_INFO;
 
-typedef struct elemHistorico {
-    INFO_HISTORICO dados;
-    struct elemHistorico *next;
-} ELEMENTO_HISTORICO;
+typedef struct elemHistory {
+    HISTORY_INFO data;
+    struct elemHistory *next;
+} ELEM_HISTORY;
 
 typedef struct ticket {
     int id;
-    int tipo;          // hardware, software, rede, acesso, outro
-    DataHora abertura;
-    DataHora fecho;
-    char descricao[500];
-    int prioridade;    // 1 = baixa, 2 = media, 3 = alta, 4 = critica
-    int estado;        // aberto, em atendimento, etc.
-    char utilizador[MAX_STR];   // quem reportou
-    int tecnico_id;    // tecnico responsavel (-1 se nenhum)
-    char solucao[500];
-} INFO_TICKET;
+    int type;           // hardware, software, network, access, other
+    DateTime openedAt;
+    DateTime closedAt;
+    char description[500];
+    int priority;       // 1 = baixa, 2 = media, 3 = alta, 4 = critica
+    int status;         // aberto, em atendimento, etc.
+    char user[MAX_STR]; // quem reportou
+    int technicianId;   // tecnico responsavel (-1 se nenhum)
+    char solution[500];
+} TICKET_INFO;
 
 typedef struct elemTicket {
-    INFO_TICKET dados;
-    ELEMENTO_HISTORICO *historico;
+    TICKET_INFO data;            
+    ELEM_HISTORY *history;      
     struct elemTicket *next;
-} ELEMENTO_TICKET;
+} ELEM_TICKET;                   
 
-DataHora obterDataAtual();
+DateTime getCurrentDateTime(); //Obter data atual
 
 // Retorna -1 se der erro e 0 sucesso
 //             GERAL : -1 ERRO -> 0 SUCESSO
 // ======================= PARTE INICIAL USERS =======================
 
-int criarAdmin(); // Feito
-int registarUtilizador(INFO_UTILIZADOR novo); // Feito
-int existeUserbyUsername(char *username); // Feito
-int quantidadeUsers(); // Feito
-int alterarPassword(char *username, char *newPassword); //Feito
+int createAdmin(); // Feito
+int registerUser(USER_INFO newUser); // Feito
+int userExistsByUsername(char *username); // Feito
+int getUserCount(); // Feito
+int changePassword(char *username, char *newPassword); //Feito
 int login(char *username, char *password);  // Feito
 
 // ======================= PARTE TICKETS =======================
-int criarTicket(INFO_TICKET ticket); // Feito
-int editarTicket(); //Ainda alterações necessárias (preciso tirar duvidas ctg)
-int removerTicket(int id); //Retorna 1 se for cancelado pelo utilizador
-void listarTickets(); // feito
-void verTicketPorID(int id); // feito
-int quantidadeTickets(); // feito
-int atribuirTecnico(int ticket_id, int tecnico_id);
-int atualizarEstado(int ticket_id, int novo_estado);
+int createTicket(TICKET_INFO ticket); // Feito
+int updateTicket(); //Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
+int deleteTicket(int id); //Retorna 1 se for cancelado pelo user
+void listAllTickets(); // feito
+void showTicketById(int id); // feito
+int getTicketCount(); // feito
+int assignTechnician(int ticket_id, int technicianId);
+int updateTicketStatus(int ticket_id, int newStatus);
 
-void printInfosTicket(INFO_TICKET ticket);
+void printInfosTicket(TICKET_INFO ticket);
 
 // ======================= PARTE UTILITARIAS =======================
 
-void limparBuffer();
-void esperarTecla();
+void clearBuffer();
+void waitForKey();
