@@ -25,6 +25,24 @@ projeto/
 └── README.md
 ```
 
+## Instalação do Make (Windows)
+
+```bash
+winget install GnuWin32.Make
+```
+
+Depois de instalar, adiciona ao PATH:
+
+1. Pesquisa **"variáveis de ambiente"** no Windows
+2. Em **PATH** clica **Editar**
+3. Adiciona o seguinte caminho:
+
+```
+C:\Program Files (x86)\GnuWin32\bin
+```
+
+4. Reinicia o terminal
+
 ## ⚙️ Compilação
 
 Certifica-te de que tens o `gcc` e o `make` instalados.
