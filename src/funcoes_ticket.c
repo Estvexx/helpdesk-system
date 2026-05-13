@@ -143,7 +143,7 @@ int editarTicket()
         if (scanf("%d", &temp->dados.tipo) != 1 || (temp->dados.tipo < TIPO_HARDWARE || temp->dados.tipo > TIPO_OUTRO)) // Se o retorno for diferente de 1 é porque não leu 1 inteiro.
         {
           puts("Tipo de TICKET não válido.");
-          limparbuffer();
+          limparBuffer();
         }
         else
         {
@@ -151,7 +151,7 @@ int editarTicket()
         }
       } while (1);
 
-      limparbuffer();
+      limparBuffer();
 
       printf("Descrição: ");
       fgets(temp->dados.descricao, sizeof(temp->dados.descricao), stdin);
@@ -162,7 +162,7 @@ int editarTicket()
       printf("Estado (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
       scanf("%d", &temp->dados.estado);
 
-      limparbuffer();
+      limparBuffer();
 
       printf("Tecnico: ");
       // Falta verificação de técnico

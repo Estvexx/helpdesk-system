@@ -2,6 +2,129 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void menuAdminFilter()
+{
+  int filterOption;
+  int running = 0;
+
+  do
+  {
+    puts("\n== FILTRAR ==");
+    puts("1  - Filtrar tickets por prioridade");
+    puts("2  - Filtrar tickets por tipo");
+    puts("3  - Filtrar tickets por estado");
+    puts("0  - Voltar");
+    printf("Opcao: ");
+
+    scanf("%d", &filterOption);
+    switch (filterOption)
+    {
+
+    case 1:
+      /* filtrarPorPrioridade() */
+
+      break;
+    case 2:
+      /* filtrarPorTipo() */
+
+      break;
+    case 3:
+      /* filtrarPorEstado() */
+
+      break;
+    case 0:
+      running = 1;
+      break;
+
+    default:
+      puts("Opção inválida!");
+      break;
+    }
+
+  } while (!running);
+}
+void menuAdminOrder()
+{
+
+  int orderOption;
+  int running;
+
+  do
+  {
+    puts("\n== ORDENAR ==");
+    puts("1  - Ordenar tickets por data");
+    puts("2  - Ordenar tickets por prioridade");
+    puts("3  - Ordenar tickets por tecnico");
+    puts("0  - Voltar");
+    printf("Opcao: ");
+    scanf("%d", &orderOption);
+    switch (orderOption)
+    {
+
+    case 1:
+      /* ordenarPorData() */
+
+      break;
+    case 2:
+      /* ordenarPorPrioridade() */
+
+      break;
+    case 3:
+      /* ordenarPorTecnico() */
+
+      break;
+    case 0:
+      running = 1;
+      break;
+    default:
+      puts("Opção inválida!");
+      break;
+    }
+
+  } while (!running);
+}
+
+void menuManagmentCategories()
+{
+  int orderOption;
+  int running;
+
+  do
+  {
+    puts("\n== GERIR CATEGORIAS ==");
+    puts("1  - Adicionar");
+    puts("2  - Remover");
+    puts("3  - Ordenar ");
+    //puts("X  - Lorem ");
+    puts("0  - Voltar");
+    printf("Opcao: ");
+    scanf("%d", &orderOption);
+    switch (orderOption)
+    {
+
+    case 1:
+      /* function() */
+
+      break;
+    case 2:
+      /* function() */
+
+      break;
+    case 3:
+      /* function() */
+
+      break;
+    // case ....
+    case 0:
+      running = 1;
+      break;
+    default:
+      puts("Opção inválida!");
+      break;
+    }
+
+  } while (!running);
+}
 void menuAdministrador()
 {
   int opcao;
@@ -10,27 +133,24 @@ void menuAdministrador()
     system("cls");
     puts("======== MENU ADMINISTRADOR ========");
     puts("1  - Adicionar ticket");
-    puts("2  - Listar todos os tickets");
-    puts("3  - Filtrar tickets por estado");
-    puts("4  - Filtrar tickets por prioridade");
-    puts("5  - Filtrar tickets por tipo");
-    puts("6  - Ordenar tickets por data");
-    puts("7  - Ordenar tickets por prioridade");
-    puts("8  - Ordenar tickets por tecnico");
-    puts("9  - Remover ticket");
-    puts("10 - Editar ticket");
-    puts("11 - Adicionar/Remover/Editar categorias");
-    puts("12 - Validar tecnicos pendentes");
-    puts("13 - Ver historico de um ticket");
-    puts("14 - Tempo medio de resolucao por tecnico");
-    puts("15 - Tempo medio de resolucao por categoria");
-    puts("16 - Gerar relatorio semanal/mensal");
-    puts("17 - Alertas de tickets fora do SLA");
+    puts("2  - Editar ticket");
+    puts("3  - Listar todos os tickets");
+    puts("4  - Ver ticket por ID");
+    puts("5  - Remover ticket");
+    puts("6  - Filtrar tickets");
+    puts("7  - Ordenar tickets");
+    puts("8  - Adicionar/Remover/Editar categorias");
+    puts("9  - Validar tecnicos pendentes");
+    puts("10 - Ver historico de um ticket");
+    puts("11 - Tempo medio de resolucao por tecnico");
+    puts("12 - Tempo medio de resolucao por categoria");
+    puts("13 - Gerar relatorio semanal/mensal");
+    puts("14 - Alertas de tickets fora do SLA");
     puts("0  - Logout");
     puts("====================================");
     printf("Opcao: ");
     scanf("%d", &opcao);
-    limparbuffer();
+    limparBuffer();
 
     switch (opcao)
     {
@@ -47,7 +167,7 @@ void menuAdministrador()
         if (scanf("%d", &ticket.tipo) != 1 || (ticket.tipo < TIPO_HARDWARE || ticket.tipo > TIPO_OUTRO)) // Se o retorno for diferente de 1 é porque não leu um inteiro.
         {
           puts("Tipo de TICKET não válido.");
-          limparbuffer();
+          limparBuffer();
         }
         else
         {
@@ -55,7 +175,7 @@ void menuAdministrador()
         }
       } while (1);
 
-      limparbuffer();
+      limparBuffer();
 
       printf("Descricao: ");
       fgets(ticket.descricao, 500, stdin);
@@ -63,7 +183,7 @@ void menuAdministrador()
 
       printf("Prioridade (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
       scanf("%d", &ticket.prioridade);
-      limparbuffer();
+      limparBuffer();
 
       printf("Utilizador que reportou: ");
       fgets(ticket.utilizador, MAX_STR, stdin);
@@ -85,43 +205,38 @@ void menuAdministrador()
     case 4:
       // verTicketPorID(); comentei devido ao erro dado
       esperarTecla();
+      break;
     case 5: /* removerTicket() */
       int idToRemove;
       printf("Introduza o ticket que deseja remover: ");
       scanf("%d", &idToRemove);
       removerTicket(idToRemove);
       break;
-    case 6: /* ordenarPorData() */
+    case 6: // Apresentar Filtrado
+      menuAdminFilter();
       break;
-    case 7: /* ordenarPorPrioridade() */
+    case 7: // Apresentar Ordenado
+      menuAdminOrder();
       break;
-    case 8: /* ordenarPorTecnico() */
+    case 8: /* gerirCategorias() */
       break;
-    case 9: /* filtrarPorPrioridade() */
+    case 9: /* validarTecnicos() */
       break;
-    case 10: /* filtrarPorTipo() */
+    case 10: /* verHistorico() */
       break;
-    case 11: /* filtrarPorEstado() */
+    case 11: /* tempoMedioPorTecnico() */
       break;
-    case 12: /* gerirCategorias() */
+    case 12: /* tempoMedioPorCategoria() */
       break;
-    case 13: /* validarTecnicos() */
+    case 13: /* gerarRelatorio() */
       break;
-    case 14: /* verHistorico() */
-      break;
-    case 15: /* tempoMedioPorTecnico() */
-      break;
-    case 16: /* tempoMedioPorCategoria() */
-      break;
-    case 17: /* gerarRelatorio() */
-      break;
-    case 18: /* alertasSLA() */
+    case 14: /* alertasSLA() */
       break;
     case 0:
       printf("Logout...\n");
       break;
     default:
-      printf("Opcao invalida!\n");
+      puts("Opção inválida!");
       esperarTecla();
     }
   } while (opcao != 0);
@@ -146,7 +261,7 @@ void menuTecnico(char *username)
     printf("==============================\n");
     printf("Opcao: ");
     scanf("%d", &opcao);
-    limparbuffer();
+    limparBuffer();
 
     switch (opcao)
     {
@@ -194,7 +309,7 @@ int main()
     printf("0 - Sair\n");
     printf("Opcao: ");
     scanf("%d", &opcao);
-    limparbuffer();
+    limparBuffer();
     system("cls");
 
     if (opcao == 0)

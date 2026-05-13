@@ -102,5 +102,5 @@ void printInfosTicket(INFO_TICKET ticket);
 
 // ======================= PARTE UTILITARIAS =======================
 
-void limparbuffer();
+void limparBuffer();
 void esperarTecla();
