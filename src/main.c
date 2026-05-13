@@ -77,33 +77,33 @@ void menuAdministrador() {
     case 4:
       verTicketPorID();
       esperarTecla();
-    case 4: /* removerTicket() */
+    case 5: /* removerTicket() */
       break;
-    case 5: /* ordenarPorData() */
+    case 6: /* ordenarPorData() */
       break;
-    case 6: /* ordenarPorPrioridade() */
+    case 7: /* ordenarPorPrioridade() */
       break;
-    case 7: /* ordenarPorTecnico() */
+    case 8: /* ordenarPorTecnico() */
       break;
-    case 8: /* filtrarPorPrioridade() */
+    case 9: /* filtrarPorPrioridade() */
       break;
-    case 9: /* filtrarPorTipo() */
+    case 10: /* filtrarPorTipo() */
       break;
-    case 10: /* filtrarPorEstado() */
+    case 11: /* filtrarPorEstado() */
       break;
-    case 11: /* gerirCategorias() */
+    case 12: /* gerirCategorias() */
       break;
-    case 12: /* validarTecnicos() */
+    case 13: /* validarTecnicos() */
       break;
-    case 13: /* verHistorico() */
+    case 14: /* verHistorico() */
       break;
-    case 14: /* tempoMedioPorTecnico() */
+    case 15: /* tempoMedioPorTecnico() */
       break;
-    case 15: /* tempoMedioPorCategoria() */
+    case 16: /* tempoMedioPorCategoria() */
       break;
-    case 16: /* gerarRelatorio() */
+    case 17: /* gerarRelatorio() */
       break;
-    case 17: /* alertasSLA() */
+    case 18: /* alertasSLA() */
       break;
     case 0:
       printf("Logout...\n");
