@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
-SRC = src/main.c src/funcoes.c
+SRC = src/main.c src/funcoes_users.c src/funcoes_ticket.c
 OUT = exe
 
 all:
@@ -8,7 +8,7 @@ all:
 
 run:
 	$(CC) $(CFLAGS) $(SRC) -o $(OUT)
-	./$(OUT)
+	.\$(OUT).exe
 
 clean:
 	rm -f $(OUT)
