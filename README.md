@@ -29,8 +29,16 @@ projeto/
 
 Certifica-te de que tens o `gcc` e o `make` instalados.
 
+Para compilar (só compilar):
+
 ```bash
 make
+```
+
+Para compilar e executar:
+
+```bash
+make run
 ```
 
 Para limpar os ficheiros compilados:
@@ -48,7 +56,7 @@ make clean
 Exemplo de utilização:
 
 ```bash
-./programa argumento1 argumento2
+./exe argumento1 argumento2
 ```
 
 ### Primeiro acesso
