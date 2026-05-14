@@ -16,7 +16,7 @@ void obterTipo(int tipo, char *texto)
   case TYPE_NETWORK:
     strcpy(texto, "Rede");
     break;
-  case TYPE_ACCESS:
+  case TYPE_ACCESS  :
     strcpy(texto, "Acesso");
     break;
   case TYPE_OTHER:
