@@ -121,9 +121,9 @@ int createTicket(TICKET_INFO ticket)
 
 int updateTicket()
 {
-  int idForSearch;
+  int idForSearch, option, running = 1;
 
-  printf("Introduza o número do TICKET que deseja editar: ");
+  printf("\n\nIntroduza o número do TICKET que deseja editar: ");
   scanf("%d", &idForSearch);
 
   ELEM_TICKET *temp = headTickets;
@@ -132,42 +132,71 @@ int updateTicket()
   {
     if (temp->data.id == idForSearch)
     {
-      puts("=== TICKET ENCONTRADO ===");
+      puts("\n=== TICKET ENCONTRADO ===");
       printInfosTicket(temp->data);
 
-      puts("=== ALTERAR INFORMAÇÕES ===");
       do
       {
-        printf("Novo tipo (1-Hardware, 2-Software, 3-Rede, 4-Acesso, 5-Outro): ");
+        puts("=== ALTERAR INFORMAÇÕES ===");
+        puts("1 - Alterar Tipo");
+        puts("2 - Alterar Descrição");
+        puts("3 - Alterar Prioridade");
+        puts("4 - Alterar Estado");
+        puts("0 - Voltar");
+        printf("Opção: ");
+        scanf("%d", &option);
 
-        if (scanf("%d", &temp->data.type) != 1 || (temp->data.type < TYPE_HARDWARE || temp->data.type > TYPE_OTHER)) // Se o retorno for diferente de 1 é porque não leu 1 inteiro.
+        // AVISO Falta informar o user se a actualização foi bem sucedida (isso será feito quando forem feitas as validações)
+
+        switch (option)
         {
-          puts("Tipo de TICKET não válido.");
+        case 1:
+          // Alterar Tipo
+          do
+          {
+            printf("Novo tipo (1-Hardware, 2-Software, 3-Rede, 4-Acesso, 5-Outro): ");
+
+            if (scanf("%d", &temp->data.type) != 1 || (temp->data.type < TYPE_HARDWARE || temp->data.type > TYPE_OTHER)) // Se o retorno for diferente de 1 é porque não leu 1 inteiro.
+            {
+              puts("Tipo de TICKET não válido.");
+              clearBuffer();
+            }
+            else
+            {
+              break; // Input válido, sai do ciclo
+            }
+          } while (1);
+
           clearBuffer();
+          break;
+        case 2:
+          // Alterar Descrição
+          printf("Descrição: ");
+          fgets(temp->data.description, sizeof(temp->data.description), stdin);
+          break;
+        case 3:
+          // Alterar Prioridade
+          printf("Prioridade (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
+          scanf("%d", &temp->data.priority);
+          clearBuffer();
+          break;
+        case 4:
+          // Alterar Estado
+          printf("Estado (1-Aberto, 2-Em Atend., 3-Esp. User, 4-Resolvido, 5-Fechado): ");
+          scanf("%d", &temp->data.status);
+          clearBuffer();
+
+          break;
+        case 0:
+          running = 0;
+          return 0;
+        default:
+          puts("Opção Inválida!");
+          break;
         }
-        else
-        {
-          break; // Input válido, sai do ciclo
-        }
-      } while (1);
+        waitForKey();
+      } while (running);
 
-      clearBuffer();
-
-      printf("Descrição: ");
-      fgets(temp->data.description, sizeof(temp->data.description), stdin);
-
-      printf("Prioridade (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
-      scanf("%d", &temp->data.priority);
-      
-      printf("Estado (1-Aberto, 2-Em Atend., 3-Esp. User, 4-Resolvido, 5-Fechado): ");
-      scanf("%d", &temp->data.status);
-
-      clearBuffer();
-
-      printf("Tecnico: ");
-      // Falta verificação de técnico
-
-      printf("\nTicket editado com sucesso!\n");
       return 0;
     }
 
