@@ -95,19 +95,25 @@ int userExistsByUsername(char *username); // Feito
 int getUserCount(); // Feito
 int changePassword(char *username, char *newPassword); //Feito
 int login(char *username, char *password);  // Feito
+int validateTechnician(int userId); // Feito, colocar tecnico como validado
+int isTechnicianValidated(int userId); // Feito, verificar se tecnico esta validado ou nao
+void listPendingTechnicians(); // Feito
+void listAllTechnicians(); // Feito
 
 // ======================= PARTE TICKETS =======================
 int createTicket(TICKET_INFO ticket); // Feito
 int updateTicket(); //Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
 int deleteTicket(int id); //Retorna 1 se for cancelado pelo user
 void listAllTickets(); // feito
+int existeUserbyId(int id); // feito
 void showTicketById(int id); // feito
 int getTicketCount(); // feito
-int assignTechnician(int ticket_id, int technicianId);
+int assignTechnician(int ticket_id, int technicianId); // feito
 int updateTicketStatus(int ticket_id, int newStatus);
 
 void printInfosTicket(TICKET_INFO ticket);
 
+// 
 // ======================= PARTE UTILITARIAS =======================
 
 void clearBuffer();
