@@ -7,19 +7,19 @@ void obterTipo(int tipo, char *texto)
 {
   switch (tipo)
   {
-  case TIPO_HARDWARE:
+  case TYPE_HARDWARE:
     strcpy(texto, "Hardware");
     break;
-  case TIPO_SOFTWARE:
+  case TYPE_SOFTWARE:
     strcpy(texto, "Software");
     break;
-  case TIPO_REDE:
+  case TYPE_NETWORK:
     strcpy(texto, "Rede");
     break;
-  case TIPO_ACESSO:
+  case TYPE_ACCESS:
     strcpy(texto, "Acesso");
     break;
-  case TIPO_OUTRO:
+  case TYPE_OTHER:
     strcpy(texto, "Outro");
     break;
   default:
@@ -28,23 +28,23 @@ void obterTipo(int tipo, char *texto)
   }
 }
 
-void obterEstado(int estado, char *texto)
+void obterEstado(int status, char *texto)
 {
-  switch (estado)
+  switch (status)
   {
-  case ESTADO_ABERTO:
+  case STATUS_OPEN:
     strcpy(texto, "Aberto");
     break;
-  case ESTADO_EM_ATENDIMENTO:
+  case STATUS_IN_PROGRESS:
     strcpy(texto, "Em Atend.");
     break;
-  case ESTADO_ESPERA_UTILIZADOR:
+  case STATUS_WAITING_USER:
     strcpy(texto, "Esp. User");
     break;
-  case ESTADO_RESOLVIDO:
+  case STATUS_RESOLVED:
     strcpy(texto, "Resolvido");
     break;
-  case ESTADO_FECHADO:
+  case STATUS_CLOSED:
     strcpy(texto, "Fechado");
     break;
   default:
@@ -75,75 +75,75 @@ void obterPrioridade(int prioridade, char *texto)
   }
 }
 
-ELEMENTO_TICKET *headTickets = NULL;
+ELEM_TICKET *headTickets = NULL;
 
-DataHora obterDataAtual()
+DateTime getCurrentDateTime()
 {
-  DataHora d;
+  DateTime d;
   time_t t = time(NULL);
   struct tm *tm = localtime(&t);
-  d.dia = tm->tm_mday;
-  d.mes = tm->tm_mon + 1;
-  d.ano = tm->tm_year + 1900;
-  d.hora = tm->tm_hour;
+  d.day = tm->tm_mday;
+  d.month = tm->tm_mon + 1;
+  d.year = tm->tm_year + 1900;
+  d.hour = tm->tm_hour;
   d.min = tm->tm_min;
   return d;
 }
 
-int criarTicket(INFO_TICKET ticket)
+int createTicket(TICKET_INFO ticket)
 {
-  ELEMENTO_TICKET *new = malloc(sizeof(ELEMENTO_TICKET));
+  ELEM_TICKET *new = malloc(sizeof(ELEM_TICKET));
   if (new == NULL)
   {
     puts("Erro ao alocar memória");
     return -1;
   }
 
-  new->dados = ticket;
-  new->dados.id = quantidadeTickets() + 1;
-  new->dados.tecnico_id = -1; // deixar -1 porque nao tem tecnico associado
-  new->dados.estado = ESTADO_ABERTO;
-  strcpy(new->dados.solucao, "");
-  new->dados.abertura = obterDataAtual();
-  new->dados.fecho.dia = 0;
-  new->dados.fecho.mes = 0;
-  new->dados.fecho.ano = 0;
-  new->dados.fecho.hora = 0;
-  new->dados.fecho.min = 0;
-  new->historico = NULL;
+  new->data = ticket;
+  new->data.id = getTicketCount() + 1;
+  new->data.technicianId = -1; // deixar -1 porque nao tem tecnico associado
+  new->data.status = STATUS_OPEN;
+  strcpy(new->data.solution, "");
+  new->data.openedAt = getCurrentDateTime();
+  new->data.closedAt.day = 0;
+  new->data.closedAt.month = 0;
+  new->data.closedAt.year = 0;
+  new->data.closedAt.hour = 0;
+  new->data.closedAt.min = 0;
+  new->history = NULL;
 
   new->next = headTickets;
   headTickets = new;
 
-  printf("\nTicket #%d criado com sucesso!\n", new->dados.id);
+  printf("\nTicket #%d criado com sucesso!\n", new->data.id);
   return 0;
 }
 
-int editarTicket()
+int updateTicket()
 {
   int idForSearch;
 
   printf("Introduza o número do TICKET que deseja editar: ");
   scanf("%d", &idForSearch);
 
-  ELEMENTO_TICKET *temp = headTickets;
+  ELEM_TICKET *temp = headTickets;
 
   while (temp != NULL)
   {
-    if (temp->dados.id == idForSearch)
+    if (temp->data.id == idForSearch)
     {
       puts("=== TICKET ENCONTRADO ===");
-      printInfosTicket(temp->dados);
+      printInfosTicket(temp->data);
 
       puts("=== ALTERAR INFORMAÇÕES ===");
       do
       {
         printf("Novo tipo (1-Hardware, 2-Software, 3-Rede, 4-Acesso, 5-Outro): ");
 
-        if (scanf("%d", &temp->dados.tipo) != 1 || (temp->dados.tipo < TIPO_HARDWARE || temp->dados.tipo > TIPO_OUTRO)) // Se o retorno for diferente de 1 é porque não leu 1 inteiro.
+        if (scanf("%d", &temp->data.type) != 1 || (temp->data.type < TYPE_HARDWARE || temp->data.type > TYPE_OTHER)) // Se o retorno for diferente de 1 é porque não leu 1 inteiro.
         {
           puts("Tipo de TICKET não válido.");
-          limparbuffer();
+          clearBuffer();
         }
         else
         {
@@ -151,18 +151,18 @@ int editarTicket()
         }
       } while (1);
 
-      limparbuffer();
+      clearBuffer();
 
       printf("Descrição: ");
-      fgets(temp->dados.descricao, sizeof(temp->dados.descricao), stdin);
+      fgets(temp->data.description, sizeof(temp->data.description), stdin);
 
-      printf("Prioridade (1-Aberto, 2-Em Atend., 3-Esp. User, 4-Resolvido, 5-Fechado): ");
-      scanf("%d", &temp->dados.prioridade);
+      printf("Prioridade (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
+      scanf("%d", &temp->data.priority);
+      
+      printf("Estado (1-Aberto, 2-Em Atend., 3-Esp. User, 4-Resolvido, 5-Fechado): ");
+      scanf("%d", &temp->data.status);
 
-      printf("Estado (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
-      scanf("%d", &temp->dados.estado);
-
-      limparbuffer();
+      clearBuffer();
 
       printf("Tecnico: ");
       // Falta verificação de técnico
@@ -177,39 +177,39 @@ int editarTicket()
   return -1;
 }
 
-void printInfosTicket(INFO_TICKET ticket)
+void printInfosTicket(TICKET_INFO ticket)
 {
-  char tipo[15], estado[20], prioridade[10];
+  char tipo[15], status[20], prioridade[10];
 
-  obterTipo(ticket.tipo, tipo);
-  obterEstado(ticket.estado, estado);
-  obterPrioridade(ticket.prioridade, prioridade);
+  obterTipo(ticket.type, tipo);
+  obterEstado(ticket.status, status);
+  obterPrioridade(ticket.priority, prioridade);
 
   printf("========================================\n");
   printf("Ticket #%d\n", ticket.id);
   printf("========================================\n");
   printf("Tipo:        %s\n", tipo);
-  printf("Estado:      %s\n", estado);
+  printf("Estado:      %s\n", status);
   printf("Prioridade:  %s\n", prioridade);
-  printf("Descricao:   %s\n", ticket.descricao);
-  printf("Utilizador:  %s\n", ticket.utilizador);
+  printf("Descricao:   %s\n", ticket.description);
+  printf("Utilizador:  %s\n", ticket.user);
 
   printf("Tecnico:     ");
-  if (ticket.tecnico_id == -1)
+  if (ticket.technicianId == -1)
     printf("N/D\n");
   else
-    printf("%d\n", ticket.tecnico_id);
+    printf("%d\n", ticket.technicianId);
 
   printf("Abertura:    %02d/%02d/%04d %02d:%02d\n",
-         ticket.abertura.dia, ticket.abertura.mes,
-         ticket.abertura.ano, ticket.abertura.hora,
-         ticket.abertura.min);
+         ticket.openedAt.day, ticket.openedAt.month,
+         ticket.openedAt.year, ticket.openedAt.hour,
+         ticket.openedAt.min);
 
-  printf("Solucao:     %s\n", strcmp(ticket.solucao, "") == 0 ? "N/D" : ticket.solucao);
+  printf("Solucao:     %s\n", strcmp(ticket.solution, "") == 0 ? "N/D" : ticket.solution);
   printf("\n");
 }
 
-void listarTickets()
+void listAllTickets()
 {
   if (headTickets == NULL)
   {
@@ -217,7 +217,7 @@ void listarTickets()
     return;
   }
 
-  ELEMENTO_TICKET *temp = headTickets;
+  ELEM_TICKET *temp = headTickets;
 
   printf("\n%-5s | %-9s | %-12s | %-10s | %-15s | %-10s\n", "ID", "Tipo",
          "Estado", "Prioridade", "Utilizador", "Tecnico");
@@ -226,22 +226,22 @@ void listarTickets()
 
   while (temp != NULL)
   {
-    char tipo[15], estado[20], prioridade[10];
+    char tipo[15], status[20], prioridade[10];
 
-    obterTipo(temp->dados.tipo, tipo);
-    obterEstado(temp->dados.estado, estado);
-    obterPrioridade(temp->dados.prioridade, prioridade);
+    obterTipo(temp->data.type, tipo);
+    obterEstado(temp->data.status, status);
+    obterPrioridade(temp->data.priority, prioridade);
 
-    if (temp->dados.tecnico_id == -1)
+    if (temp->data.technicianId == -1)
     {
-      printf("%-5d | %-9s | %-12s | %-10s | %-15s | %-10s\n", temp->dados.id,
-             tipo, estado, prioridade, temp->dados.utilizador, "N/D");
+      printf("%-5d | %-9s | %-12s | %-10s | %-15s | %-10s\n", temp->data.id,
+             tipo, status, prioridade, temp->data.user, "N/D");
     }
     else
     {
-      printf("%-5d | %-9s | %-12s | %-10s | %-15s | %-10d\n", temp->dados.id,
-             tipo, estado, prioridade, temp->dados.utilizador,
-             temp->dados.tecnico_id);
+      printf("%-5d | %-9s | %-12s | %-10s | %-15s | %-10d\n", temp->data.id,
+             tipo, status, prioridade, temp->data.user,
+             temp->data.technicianId);
     }
 
     temp = temp->next;
@@ -249,9 +249,9 @@ void listarTickets()
   printf("\n");
 }
 
-int quantidadeTickets()
+int getTicketCount()
 {
-  ELEMENTO_TICKET *temp = headTickets;
+  ELEM_TICKET *temp = headTickets;
   int count = 0;
   while (temp != NULL)
   {
@@ -261,15 +261,15 @@ int quantidadeTickets()
   return count;
 }
 
-void verTicketPorID(int id)
+void showTicketById(int id)
 {
-  ELEMENTO_TICKET *temp = headTickets;
+  ELEM_TICKET *temp = headTickets;
 
   while (temp != NULL)
   {
-    if (temp->dados.id == id)
+    if (temp->data.id == id)
     {
-      printInfosTicket(temp->dados);
+      printInfosTicket(temp->data);
       return;
     }
     temp = temp->next;
@@ -277,7 +277,7 @@ void verTicketPorID(int id)
   puts("Ticket nao encontrado.");
 }
 
-int removerTicket(int id)
+int deleteTicket(int id)
 {
   int confirmDelete;
 
@@ -287,10 +287,10 @@ int removerTicket(int id)
     return -1;
   }
 
-  ELEMENTO_TICKET *temp = headTickets;
-  ELEMENTO_TICKET *prev = NULL;
+  ELEM_TICKET *temp = headTickets;
+  ELEM_TICKET *prev = NULL;
 
-  while (temp != NULL && temp->dados.id != id)
+  while (temp != NULL && temp->data.id != id)
   {
     prev = temp;
     temp = temp->next;
@@ -302,7 +302,7 @@ int removerTicket(int id)
     return -1;
   }
 
-  printInfosTicket(temp->dados);
+  printInfosTicket(temp->data);
 
   // Confirmação da remoção
   do
@@ -313,7 +313,7 @@ int removerTicket(int id)
 
     if (scanf("%d", &confirmDelete) != 1 || (confirmDelete != 0 && confirmDelete != 1))
     {
-      limparBuffer();
+      clearBuffer();
       puts("Insira uma opção válida");
     }
     else
@@ -323,7 +323,7 @@ int removerTicket(int id)
 
   } while (1);
 
-  limparBuffer();
+  clearBuffer();
 
   if (confirmDelete == 1)
   {
@@ -342,11 +342,11 @@ int removerTicket(int id)
   }
 
   // libertar histórico
-  ELEMENTO_HISTORICO *histTemp = temp->historico;
+  ELEM_HISTORY *histTemp = temp->history;
 
   while (histTemp != NULL)
   {
-    ELEMENTO_HISTORICO *aux = histTemp;
+    ELEM_HISTORY *aux = histTemp;
     histTemp = histTemp->next;
     free(aux);
   }

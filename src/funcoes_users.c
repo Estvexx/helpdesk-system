@@ -2,48 +2,48 @@
 #include <stdio.h>
 #include <string.h>
 
-ELEMENTO_UTILIZADOR *head = NULL;
+ELEM_USER *head = NULL;
 
 // ======================= PARTE USERS =======================
 
-int criarAdmin()
+int createAdmin()
 {
-  ELEMENTO_UTILIZADOR *novo = malloc(sizeof(ELEMENTO_UTILIZADOR));
-  if (novo == NULL)
+  ELEM_USER *new = malloc(sizeof(ELEM_USER));
+  if (new == NULL)
   {
     puts("Erro ao alocar a memóra");
     return -1;
   }
-  novo->info.id = 1;
-  strcpy(novo->info.nome, "Administrador");
-  strcpy(novo->info.username, "admin");
-  strcpy(novo->info.password, "admin");
-  novo->info.perfil = PERFIL_ADMIN;
-  novo->info.validado = 1;
-  novo->next = head;
-  head = novo;
+  new->info.id = 1;
+  strcpy(new->info.name, "Administrador");
+  strcpy(new->info.username, "admin");
+  strcpy(new->info.password, "admin");
+  new->info.perfil = PERFIL_ADMIN;
+  new->info.isValidated = 1;
+  new->next = head;
+  head = new;
   return 0;
 }
 
-int registarUtilizador(INFO_UTILIZADOR info)
+int registerUser(USER_INFO newUser)
 {
-  if (existeUserbyUsername(info.username) == 1)
+  if (userExistsByUsername(newUser.username) == 0)
   {
     puts("Username ja existe!");
     return -1;
   }
 
-  ELEMENTO_UTILIZADOR *new = malloc(sizeof(ELEMENTO_UTILIZADOR));
+  ELEM_USER *new = malloc(sizeof(ELEM_USER));
   if (new == NULL)
   {
     puts("Erro ao alocar a memória");
     return -1;
   }
 
-  new->info = info;
-  new->info.id = quantidadeUsers() + 1;
+  new->info = newUser;
+  new->info.id = getUserCount() + 1;
 
-  new->info.validado = 0;
+  new->info.isValidated = 0;
 
   new->next = head;
   head = new;
@@ -53,9 +53,9 @@ int registarUtilizador(INFO_UTILIZADOR info)
 }
 
 // Retorna 0 se encontra e -1 senão
-int existeUserbyUsername(char *username)
+int userExistsByUsername(char *username)
 {
-  ELEMENTO_UTILIZADOR *temp = head;
+  ELEM_USER *temp = head;
   while (temp != NULL)
   {
     if (strcmp(temp->info.username, username) == 0)
@@ -67,9 +67,9 @@ int existeUserbyUsername(char *username)
   return -1;
 }
 
-int quantidadeUsers()
+int getUserCount()
 {
-  ELEMENTO_UTILIZADOR *temp = head;
+  ELEM_USER *temp = head;
   int count = 0;
 
   while (temp != NULL)
@@ -82,12 +82,12 @@ int quantidadeUsers()
 
 int login(char *username, char *password)
 {
-  if (existeUserbyUsername(username) != 0)
+  if (userExistsByUsername(username) != 0)
   {
     return -1;
   }
 
-  ELEMENTO_UTILIZADOR *temp = head;
+  ELEM_USER *temp = head;
   while (temp != NULL)
   {
     if (strcmp(temp->info.username, username) == 0)
@@ -106,9 +106,9 @@ int login(char *username, char *password)
   return -1;
 }
 
-int alterarPassword(char *username, char *newPassword)
+int changePassword(char *username, char *newPassword)
 {
-  ELEMENTO_UTILIZADOR *temp = head;
+  ELEM_USER *temp = head;
   while (temp != NULL)
   {
     if (strcmp(temp->info.username, username) == 0)
