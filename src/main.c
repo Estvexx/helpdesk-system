@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <windows.h>
 
-void navbar() {
+void navbar()
+{
   //  printf("\033[0;32m");
 
   // clang-format off
@@ -23,50 +24,88 @@ void navbar() {
   // Reset cor
   // printf("\033[0m");
 }
-void menuAdminFilter() {
+void menuAdminFilter()
+{
   int filterOption;
+  int filterValue; // Guardar o valor do filtro escolhido
   int running = 0;
 
-  do {
-    puts("\n== FILTRAR ==");
+  do
+  {
+    puts("\n== FILTRAR TICKETS ==");
     puts("1  - Filtrar tickets por prioridade");
     puts("2  - Filtrar tickets por tipo");
-    puts("3  - Filtrar tickets por status");
+    puts("3  - Filtrar tickets por estado");
     puts("0  - Voltar");
     printf("Opcao: ");
-
     scanf("%d", &filterOption);
-    switch (filterOption) {
+    clearBuffer();
 
+    switch (filterOption)
+    {
     case 1:
-      /* filtrarPorPrioridade() */
-
+      printf("\nQual a prioridade? (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
+      if (scanf("%d", &filterValue) == 1)
+      {
+        listTicketsByPriority(filterValue);
+      }
+      else
+      {
+        puts("Entrada inválida!");
+      }
+      clearBuffer();
+      waitForKey();
       break;
+
     case 2:
-      /* filtrarPorTipo() */
-
+      printf("\nQual o tipo? (1-Hardware, 2-Software, 3-Rede, 4-Acesso, 5-Outro): ");
+      if (scanf("%d", &filterValue) == 1)
+      {
+        listTicketsByType(filterValue);
+      }
+      else
+      {
+        puts("Entrada inválida!");
+      }
+      clearBuffer();
+      waitForKey();
       break;
+
     case 3:
-      /* filtrarPorEstado() */
-
+      printf("\nQual o estado? (1-Aberto, 2-Em Atend., 3-Esp. User, 4-Resolvido, 5-Fechado): ");
+      if (scanf("%d", &filterValue) == 1)
+      {
+        listTicketsByStatus(filterValue);
+      }
+      else
+      {
+        puts("Entrada inválida!");
+      }
+      clearBuffer();
+      waitForKey();
       break;
+
     case 0:
       running = 1;
       break;
 
     default:
       puts("Opção inválida!");
+      waitForKey();
       break;
     }
 
   } while (!running);
 }
-void menuAdminOrder() {
+
+void menuAdminOrder()
+{
 
   int orderOption;
   int running;
 
-  do {
+  do
+  {
     puts("\n== ORDENAR ==");
     puts("1  - Ordenar tickets por data");
     puts("2  - Ordenar tickets por prioridade");
@@ -74,7 +113,8 @@ void menuAdminOrder() {
     puts("0  - Voltar");
     printf("Opcao: ");
     scanf("%d", &orderOption);
-    switch (orderOption) {
+    switch (orderOption)
+    {
 
     case 1:
       /* ordenarPorData() */
@@ -99,11 +139,13 @@ void menuAdminOrder() {
   } while (!running);
 }
 
-void menuManagmentCategories() {
+void menuManagmentCategories()
+{
   int orderOption;
   int running;
 
-  do {
+  do
+  {
     puts("\n== GERIR CATEGORIAS ==");
     puts("1  - Adicionar");
     puts("2  - Remover");
@@ -112,7 +154,8 @@ void menuManagmentCategories() {
     puts("0  - Voltar");
     printf("Opcao: ");
     scanf("%d", &orderOption);
-    switch (orderOption) {
+    switch (orderOption)
+    {
 
     case 1:
       /* function() */
@@ -138,9 +181,11 @@ void menuManagmentCategories() {
   } while (!running);
 }
 
-void adminMenu() {
+void adminMenu()
+{
   int option;
-  do {
+  do
+  {
     system("cls");
     navbar();
     puts("======== MENU ADMINISTRADOR ========");
@@ -166,13 +211,16 @@ void adminMenu() {
     scanf("%d", &option);
     clearBuffer();
 
-    switch (option) {
+    switch (option)
+    {
       // precisa de "{}" por causa da declaraçao da variavel
-    case 1: {
+    case 1:
+    {
       TICKET_INFO ticket;
 
       printf("**ADICIONAR TICKET**\n");
-      do {
+      do
+      {
         printf("Tipo (1-Hardware, 2-Software, 3-Rede, 4-Acesso, 5-Outro): ");
 
         if (scanf("%d", &ticket.type) != 1 ||
@@ -182,7 +230,9 @@ void adminMenu() {
         {
           puts("Tipo de TICKET não válido.");
           clearBuffer();
-        } else {
+        }
+        else
+        {
           break; // Input válido, sai do ciclo
         }
       } while (1);
@@ -215,7 +265,8 @@ void adminMenu() {
       listAllTickets();
       waitForKey();
       break;
-    case 4: {
+    case 4:
+    {
       int ticketId = 0;
       puts("Digita o id do ticket a visualizar");
       scanf("%i", &ticketId);
@@ -224,7 +275,8 @@ void adminMenu() {
       waitForKey();
       break;
     }
-    case 5: {
+    case 5:
+    {
       int idToRemove;
       printf("Introduza o ticket que deseja remover: ");
       scanf("%d", &idToRemove);
@@ -252,12 +304,14 @@ void adminMenu() {
       scanf("%d", &userId);
       clearBuffer();
 
-      if (userId != 0) {
+      if (userId != 0)
+      {
         validateTechnician(userId);
       }
       waitForKey();
       break;
-    case 11: {
+    case 11:
+    {
       int ticketId, tecnicoId;
 
       printf("**ATRIBUIR TECNICO A TICKET**\n");
@@ -293,9 +347,11 @@ void adminMenu() {
   } while (option != 0);
 }
 
-void technicianMenu(char *username) {
+void technicianMenu(char *username)
+{
   int option;
-  do {
+  do
+  {
     system("cls");
     printf("Utilizador: %s\n\n", username);
     printf("======== MENU TECNICO ========\n");
@@ -312,7 +368,8 @@ void technicianMenu(char *username) {
     scanf("%d", &option);
     clearBuffer();
 
-    switch (option) {
+    switch (option)
+    {
     case 1: /* verMeusTickets(username) */
       break;
     case 2: /* aceitarTicket(username) */
@@ -337,7 +394,8 @@ void technicianMenu(char *username) {
   } while (option != 0);
 }
 
-int main() {
+int main()
+{
   system("chcp 65001 > nul");
   system("cls");
   char username[MAX_STR], pass[MAX_STR], newPassword[MAX_STR];
@@ -347,7 +405,8 @@ int main() {
 
   createAdmin();
 
-  while (1) {
+  while (1)
+  {
     printf("======== SISTEMA DE HELPDESK ========\n");
 
     printf("\n1 - Login\n");
@@ -362,7 +421,8 @@ int main() {
     if (option == 0)
       break;
 
-    switch (option) {
+    switch (option)
+    {
     case 1:
       printf("**LOGIN**\n");
       printf("Username: ");
@@ -375,34 +435,44 @@ int main() {
 
       int perfil = login(username, pass);
 
-      if (perfil == -1) {
+      if (perfil == -1)
+      {
         printf("\nCredenciais invalidas!\n");
         waitForKey();
-      } else if (perfil == PERFIL_ADMIN) {
-        if (isLogged == 1) {
+      }
+      else if (perfil == PERFIL_ADMIN)
+      {
+        if (isLogged == 1)
+        {
           puts("Utilizador logado com sucesso");
         }
         waitForKey();
         system("cls");
 
-        if (isLogged != 1) {
+        if (isLogged != 1)
+        {
           puts("\n=== Primeiro login: altere a password! ===\n");
           printf("Nova password: ");
           fgets(newPassword, MAX_STR, stdin);
           newPassword[strcspn(newPassword, "\n")] = 0;
 
-          if (changePassword(username, newPassword) == 0) {
+          if (changePassword(username, newPassword) == 0)
+          {
             puts("Password alterada com sucesso!");
             isLogged = 1;
             puts("\nInicio de sessao automatico...");
             waitForKey();
             system("cls");
-          } else {
+          }
+          else
+          {
             puts("Ocorreu um erro ao alterar palavra-passe");
           }
         }
         adminMenu();
-      } else if (perfil == PERFIL_TECNICO) {
+      }
+      else if (perfil == PERFIL_TECNICO)
+      {
         technicianMenu(username);
       }
       system("cls");
@@ -424,7 +494,8 @@ int main() {
 
       user.perfil = PERFIL_TECNICO;
 
-      if (registerUser(user) == -1) {
+      if (registerUser(user) == -1)
+      {
         printf("ERRO: Registo mal sucedido\n");
       }
       puts("Utilizador criado com sucesso");
@@ -442,9 +513,12 @@ int main() {
       fgets(newPassword, MAX_STR, stdin);
       newPassword[strcspn(newPassword, "\n")] = 0;
 
-      if (changePassword(username, newPassword) == 0) {
+      if (changePassword(username, newPassword) == 0)
+      {
         puts("Password alterada com sucesso!");
-      } else {
+      }
+      else
+      {
         puts("Ocorreu um erro ao alterar palavra-passe");
       }
       waitForKey();

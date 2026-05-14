@@ -21,13 +21,6 @@
 #define PERFIL_ADMIN 1
 #define PERFIL_TECNICO 2
 
-/* 
-#define ROLE_ADMIN      1
-#define ROLE_TECHNICIAN 2
-
-Achas que ficaria mal assim?
-*/
-
 typedef struct datetime {
     int day, month, year;
     int hour, min;
@@ -111,9 +104,15 @@ int getTicketCount(); // feito
 int assignTechnician(int ticket_id, int technicianId); // feito
 int updateTicketStatus(int ticket_id, int newStatus);
 
-void printInfosTicket(TICKET_INFO ticket);
+void printInfosTicket(TICKET_INFO ticket); // Feito
+void printInfoFormatTable(TICKET_INFO ticket); //Feito 
 
-// 
+//Listar Tickets com Filtros
+void listTicketsByStatus(int status); //Feito
+void listTicketsByPriority(int priority); //Feito
+void listTicketsByType(int type); //Feito
+
+
 // ======================= PARTE UTILITARIAS =======================
 
 void clearBuffer();
