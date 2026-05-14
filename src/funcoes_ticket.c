@@ -146,8 +146,7 @@ int createTicket(TICKET_INFO ticket) {
   return 0;
 }
 
-int updateTicket()
-{
+int updateTicket() {
   int idForSearch, option, running = 1;
 
   printf("\n\nIntroduza o número do TICKET que deseja editar: ");
@@ -155,15 +154,12 @@ int updateTicket()
 
   ELEM_TICKET *temp = headTickets;
 
-  while (temp != NULL)
-  {
-    if (temp->data.id == idForSearch)
-    {
+  while (temp != NULL) {
+    if (temp->data.id == idForSearch) {
       puts("\n=== TICKET ENCONTRADO ===");
       printInfosTicket(temp->data);
 
-      do
-      {
+      do {
         puts("=== ALTERAR INFORMAÇÕES ===");
         puts("1 - Alterar Tipo");
         puts("2 - Alterar Descrição");
@@ -173,23 +169,24 @@ int updateTicket()
         printf("Opção: ");
         scanf("%d", &option);
         clearBuffer();
-        // AVISO Falta informar o user se a actualização foi bem sucedida (isso será feito quando forem feitas as validações)
+        // AVISO Falta informar o user se a actualização foi bem sucedida (isso
+        // será feito quando forem feitas as validações)
 
-        switch (option)
-        {
+        switch (option) {
         case 1:
           // Alterar Tipo
-          do
-          {
-            printf("Novo tipo (1-Hardware, 2-Software, 3-Rede, 4-Acesso, 5-Outro): ");
+          do {
+            printf("Novo tipo (1-Hardware, 2-Software, 3-Rede, 4-Acesso, "
+                   "5-Outro): ");
 
-            if (scanf("%d", &temp->data.type) != 1 || (temp->data.type < TYPE_HARDWARE || temp->data.type > TYPE_OTHER)) // Se o retorno for diferente de 1 é porque não leu 1 inteiro.
+            if (scanf("%d", &temp->data.type) != 1 ||
+                (temp->data.type < TYPE_HARDWARE ||
+                 temp->data.type > TYPE_OTHER)) // Se o retorno for diferente de
+                                                // 1 é porque não leu 1 inteiro.
             {
               puts("Tipo de TICKET não válido.");
               clearBuffer();
-            }
-            else
-            {
+            } else {
               break; // Input válido, sai do ciclo
             }
           } while (1);
@@ -209,7 +206,8 @@ int updateTicket()
           break;
         case 4:
           // Alterar Estado
-          printf("Estado (1-Aberto, 2-Em Atend., 3-Esp. User, 4-Resolvido, 5-Fechado): ");
+          printf("Estado (1-Aberto, 2-Em Atend., 3-Esp. User, 4-Resolvido, "
+                 "5-Fechado): ");
           scanf("%d", &temp->data.status);
           clearBuffer();
 

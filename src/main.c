@@ -1,7 +1,28 @@
 #include "funcoes.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 
+void navbar() {
+  //  printf("\033[0;32m");
+
+  // clang-format off
+  /* prettier-ignore */
+    printf(
+        "    ░██     ░██            ░██                   ░██                       ░██                                                   ░██                               \n"
+        "    ░██     ░██            ░██                   ░██                       ░██                                                   ░██                               \n"
+        "    ░██     ░██  ░███████  ░██ ░████████   ░████████  ░███████   ░███████  ░██    ░██         ░███████  ░██    ░██  ░███████  ░████████  ░███████  ░█████████████  \n"
+        "    ░██████████ ░██    ░██ ░██ ░██    ░██ ░██    ░██ ░██    ░██ ░██        ░██   ░██ ░██████ ░██        ░██    ░██ ░██           ░██    ░██    ░██ ░██   ░██   ░██ \n"
+        "    ░██     ░██ ░█████████ ░██ ░██    ░██ ░██    ░██ ░█████████  ░███████  ░███████           ░███████  ░██    ░██  ░███████     ░██    ░█████████ ░██   ░██   ░██ \n"
+        "    ░██     ░██ ░██        ░██ ░███   ░██ ░██   ░███ ░██               ░██ ░██   ░██                ░██ ░██   ░███        ░██    ░██    ░██        ░██   ░██   ░██ \n"
+        "    ░██     ░██  ░███████  ░██ ░██░█████   ░█████░██  ░███████   ░███████  ░██    ░██         ░███████   ░█████░██  ░███████      ░████  ░███████  ░██   ░██   ░██ \n"
+        "                               ░██                                                                             ░██                                                 \n"
+        "                               ░██                                                                       ░███████                                                  \n"
+    );
+  // clang-format on
+  // Reset cor
+  // printf("\033[0m");
+}
 void menuAdminFilter() {
   int filterOption;
   int running = 0;
@@ -121,6 +142,7 @@ void adminMenu() {
   int option;
   do {
     system("cls");
+    navbar();
     puts("======== MENU ADMINISTRADOR ========");
     puts("1  - Adicionar ticket");
     puts("2  - Editar ticket");
@@ -316,6 +338,7 @@ void technicianMenu(char *username) {
 }
 
 int main() {
+  system("chcp 65001 > nul");
   system("cls");
   char username[MAX_STR], pass[MAX_STR], newPassword[MAX_STR];
   int option;
