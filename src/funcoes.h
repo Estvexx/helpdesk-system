@@ -112,8 +112,14 @@ void listTicketsByStatus(int status); //Feito
 void listTicketsByPriority(int priority); //Feito
 void listTicketsByType(int type); //Feito
 
+// Ordenar lista
+// PERIGOSO TENHO DE CORRIGIR A ESTRUTURA DO HISTORY
+void sortTicketsByTechnician();
+void sortTicketsByDate();
+void sortTicketsByPriority();
 
 // ======================= PARTE UTILITARIAS =======================
 
 void clearBuffer();
 void waitForKey();
+int compareDates(DateTime d1, DateTime d2);
