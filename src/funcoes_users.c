@@ -165,8 +165,7 @@ void listPendingTechnicians() {
   ELEM_USER *temp = head;
   int encontrou = 0;
 
-  printf("\n%-5s | %-20s | %-15s | %-10s\n", "ID", "Nome", "Username",
-         "Validado");
+  printf("\n%-5s | %-20s | %-15s | %-10s\n", "ID", "Nome", "Username", "Validado");
   printf("------+----------------------+-----------------+--------\n");
 
   while (temp != NULL) {

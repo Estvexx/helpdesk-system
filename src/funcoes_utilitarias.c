@@ -1,19 +1,24 @@
 #include "funcoes.h"
 #include <stdio.h>
+#include <string.h>
 
-void clearBuffer() {
+
+void clearBuffer()
+{
   int c;
   while ((c = getchar()) != '\n' && c != EOF)
     ;
 }
 
-void waitForKey() {
+void waitForKey()
+{
   puts("\nCarregue numa tecla para continuar ...");
   getchar();
 }
 
 // Retorna 1 se d1 > d2, 0 se igual, -1 se d1 < d2
-int compareDates(DateTime d1, DateTime d2) {
+int compareDates(DateTime d1, DateTime d2)
+{
   if (d1.year > d2.year)
     return 1;
   if (d1.year < d2.year)
@@ -37,54 +42,37 @@ int compareDates(DateTime d1, DateTime d2) {
   return 0;
 }
 
-void obterTipo(int tipo, char *texto) {
-  switch (tipo) {
-  case TYPE_HARDWARE:
-    strcpy(texto, "Hardware");
-    break;
-  case TYPE_SOFTWARE:
-    strcpy(texto, "Software");
-    break;
-  case TYPE_NETWORK:
-    strcpy(texto, "Rede");
-    break;
-  case TYPE_ACCESS:
-    strcpy(texto, "Acesso");
-    break;
-  case TYPE_OTHER:
-    strcpy(texto, "Outro");
-    break;
-  default:
-    strcpy(texto, "???");
-    break;
-  }
-}
 
-void obterEstado(int status, char *texto) {
-  switch (status) {
+
+void getStatus(int status, char *str)
+{
+  switch (status)
+  {
   case STATUS_OPEN:
-    strcpy(texto, "Aberto");
+    strcpy(str, "Aberto");
     break;
   case STATUS_IN_PROGRESS:
-    strcpy(texto, "Em Atend.");
+    strcpy(str, "Em Atend.");
     break;
   case STATUS_WAITING_USER:
-    strcpy(texto, "Esp. User");
+    strcpy(str, "Esp. User");
     break;
   case STATUS_RESOLVED:
-    strcpy(texto, "Resolvido");
+    strcpy(str, "Resolvido");
     break;
   case STATUS_CLOSED:
-    strcpy(texto, "Fechado");
+    strcpy(str, "Fechado");
     break;
   default:
-    strcpy(texto, "???");
+    strcpy(str, "???");
     break;
   }
 }
 
-void obterPrioridade(int prioridade, char *texto) {
-  switch (prioridade) {
+void getPriority(int prioridade, char *texto)
+{
+  switch (prioridade)
+  {
   case 1:
     strcpy(texto, "Baixa");
     break;
@@ -103,9 +91,48 @@ void obterPrioridade(int prioridade, char *texto) {
   }
 }
 
-void tableHeaders() {
-  printf("\n%-5s | %-9s | %-12s | %-10s | %-15s | %-10s |%-16s\n", "ID", "Tipo",
-         "Estado", "Prioridade", "Utilizador", "Tecnico", "Data Abertura");
-  printf("------+-----------+--------------+------------+-----------------+----"
-         "--------+-----------------\n");
+void tableHeaders()
+{
+  printf("\n%-5s | %-9s | %-12s | %-10s | %-15s | %-10s |%-16s\n", "ID", "Tipo", "Estado", "Prioridade", "Utilizador", "Tecnico", "Data Abertura");
+  printf("------+-----------+--------------+------------+-----------------+-----------+-----------------\n");
+}
+
+int confirmDelete()
+{
+  int confirmDelete;
+  do
+  {
+    puts("Confirmar remoção?");
+    puts("0 - Continuar");
+    puts("1 - Cancelar");
+
+    if (scanf("%d", &confirmDelete) != 1 || (confirmDelete != 0 && confirmDelete != 1))
+    {
+      clearBuffer();
+      puts("Insira uma opção válida");
+    }
+    else
+    {
+      break;
+    }
+
+  } while (1);
+
+  return confirmDelete;
+}
+
+void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTicketsTypes)
+{
+  ELEM_TICKET_TYPE *temp = headTicketsTypes;
+
+  while (temp != NULL)
+  {
+    if (temp->data.id == typeId)
+    {
+      strcpy(str, temp->data.name);
+      return;
+    }
+    temp = temp->next;
+  }
+  strcpy(str, "???");
 }

@@ -6,42 +6,45 @@
 
 #define MAX_STR 100
 
-#define TYPE_HARDWARE 1 // TIPO_HARDWARE 
-#define TYPE_SOFTWARE 2 // TIPO_SOFTWARE 
-#define TYPE_NETWORK  3 // TIPO_REDE 
-#define TYPE_ACCESS   4 // TIPO_ACESSO 
-#define TYPE_OTHER    5 // TIPO_OUTRO 
+#define TYPE_HARDWARE 1 // TIPO_HARDWARE
+#define TYPE_SOFTWARE 2 // TIPO_SOFTWARE
+#define TYPE_NETWORK 3  // TIPO_REDE
+#define TYPE_ACCESS 4   // TIPO_ACESSO
+#define TYPE_OTHER 5    // TIPO_OUTRO
 
-#define STATUS_OPEN            1 // ESTADO_ABERTO 
-#define STATUS_IN_PROGRESS     2 // ESTADO_EM_ATENDIMENTO 
-#define STATUS_WAITING_USER    3 // ESTADO_ESPERA_UTILIZADOR 
-#define STATUS_RESOLVED        4 // ESTADO_RESOLVIDO 
-#define STATUS_CLOSED          5 // ESTADO_FECHADO 
+#define STATUS_OPEN 1         // ESTADO_ABERTO
+#define STATUS_IN_PROGRESS 2  // ESTADO_EM_ATENDIMENTO
+#define STATUS_WAITING_USER 3 // ESTADO_ESPERA_UTILIZADOR
+#define STATUS_RESOLVED 4     // ESTADO_RESOLVIDO
+#define STATUS_CLOSED 5       // ESTADO_FECHADO
 
 #define PERFIL_ADMIN 1
 #define PERFIL_TECNICO 2
 
-typedef struct datetime {
+typedef struct datetime
+{
     int day, month, year;
     int hour, min;
 } DateTime;
 
-
-typedef struct user {
+typedef struct user
+{
     int id;
     char name[MAX_STR];
     char username[MAX_STR];
     char password[MAX_STR];
-    int perfil;        // ADMIN ou TECNICO
+    int perfil;      // ADMIN ou TECNICO
     int isValidated; // 0 = pendente, 1 = validado
 } USER_INFO;
 
-typedef struct elemUser {
+typedef struct elemUser
+{
     USER_INFO info;
     struct elemUser *next;
 } ELEM_USER;
 
-typedef struct history {
+typedef struct history
+{
     DateTime date;
     char user[MAX_STR];
     char description[300];
@@ -49,17 +52,19 @@ typedef struct history {
     char previousTechnician[30];
     char currentTechnician[30];
     char previousStatus[30];
-    char currentStatus[30];  
+    char currentStatus[30];
 } HISTORY_INFO;
 
-typedef struct elemHistory {
+typedef struct elemHistory
+{
     HISTORY_INFO data;
     struct elemHistory *next;
 } ELEM_HISTORY;
 
-typedef struct ticket {
+typedef struct ticket
+{
     int id;
-    int type;           // hardware, software, network, access, other
+    int typeId; 
     DateTime openedAt;
     DateTime closedAt;
     char description[500];
@@ -70,66 +75,98 @@ typedef struct ticket {
     char solution[500];
 } TICKET_INFO;
 
-typedef struct elemTicket {
-    TICKET_INFO data;            
-    ELEM_HISTORY *history;      
+typedef struct elemTicket
+{
+    TICKET_INFO data;
+    ELEM_HISTORY *history;
     struct elemTicket *next;
-} ELEM_TICKET;                   
+} ELEM_TICKET;
 
-DateTime getCurrentDateTime(); //Obter data atual
+typedef struct ticketType
+{
+    int id;
+    char name[50]; // pre. def: hardware, software, network, access, other
+} TICKET_TYPE;
+
+typedef struct elemTicketType
+{
+    TICKET_TYPE data;
+    struct elemTicketType *next;
+} ELEM_TICKET_TYPE;
+
+DateTime getCurrentDateTime(); // Obter data atual
 
 // Retorna -1 se der erro e 0 sucesso
 //             GERAL : -1 ERRO -> 0 SUCESSO
 // ======================= PARTE INICIAL USERS =======================
 
-int createAdmin(); // Feito
-int registerUser(USER_INFO newUser); // Feito
-int userExistsByUsername(char *username); // Feito
-int getUserCount(); // Feito
-int changePassword(char *username, char *newPassword); //Feito
-int login(char *username, char *password, int *id);  // Feito
-int validateTechnician(int userId); // Feito, colocar tecnico como validado
-int isTechnicianValidated(int userId); // Feito, verificar se tecnico esta validado ou nao
-void listPendingTechnicians(); // Feito
-void listAllTechnicians(); // Feito
+int createAdmin();                                     // Feito
+int registerUser(USER_INFO newUser);                   // Feito
+int userExistsByUsername(char *username);              // Feito
+int getUserCount();                                    // Feito
+int changePassword(char *username, char *newPassword); // Feito
+int login(char *username, char *password, int *id);             // Feito
+int validateTechnician(int userId);                    // Feito, colocar tecnico como validado
+int isTechnicianValidated(int userId);                 // Feito, verificar se tecnico esta validado ou nao
+void listPendingTechnicians();                         // Feito
+void listAllTechnicians();                             // Feito
 
 // ======================= PARTE TICKETS =======================
-int createTicket(TICKET_INFO ticket); // Feito
-int updateTicket(); //Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
-int deleteTicket(int id); //Retorna 1 se for cancelado pelo user
-void listAllTickets(); // feito
-int existeUserbyId(int id); // feito
-void showTicketById(int id); // feito
-void showTicketByTechnician(int id); // feito
-int getTicketCount(); // feito
-int assignTechnician(int ticket_id, int technicianId); // feito
+int createTicket(TICKET_INFO ticket);                  // Feito
+int updateTicket(int ticketId);                                    // Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
+int deleteTicket(int ticketId);                              // Retorna 1 se for cancelado pelo user
+void listAllTickets();                                 // feito
+int existeUserbyId(int id);                            // feito
+void showTicketById(int id);                           // feito
+int getTicketCount();                                  // feito
+int assignTechnician(int ticket_id, int technicianId);
+ // feito
 int updateTicketStatus(int ticket_id, int newStatus);
 
-void printInfosTicket(TICKET_INFO ticket); // Feito
-void printInfoFormatTable(TICKET_INFO ticket); //Feito 
+void printInfosTicket(TICKET_INFO ticket);     // Feito
+void printInfoFormatTable(TICKET_INFO ticket); // Feito
 
-//Listar Tickets com Filtros
-void listTicketsByStatus(int status); //Feito
-void listTicketsByPriority(int priority); //Feito
-void listTicketsByType(int type); //Feito
+// Listar Tickets com Filtros
+void listTicketsByStatus(int status);     // Feito
+void listTicketsByPriority(int priority); // Feito
+void listTicketsByType(int type);         // Feito
 
 // Ordenar lista
+// PERIGOSO TENHO DE CORRIGIR A ESTRUTURA DO HISTORY
 void sortTicketsByTechnician();
 void sortTicketsByDate();
 void sortTicketsByPriority();
 
-// ======================= PARTE HISTÓRICO =======================
+//Tecnico
+void showTicketByTechnician(int id); // feito
+
+//History
 void addHistory(ELEM_TICKET *ticket, HISTORY_INFO history);
 void printHistory(int ticketId, ELEM_TICKET *headTickets);
 // este print é o intermediario que permite utilizar a funçao acima 
 void printTicketHistory(int ticketId);
 
+// ======================= PARTE TIPOS TICKETS =======================
+
+int createTicketType(TICKET_TYPE ticketType);
+int deleteTicketType(int typeId, ELEM_TICKET *headTickets); //Feito
+int updateTicketType(int typeId); //Feito
+void listTicketTypes(); // Feito
+int getRealTypeId(int displayIndex); // Feito
+int getTicketTypeCount(); //Feito
 // ======================= PARTE UTILITARIAS =======================
 
+void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTickets);
+void getStatus(int status, char *str);
+void getPriority(int prioridade, char *texto);
 void clearBuffer();
 void waitForKey();
 int compareDates(DateTime d1, DateTime d2);
-void obterTipo(int tipo, char *texto);
-void obterEstado(int status, char *texto);
-void obterPrioridade(int prioridade, char *texto);
-void tableHeaders();  
+int confirmDelete() ; // 0 - confirma / 1 - cancela
+void tableHeaders();
+
+
+void deleteType(int typeId);
+void headTypes(int typeId, char *str);
+void getTypeUtil(int typeId, char *str);
+void seederTypes();
