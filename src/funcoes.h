@@ -87,7 +87,7 @@ int registerUser(USER_INFO newUser); // Feito
 int userExistsByUsername(char *username); // Feito
 int getUserCount(); // Feito
 int changePassword(char *username, char *newPassword); //Feito
-int login(char *username, char *password);  // Feito
+int login(char *username, char *password, int *id);  // Feito
 int validateTechnician(int userId); // Feito, colocar tecnico como validado
 int isTechnicianValidated(int userId); // Feito, verificar se tecnico esta validado ou nao
 void listPendingTechnicians(); // Feito
@@ -100,6 +100,7 @@ int deleteTicket(int id); //Retorna 1 se for cancelado pelo user
 void listAllTickets(); // feito
 int existeUserbyId(int id); // feito
 void showTicketById(int id); // feito
+void showTicketByTechnician(int id); // feito
 int getTicketCount(); // feito
 int assignTechnician(int ticket_id, int technicianId); // feito
 int updateTicketStatus(int ticket_id, int newStatus);
@@ -113,13 +114,22 @@ void listTicketsByPriority(int priority); //Feito
 void listTicketsByType(int type); //Feito
 
 // Ordenar lista
-// PERIGOSO TENHO DE CORRIGIR A ESTRUTURA DO HISTORY
 void sortTicketsByTechnician();
 void sortTicketsByDate();
 void sortTicketsByPriority();
+
+// ======================= PARTE HISTÓRICO =======================
+void addHistory(ELEM_TICKET *ticket, HISTORY_INFO history);
+void printHistory(int ticketId, ELEM_TICKET *headTickets);
+// este print é o intermediario que permite utilizar a funçao acima 
+void printTicketHistory(int ticketId);
 
 // ======================= PARTE UTILITARIAS =======================
 
 void clearBuffer();
 void waitForKey();
 int compareDates(DateTime d1, DateTime d2);
+void obterTipo(int tipo, char *texto);
+void obterEstado(int status, char *texto);
+void obterPrioridade(int prioridade, char *texto);
+void tableHeaders();  

@@ -109,7 +109,6 @@ void menuAdminOrder() {
       waitForKey();
       break;
     case 2:
-      puts("AAAAAAAAAAAAAAAA");
       sortTicketsByPriority();
       listAllTickets();
       waitForKey();
@@ -118,7 +117,6 @@ void menuAdminOrder() {
       sortTicketsByTechnician();
       listAllTickets();
       waitForKey();
-
       break;
     case 0:
       running = 1;
@@ -305,8 +303,15 @@ void adminMenu() {
       waitForKey();
       break;
     }
-    case 12: /* verhistory() */
+    case 12: {
+      int id;
+      printf("ID do ticket: ");
+      scanf("%d", &id);
+      clearBuffer();
+      printTicketHistory(id);
+      waitForKey();
       break;
+    }
     case 13: /* tempoMedioPorTecnico() */
       break;
     case 14: /* tempoMedioPorCategoria() */
@@ -325,7 +330,7 @@ void adminMenu() {
   } while (option != 0);
 }
 
-void technicianMenu(char *username) {
+void technicianMenu(char *username, int logged_userId) {
   int option;
   do {
     system("cls");
@@ -345,7 +350,9 @@ void technicianMenu(char *username) {
     clearBuffer();
 
     switch (option) {
-    case 1: /* verMeusTickets(username) */
+    case 1:
+      showTicketByTechnician(logged_userId);
+      waitForKey();
       break;
     case 2: /* aceitarTicket(username) */
       break;
@@ -404,8 +411,8 @@ int main() {
       printf("Password: ");
       fgets(pass, MAX_STR, stdin);
       pass[strcspn(pass, "\n")] = 0;
-
-      int perfil = login(username, pass);
+      int logged_userId = -1;
+      int perfil = login(username, pass, &logged_userId);
 
       if (perfil == -1) {
         printf("\nCredenciais invalidas!\n");
@@ -435,7 +442,7 @@ int main() {
         }
         adminMenu();
       } else if (perfil == PERFIL_TECNICO) {
-        technicianMenu(username);
+        technicianMenu(username, logged_userId);
       }
       system("cls");
       break;

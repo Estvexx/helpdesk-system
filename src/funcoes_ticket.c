@@ -3,72 +3,6 @@
 #include <string.h>
 #include <time.h>
 
-void obterTipo(int tipo, char *texto) {
-  switch (tipo) {
-  case TYPE_HARDWARE:
-    strcpy(texto, "Hardware");
-    break;
-  case TYPE_SOFTWARE:
-    strcpy(texto, "Software");
-    break;
-  case TYPE_NETWORK:
-    strcpy(texto, "Rede");
-    break;
-  case TYPE_ACCESS:
-    strcpy(texto, "Acesso");
-    break;
-  case TYPE_OTHER:
-    strcpy(texto, "Outro");
-    break;
-  default:
-    strcpy(texto, "???");
-    break;
-  }
-}
-
-void obterEstado(int status, char *texto) {
-  switch (status) {
-  case STATUS_OPEN:
-    strcpy(texto, "Aberto");
-    break;
-  case STATUS_IN_PROGRESS:
-    strcpy(texto, "Em Atend.");
-    break;
-  case STATUS_WAITING_USER:
-    strcpy(texto, "Esp. User");
-    break;
-  case STATUS_RESOLVED:
-    strcpy(texto, "Resolvido");
-    break;
-  case STATUS_CLOSED:
-    strcpy(texto, "Fechado");
-    break;
-  default:
-    strcpy(texto, "???");
-    break;
-  }
-}
-
-void obterPrioridade(int prioridade, char *texto) {
-  switch (prioridade) {
-  case 1:
-    strcpy(texto, "Baixa");
-    break;
-  case 2:
-    strcpy(texto, "Media");
-    break;
-  case 3:
-    strcpy(texto, "Alta");
-    break;
-  case 4:
-    strcpy(texto, "Critica");
-    break;
-  default:
-    strcpy(texto, "???");
-    break;
-  }
-}
-
 ELEM_TICKET *headTickets = NULL;
 
 DateTime getCurrentDateTime() {
@@ -84,40 +18,9 @@ DateTime getCurrentDateTime() {
 }
 
 // ========================= HISTORY
+void printTicketHistory(int ticketId) { printHistory(ticketId, headTickets); }
 
-void addHistory(ELEM_TICKET *ticket, char *user, char *actionType,
-                int previousTechnician, int currentTechnician,
-                int previousStatus, int currentStatus, char *description) {
-
-  ELEM_HISTORY *newHistory = malloc(sizeof(ELEM_HISTORY));
-  if (newHistory == NULL) {
-    puts("Erro ao alocar memória para o histórico");
-    return;
-  }
-
-  newHistory->data.date = getCurrentDateTime();
-  strcpy(newHistory->data.user, user);
-  strcpy(newHistory->data.actionType, actionType);
-
-  if (previousTechnician == -1)
-    strcpy(newHistory->data.previousTechnician, "N/D");
-  else
-    snprintf(newHistory->data.previousTechnician, 30, "%d", previousTechnician);
-
-  if (currentTechnician == -1)
-    strcpy(newHistory->data.currentTechnician, "N/D");
-  else
-    snprintf(newHistory->data.currentTechnician, 30, "%d", currentTechnician);
-
-  obterEstado(previousStatus, newHistory->data.previousStatus);
-
-  obterEstado(currentStatus, newHistory->data.currentStatus);
-
-  strcpy(newHistory->data.description, description);
-
-  newHistory->next = ticket->history;
-  ticket->history = newHistory;
-}
+int nextTicketId = 1;
 
 int createTicket(TICKET_INFO ticket) {
   ELEM_TICKET *new = malloc(sizeof(ELEM_TICKET));
@@ -127,7 +30,8 @@ int createTicket(TICKET_INFO ticket) {
   }
 
   new->data = ticket;
-  new->data.id = getTicketCount() + 1;
+  new->data.id = nextTicketId;
+  nextTicketId++;
   new->data.technicianId = -1; // deixar -1 porque nao tem tecnico associado
   new->data.status = STATUS_OPEN;
   strcpy(new->data.solution, "");
@@ -232,7 +136,7 @@ int updateTicket() {
 }
 
 void printInfoFormatTable(TICKET_INFO ticket) {
-  char typeStr[15], statusStr[20], priorityStr[10], techStr[20];
+  char typeStr[15], statusStr[20], priorityStr[10], techStr[20], dataStr[20];
 
   obterTipo(ticket.type, typeStr);
   obterEstado(ticket.status, statusStr);
@@ -244,8 +148,12 @@ void printInfoFormatTable(TICKET_INFO ticket) {
     sprintf(techStr, "%d", ticket.technicianId);
   }
 
-  printf("%-5d | %-9s | %-12s | %-10s | %-15s | %-10s\n", ticket.id, typeStr,
-         statusStr, priorityStr, ticket.user, techStr);
+  sprintf(dataStr, "%02d/%02d/%04d %02d:%02d", ticket.openedAt.day,
+          ticket.openedAt.month, ticket.openedAt.year, ticket.openedAt.hour,
+          ticket.openedAt.min);
+
+  printf("%-5d | %-9s | %-12s | %-10s | %-15s | %-10s | %-16s\n", ticket.id,
+         typeStr, statusStr, priorityStr, ticket.user, techStr, dataStr);
 }
 
 void printInfosTicket(TICKET_INFO ticket) {
@@ -302,12 +210,7 @@ void listAllTickets() {
   }
 
   ELEM_TICKET *temp = headTickets;
-
-  printf("\n%-5s | %-9s | %-12s | %-10s | %-15s | %-10s\n", "ID", "Tipo",
-         "Estado", "Prioridade", "Utilizador", "Tecnico");
-  printf("------+-----------+--------------+------------+-----------------+----"
-         "--------\n");
-
+  tableHeaders();
   while (temp != NULL) {
     printInfoFormatTable(temp->data);
 
@@ -348,6 +251,25 @@ void showTicketById(int id) {
     temp = temp->next;
   }
   puts("Ticket nao encontrado.");
+}
+
+void showTicketByTechnician(int id) {
+  if (headTickets == NULL) {
+    puts("Nenhum ticket registado no sistema.");
+    return;
+  }
+
+  ELEM_TICKET *temp = headTickets;
+
+  tableHeaders();
+
+  while (temp != NULL) {
+    if (temp->data.technicianId == id) {
+      printInfoFormatTable(temp->data);
+    }
+    temp = temp->next;
+  }
+  printf("\n");
 }
 
 int deleteTicket(int id) {
@@ -423,31 +345,37 @@ int assignTechnician(int ticket_id, int technicianId) {
 
   while (temp != NULL) {
     if (temp->data.id == ticket_id) {
-      if (isTechnicianValidated(technicianId) == 1) {
-        puts("Técnico está valido para ser associado");
-      } else if (isTechnicianValidated(technicianId) == 0) {
-        puts("Técnico deve ser validado");
-        return -1;
-      } else {
-        puts("Técnico não encontrado");
+      if (isTechnicianValidated(technicianId) == -1) {
+        puts("Tecnico nao encontrado");
         return -1;
       }
+      if (isTechnicianValidated(technicianId) == 0) {
+        puts("Tecnico deve ser validado");
+        return -1;
+      }
+      HISTORY_INFO h;
 
-      int tecnicoAnterior = temp->data.technicianId;
-      int estadoAnterior = temp->data.status;
-
+      h.date = getCurrentDateTime();
+      strcpy(h.user, "admin");
+      strcpy(h.actionType, "ATRIBUICAO");
+      if (temp->data.technicianId == -1) {
+        strcpy(h.previousTechnician, "N/D");
+      } else {
+        snprintf(h.previousTechnician, 30, "%d", temp->data.technicianId);
+      }
+      snprintf(h.currentTechnician, 30, "%d", technicianId);
+      obterEstado(temp->data.status, h.previousStatus);
       temp->data.technicianId = technicianId;
 
       if (temp->data.status == STATUS_OPEN) {
         temp->data.status = STATUS_IN_PROGRESS;
       }
+      obterEstado(temp->data.status, h.currentStatus);
+      snprintf(h.description, 300, "Ticket atribuido ao tecnico #%d",
+               technicianId);
 
-      char descricao[300];
-      // snprintf permite passar argumentos e guarda na variavel descrição
-      snprintf(descricao, 300, "Ticket atribuido ao tecnico #%d", technicianId);
-
-      addHistory(temp, "admin", "ATRIBUICAO", tecnicoAnterior, technicianId,
-                 estadoAnterior, temp->data.status, descricao);
+      // Adicionar histórico
+      addHistory(temp, h);
 
       printf("Ticket #%d atribuido ao tecnico #%d com sucesso!\n", ticket_id,
              technicianId);
@@ -472,10 +400,7 @@ void listTicketsByStatus(int status) {
   ELEM_TICKET *temp = headTickets;
   int found = 0;
 
-  printf("\n%-5s | %-9s | %-12s | %-10s | %-15s | %-10s\n", "ID", "Tipo",
-         "Estado", "Prioridade", "Utilizador", "Tecnico");
-  printf("------+-----------+--------------+------------+-----------------+----"
-         "--------\n");
+  tableHeaders();
 
   while (temp != NULL) {
     if (temp->data.status == status) {
@@ -499,10 +424,7 @@ void listTicketsByPriority(int priority) {
   ELEM_TICKET *temp = headTickets;
   int found = 0;
 
-  printf("\n%-5s | %-9s | %-12s | %-10s | %-15s | %-10s\n", "ID", "Tipo",
-         "Estado", "Prioridade", "Utilizador", "Tecnico");
-  printf("------+-----------+--------------+------------+-----------------+----"
-         "--------\n");
+  tableHeaders();
 
   while (temp != NULL) {
     if (temp->data.priority == priority) {
@@ -527,10 +449,7 @@ void listTicketsByType(int type) {
   ELEM_TICKET *temp = headTickets;
   int found = 0;
 
-  printf("\n%-5s | %-9s | %-12s | %-10s | %-15s | %-10s\n", "ID", "Tipo",
-         "Estado", "Prioridade", "Utilizador", "Tecnico");
-  printf("------+-----------+--------------+------------+-----------------+----"
-         "--------\n");
+  tableHeaders();
 
   while (temp != NULL) {
     if (temp->data.type == type) {
@@ -567,6 +486,11 @@ void sortTicketsByPriority() {
         current->data = current->next->data;
         current->next->data = temp;
         swapped = 1;
+
+        // Aqui levo o historico com ele tambem, nao ordeno so a info do ticket
+        ELEM_HISTORY *tempHistory = current->history;
+        current->history = current->next->history;
+        current->next->history = tempHistory;
       }
       current = current->next;
     }
@@ -594,6 +518,11 @@ void sortTicketsByDate() {
         TICKET_INFO temp = current->data;
         current->data = current->next->data;
         current->next->data = temp;
+
+        // Aqui levo o historico com ele tambem, nao ordeno so a info do ticket
+        ELEM_HISTORY *tempHistory = current->history;
+        current->history = current->next->history;
+        current->next->history = tempHistory;
         swapped = 1;
       }
       current = current->next;
@@ -621,6 +550,12 @@ void sortTicketsByTechnician() {
         TICKET_INFO temp = current->data;
         current->data = current->next->data;
         current->next->data = temp;
+
+        // Aqui levo o historico com ele tambem, nao ordeno so a info do ticket
+        ELEM_HISTORY *tempHistory = current->history;
+        current->history = current->next->history;
+        current->next->history = tempHistory;
+
         swapped = 1;
       }
       current = current->next;

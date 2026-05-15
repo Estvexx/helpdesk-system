@@ -36,3 +36,76 @@ int compareDates(DateTime d1, DateTime d2) {
     return -1;
   return 0;
 }
+
+void obterTipo(int tipo, char *texto) {
+  switch (tipo) {
+  case TYPE_HARDWARE:
+    strcpy(texto, "Hardware");
+    break;
+  case TYPE_SOFTWARE:
+    strcpy(texto, "Software");
+    break;
+  case TYPE_NETWORK:
+    strcpy(texto, "Rede");
+    break;
+  case TYPE_ACCESS:
+    strcpy(texto, "Acesso");
+    break;
+  case TYPE_OTHER:
+    strcpy(texto, "Outro");
+    break;
+  default:
+    strcpy(texto, "???");
+    break;
+  }
+}
+
+void obterEstado(int status, char *texto) {
+  switch (status) {
+  case STATUS_OPEN:
+    strcpy(texto, "Aberto");
+    break;
+  case STATUS_IN_PROGRESS:
+    strcpy(texto, "Em Atend.");
+    break;
+  case STATUS_WAITING_USER:
+    strcpy(texto, "Esp. User");
+    break;
+  case STATUS_RESOLVED:
+    strcpy(texto, "Resolvido");
+    break;
+  case STATUS_CLOSED:
+    strcpy(texto, "Fechado");
+    break;
+  default:
+    strcpy(texto, "???");
+    break;
+  }
+}
+
+void obterPrioridade(int prioridade, char *texto) {
+  switch (prioridade) {
+  case 1:
+    strcpy(texto, "Baixa");
+    break;
+  case 2:
+    strcpy(texto, "Media");
+    break;
+  case 3:
+    strcpy(texto, "Alta");
+    break;
+  case 4:
+    strcpy(texto, "Critica");
+    break;
+  default:
+    strcpy(texto, "???");
+    break;
+  }
+}
+
+void tableHeaders() {
+  printf("\n%-5s | %-9s | %-12s | %-10s | %-15s | %-10s |%-16s\n", "ID", "Tipo",
+         "Estado", "Prioridade", "Utilizador", "Tecnico", "Data Abertura");
+  printf("------+-----------+--------------+------------+-----------------+----"
+         "--------+-----------------\n");
+}

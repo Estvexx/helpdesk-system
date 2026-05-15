@@ -70,7 +70,7 @@ int getUserCount() {
   return count;
 }
 
-int login(char *username, char *password) {
+int login(char *username, char *password, int *id) {
   if (userExistsByUsername(username) != 0) {
     return -1;
   }
@@ -79,6 +79,7 @@ int login(char *username, char *password) {
   while (temp != NULL) {
     if (strcmp(temp->info.username, username) == 0) {
       if (strcmp(temp->info.password, password) == 0) {
+        *id = temp->info.id;
         return temp->info.perfil;
       } else {
         return -1;
