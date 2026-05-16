@@ -1,35 +1,29 @@
 #include "funcoes.h"
 #include <stdio.h>
 
-void addHistory(ELEM_TICKET *ticket, HISTORY_INFO history)
-{
+void addHistory(ELEM_TICKET *ticket, HISTORY_INFO history) {
   ELEM_HISTORY *newHistory = malloc(sizeof(ELEM_HISTORY));
-  if (newHistory == NULL)
-  {
+  if (newHistory == NULL) {
     puts("Erro ao alocar memóra");
     return;
   }
   newHistory->data = history;
   newHistory->data.date = getCurrentDateTime();
+  // Aqui estou a apontar para a cabeça da lista ligada
   newHistory->next = ticket->history;
   ticket->history = newHistory;
 }
 
-void printHistory(int ticketId, ELEM_TICKET *headTickets)
-{
+void printHistory(int ticketId, ELEM_TICKET *headTickets) {
   ELEM_TICKET *temp = headTickets;
-  while (temp != NULL)
-  {
-    if (temp->data.id == ticketId)
-    {
+  while (temp != NULL) {
+    if (temp->data.id == ticketId) {
       ELEM_HISTORY *h = temp->history;
-      if (h == NULL)
-      {
+      if (h == NULL) {
         puts("Sem histórico para este ticket");
         return;
       }
-      while (h != NULL)
-      {
+      while (h != NULL) {
         printf("Data: %d/%d/%d %d:%d\n", h->data.date.day, h->data.date.month,
                h->data.date.year, h->data.date.hour, h->data.date.min);
         printf("Utilizador: %s\n", h->data.user);

@@ -12,9 +12,9 @@
 #define TYPE_ACCESS 4   // TIPO_ACESSO
 #define TYPE_OTHER 5    // TIPO_OUTRO
 
-#define STATUS_OPEN 1         // ESTADO_ABERTO
-#define STATUS_IN_PROGRESS 2  // ESTADO_EM_ATENDIMENTO
-#define STATUS_WAITING_USER 3 // ESTADO_ESPERA_UTILIZADOR
+#define STATUS_OPEN 1          // ESTADO_ABERTO
+#define STATUS_WAITING_USER 2 // ESTADO_ESPERA_TECNICO
+#define STATUS_IN_PROGRESS 3  // ESTADO_EM_ATENDIMENTO
 #define STATUS_RESOLVED 4     // ESTADO_RESOLVIDO
 #define STATUS_CLOSED 5       // ESTADO_FECHADO
 
@@ -67,12 +67,15 @@ typedef struct ticket
     int typeId;
     DateTime openedAt;
     DateTime closedAt;
+    DateTime estimatedConclusion;
     char description[500];
     int priority;       // 1 = baixa, 2 = media, 3 = alta, 4 = critica
     int status;         // aberto, em atendimento, etc.
     char user[MAX_STR]; // quem reportou
     int technicianId;   // tecnico responsavel (-1 se nenhum)
     char solution[500];
+    char actions[300];       // ações realizadas
+    char tools[200];        // ferramenta utilizadas
 } TICKET_INFO;
 
 typedef struct elemTicket
@@ -119,9 +122,10 @@ void listAllTickets();                // feito
 int existeUserbyId(int id);           // feito
 void showTicketById(int id);          // feito
 int getTicketCount();                 // feito
-int assignTechnician(int ticket_id, int technicianId);
-// feito
+int assignTechnician(int ticket_id, int technicianId);// feito
 int updateTicketStatus(int ticket_id, int logged_userId); // Feito
+int acceptTicket(int tecnicoId, int ticketId); // Feitos
+int delegateTicket(int ticket_id, int logged_userId); // Feito
 
 void printInfosTicket(TICKET_INFO ticket);     // Feito
 void printInfoFormatTable(TICKET_INFO ticket); // Feito
@@ -167,7 +171,9 @@ void getStatus(int status, char *str);
 void getPriority(int prioridade, char *texto);
 void clearBuffer();
 void waitForKey();
+DateTime addTimeToDateTime(DateTime dt, int hours, int minutes);
 int compareDates(DateTime d1, DateTime d2);
+int diasNoMes(int month, int year);
 int confirmDelete(); // 0 - confirma / 1 - cancela
 void tableHeaders();
 
