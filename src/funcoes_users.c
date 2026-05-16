@@ -6,6 +6,26 @@ ELEM_USER *head = NULL;
 
 // ======================= PARTE USERS =======================
 
+//Return 1 - erro / Return 0 é admin / Return -1 não é
+int isAdmin(int logged_userId) {
+  ELEM_USER *temp = head;
+  
+  while(temp != NULL && temp->info.id != logged_userId) {
+    temp = temp->next;
+  }
+
+  if(temp == NULL) {
+    return 1;
+  }
+
+  if(temp->info.perfil == PERFIL_ADMIN) {
+    return 0;
+  } else {
+    return -1;
+  }
+
+  return 1;
+}
 int createAdmin() {
   ELEM_USER *new = malloc(sizeof(ELEM_USER));
   if (new == NULL) {
@@ -78,6 +98,9 @@ int login(char *username, char *password, int *id) {
   ELEM_USER *temp = head;
   while (temp != NULL) {
     if (strcmp(temp->info.username, username) == 0) {
+      if(temp->info.isValidated == 0) {
+        return -2;
+      }
       if (strcmp(temp->info.password, password) == 0) {
         *id = temp->info.id;
         return temp->info.perfil;

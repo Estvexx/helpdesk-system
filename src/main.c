@@ -57,7 +57,8 @@ void menuAdminFilter()
       waitForKey();
       break;
 
-    case 2: {
+    case 2:
+    {
 
       int realId;
       int displayId;
@@ -71,7 +72,6 @@ void menuAdminFilter()
       listTicketsByType(realId);
       waitForKey();
       break;
-      
     }
     case 3:
       printf("\nQual o estado? (1-Aberto, 2-Em Atend., 3-Esp. User, "
@@ -404,7 +404,7 @@ void technicianMenu(char *username, int logged_userId)
     printf("======== MENU TECNICO ========\n");
     printf("1 - Ver os meus tickets\n");
     printf("2 - Aceitar ticket pendente\n");
-    printf("3 - Atualizar status de um ticket\n");
+    printf("3 - Atualizar estado de um ticket\n");
     printf("4 - Adicionar comentario/acao\n");
     printf("5 - Delegar ticket a outro tecnico\n");
     printf("6 - Registar ferramentas usadas\n");
@@ -421,10 +421,24 @@ void technicianMenu(char *username, int logged_userId)
       showTicketByTechnician(logged_userId);
       waitForKey();
       break;
-    case 2: /* aceitarTicket(username) */
+    case 2:
       break;
     case 3: /* atualizarEstadoTicket(username) */
+    {
+      int ticketId;
+      printf("\nIntroduza o ID do ticket que deseja atualizar o estado: (0 para cancelar): ");
+      scanf("%d", &ticketId);
+      clearBuffer();
+
+      if(ticketId == 0) {
+        waitForKey();
+        break;
+      }
+
+      updateTicketStatus(ticketId, logged_userId);
+      waitForKey();
       break;
+    }
     case 4: /* adicionarComentario(username) */
       break;
     case 5: /* delegarTicket(username) */
@@ -457,6 +471,7 @@ int main()
   seederTypes();
   while (1)
   {
+    system("cls");
     printf("======== SISTEMA DE HELPDESK ========\n");
 
     printf("\n1 - Login\n");
@@ -483,11 +498,19 @@ int main()
       fgets(pass, MAX_STR, stdin);
       pass[strcspn(pass, "\n")] = 0;
       int logged_userId = -1;
+
+      
       int perfil = login(username, pass, &logged_userId);
+      
+
+      
 
       if (perfil == -1)
       {
         printf("\nCredenciais invalidas!\n");
+        waitForKey();
+      } else if(perfil == -2) {
+        puts("\nTécnico ainda não validado! Contacte o administrador de sistema\n");
         waitForKey();
       }
       else if (perfil == PERFIL_ADMIN)
@@ -547,6 +570,7 @@ int main()
       if (registerUser(user) == -1)
       {
         printf("ERRO: Registo mal sucedido\n");
+        break;
       }
       puts("Utilizador criado com sucesso");
       waitForKey();

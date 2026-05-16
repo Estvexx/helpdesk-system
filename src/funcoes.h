@@ -64,7 +64,7 @@ typedef struct elemHistory
 typedef struct ticket
 {
     int id;
-    int typeId; 
+    int typeId;
     DateTime openedAt;
     DateTime closedAt;
     char description[500];
@@ -105,23 +105,23 @@ int registerUser(USER_INFO newUser);                   // Feito
 int userExistsByUsername(char *username);              // Feito
 int getUserCount();                                    // Feito
 int changePassword(char *username, char *newPassword); // Feito
-int login(char *username, char *password, int *id);             // Feito
+int login(char *username, char *password, int *id);    // Retorn -2 se tecnic não está validado             // Feito
 int validateTechnician(int userId);                    // Feito, colocar tecnico como validado
 int isTechnicianValidated(int userId);                 // Feito, verificar se tecnico esta validado ou nao
 void listPendingTechnicians();                         // Feito
 void listAllTechnicians();                             // Feito
 
 // ======================= PARTE TICKETS =======================
-int createTicket(TICKET_INFO ticket);                  // Feito
-int updateTicket(int ticketId);                                    // Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
-int deleteTicket(int ticketId);                              // Retorna 1 se for cancelado pelo user
-void listAllTickets();                                 // feito
-int existeUserbyId(int id);                            // feito
-void showTicketById(int id);                           // feito
-int getTicketCount();                                  // feito
+int createTicket(TICKET_INFO ticket); // Feito
+int updateTicket(int ticketId);       // Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
+int deleteTicket(int ticketId);       // Retorna 1 se for cancelado pelo user
+void listAllTickets();                // feito
+int existeUserbyId(int id);           // feito
+void showTicketById(int id);          // feito
+int getTicketCount();                 // feito
 int assignTechnician(int ticket_id, int technicianId);
- // feito
-int updateTicketStatus(int ticket_id, int newStatus);
+// feito
+int updateTicketStatus(int ticket_id, int logged_userId); // Feito
 
 void printInfosTicket(TICKET_INFO ticket);     // Feito
 void printInfoFormatTable(TICKET_INFO ticket); // Feito
@@ -137,23 +137,26 @@ void sortTicketsByTechnician();
 void sortTicketsByDate();
 void sortTicketsByPriority();
 
-//Tecnico
+// ======================= PARTE TECNICO =======================
 void showTicketByTechnician(int id); // feito
 
-//History
+int isAdmin(int logged_userId); // Return 1 - erro / Return 0 é admin / Return -1 não é *FEITO*
+
+// ======================= PARTE HISTORY =======================
+
 void addHistory(ELEM_TICKET *ticket, HISTORY_INFO history);
 void printHistory(int ticketId, ELEM_TICKET *headTickets);
-// este print é o intermediario que permite utilizar a funçao acima 
+// este print é o intermediario que permite utilizar a funçao acima
 void printTicketHistory(int ticketId);
 
 // ======================= PARTE TIPOS TICKETS =======================
 
 int createTicketType(TICKET_TYPE ticketType);
-int deleteTicketType(int typeId, ELEM_TICKET *headTickets); //Feito
-int updateTicketType(int typeId); //Feito
-void listTicketTypes(); // Feito
-int getRealTypeId(int displayIndex); // Feito
-int getTicketTypeCount(); //Feito
+int deleteTicketType(int typeId, ELEM_TICKET *headTickets); // Feito
+int updateTicketType(int typeId);                           // Feito
+void listTicketTypes();                                     // Feito
+int getRealTypeId(int displayIndex);                        // Feito
+int getTicketTypeCount();                                   // Feito
 // ======================= PARTE UTILITARIAS =======================
 
 void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTickets);
@@ -162,9 +165,8 @@ void getPriority(int prioridade, char *texto);
 void clearBuffer();
 void waitForKey();
 int compareDates(DateTime d1, DateTime d2);
-int confirmDelete() ; // 0 - confirma / 1 - cancela
+int confirmDelete(); // 0 - confirma / 1 - cancela
 void tableHeaders();
-
 
 void deleteType(int typeId);
 void headTypes(int typeId, char *str);

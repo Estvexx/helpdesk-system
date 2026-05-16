@@ -69,6 +69,7 @@ void getStatus(int status, char *str)
   }
 }
 
+
 void getPriority(int prioridade, char *texto)
 {
   switch (prioridade)

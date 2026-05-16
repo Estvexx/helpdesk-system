@@ -19,9 +19,8 @@ DateTime getCurrentDateTime()
 }
 
 // ========================= HISTORY
-void printTicketHistory(int ticketId) { printHistory(ticketId, headTickets); } 
-void deleteType(int typeId) {deleteTicketType(typeId, headTickets);}
-
+void printTicketHistory(int ticketId) { printHistory(ticketId, headTickets); }
+void deleteType(int typeId) { deleteTicketType(typeId, headTickets); }
 
 int nextTicketId = 1;
 
@@ -121,8 +120,6 @@ int deleteTicket(int id)
 int updateTicket(int ticketId)
 {
   int option, running = 1;
-
- 
 
   ELEM_TICKET *temp = headTickets;
 
@@ -508,7 +505,7 @@ void listTicketsByType(int type)
   {
     if (temp->data.typeId == type)
     {
-      
+
       printInfoFormatTable(temp->data);
       found = 1;
     }
@@ -637,3 +634,75 @@ void sortTicketsByTechnician()
   puts("Ordenado com sucesso");
 }
 
+int updateTicketStatus(int ticket_id, int logged_userId)
+{
+  ELEM_TICKET *temp = headTickets;
+
+  while (temp != NULL && temp->data.id != ticket_id)
+  {
+    temp = temp->next;
+  }
+
+  if (temp == NULL)
+  {
+    printf("Ticket #%d não encontrado.\n", ticket_id);
+    return -1;
+  }
+
+  if (temp->data.technicianId != logged_userId && isAdmin(logged_userId) == -1)
+  {
+    printf("Apenas é possível alterar o estado dos tickets a si atribuidos");
+    return -1;
+  }
+
+  char strStatus[30];
+  getStatus(temp->data.status, strStatus);
+
+  printf("Estado atual: %d - %s", temp->data.status, strStatus);
+
+  int newStatus;
+  int isValid = 0;
+
+  do
+  {
+    printf("\nIntroduza o novo estado (1-Aberto, 2-Em Atendimento, 3-Esp. User, 4-Resolvido): ");
+
+    if (scanf("%d", &newStatus) == 1)
+    {
+      clearBuffer();
+
+      if (newStatus == STATUS_OPEN && (temp->data.status == STATUS_IN_PROGRESS || temp->data.status == STATUS_WAITING_USER))
+      {
+        puts("Erro: Não é possível reverter um ticket em Atendimento/Espera para Aberto.");
+      }
+      else if (newStatus >= STATUS_OPEN && newStatus <= STATUS_CLOSED)
+      {
+        isValid = 1;
+      }
+      else
+      {
+        puts("Estado inválido.");
+      }
+    }
+    else
+    {
+      clearBuffer();
+      puts("Erro: Entrada inválida. Introduza um número.");
+    }
+
+  } while (!isValid);
+
+  if (newStatus == STATUS_RESOLVED)
+  {
+    printf("Introduza uma solução para o ticket ser fechado: ");
+    fgets(temp->data.solution, sizeof(temp->data.solution), stdin);
+    temp->data.solution[strcspn(temp->data.solution, "\n")] = 0;
+    temp->data.closedAt = getCurrentDateTime();
+  }
+
+  getStatus(newStatus, strStatus);
+  temp->data.status = newStatus;
+
+  printf("Estado do ticket #%d alterado para '%s' com sucesso!\n", ticket_id, strStatus);
+  return 0;
+}
