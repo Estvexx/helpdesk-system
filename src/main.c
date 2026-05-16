@@ -466,8 +466,25 @@ void technicianMenu(char *username, int logged_userId) {
       waitForKey();
       break;
     }
-    case 4: /* adicionarComentario(username) */
+    case 4: {
+      int idTicket;
+
+      showTicketByTechnician(logged_userId);
+
+      puts("\nID do ticket para comentar (0 para cancelar): ");
+      scanf("%d", &idTicket);
+      clearBuffer();
+
+      if (idTicket == 0) {
+        puts("Operação cancelada.");
+        waitForKey();
+        break;
+      }
+
+      addComment(idTicket, logged_userId);
+      waitForKey();
       break;
+    }
     case 5: {
       int idTicket;
       system("cls");
@@ -617,6 +634,6 @@ int main() {
       break;
     }
   }
-
+  cleanAllLists();
   return 0;
 }

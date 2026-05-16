@@ -4,21 +4,23 @@
 
 ELEM_USER *head = NULL;
 
+void cleanupIntermediateUsers() { cleanupUsers(head); };
+
 // ======================= PARTE USERS =======================
 
-//Return 1 - erro / Return 0 é admin / Return -1 não é
+// Return 1 - erro / Return 0 é admin / Return -1 não é
 int isAdmin(int logged_userId) {
   ELEM_USER *temp = head;
-  
-  while(temp != NULL && temp->info.id != logged_userId) {
+
+  while (temp != NULL && temp->info.id != logged_userId) {
     temp = temp->next;
   }
 
-  if(temp == NULL) {
+  if (temp == NULL) {
     return 1;
   }
 
-  if(temp->info.perfil == PERFIL_ADMIN) {
+  if (temp->info.perfil == PERFIL_ADMIN) {
     return 0;
   } else {
     return -1;
@@ -98,7 +100,7 @@ int login(char *username, char *password, int *id) {
   ELEM_USER *temp = head;
   while (temp != NULL) {
     if (strcmp(temp->info.username, username) == 0) {
-      if(temp->info.isValidated == 0) {
+      if (temp->info.isValidated == 0) {
         return -2;
       }
       if (strcmp(temp->info.password, password) == 0) {
@@ -188,7 +190,8 @@ void listPendingTechnicians() {
   ELEM_USER *temp = head;
   int encontrou = 0;
 
-  printf("\n%-5s | %-20s | %-15s | %-10s\n", "ID", "Nome", "Username", "Validado");
+  printf("\n%-5s | %-20s | %-15s | %-10s\n", "ID", "Nome", "Username",
+         "Validado");
   printf("------+----------------------+-----------------+--------\n");
 
   while (temp != NULL) {

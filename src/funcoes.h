@@ -73,7 +73,6 @@ typedef struct ticket
     int status;         // aberto, em atendimento, etc.
     char user[MAX_STR]; // quem reportou
     int technicianId;   // tecnico responsavel (-1 se nenhum)
-    char solution[500];
     char actions[300];       // ações realizadas
     char tools[200];        // ferramenta utilizadas
 } TICKET_INFO;
@@ -129,6 +128,7 @@ int delegateTicket(int ticket_id, int logged_userId); // Feito
 
 void printInfosTicket(TICKET_INFO ticket);     // Feito
 void printInfoFormatTable(TICKET_INFO ticket); // Feito
+int addComment(int ticket_id, int logged_userId); // Feito
 
 // Listar Tickets com Filtros
 void listTicketsByStatus(int status);     // Feito
@@ -166,20 +166,39 @@ int getRealTypeId(int displayIndex);                        // Feito
 int getTicketTypeCount();                                   // Feito
 // ======================= PARTE UTILITARIAS =======================
 
-void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTickets);
-void getStatus(int status, char *str);
-void getPriority(int prioridade, char *texto);
-void clearBuffer();
-void waitForKey();
-DateTime addTimeToDateTime(DateTime dt, int hours, int minutes);
-int compareDates(DateTime d1, DateTime d2);
-int diasNoMes(int month, int year);
+void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTickets); // Feito
+void getStatus(int status, char *str); // Feito
+void getPriority(int prioridade, char *texto); // Feito
+void clearBuffer(); // Feito
+void waitForKey(); // Feito
+
+// Datas                   -------
+DateTime addTimeToDateTime(DateTime dt, int hours, int minutes); // Feito
+int compareDates(DateTime d1, DateTime d2); // Feito
+long differenceInMinutes(DateTime inicio, DateTime fim); // Feito
+int diasNoMes(int month, int year); // Feito
+//                          --------
+
 int confirmDelete(); // 0 - confirma / 1 - cancela
-void tableHeaders();
+void tableHeaders(); // Feito
 
-void deleteType(int typeId);
-void headTypes(int typeId, char *str);
-void getTypeUtil(int typeId, char *str);
+void deleteType(int typeId); // Feito
+void headTypes(int typeId, char *str); // Feito
+void getTypeUtil(int typeId, char *str); // Feito
 
-void seederTypes();
-void seederTickets();
+void seederTypes(); // Feito
+void seederTickets(); // Feito
+
+// ======================= PARTE EXIT =======================
+
+// Privadas
+void cleanupTickets(ELEM_TICKET *headTickets);
+void cleanupUsers(ELEM_USER *headUsers);
+void cleanupTicketTypes(ELEM_TICKET_TYPE *headTicketsTypes);
+
+// Publicas / INtermediárias
+void cleanupIntermediateUsers();
+void cleanupIntermediateTickets();
+void cleanupIntermediateTicketsTypes();
+
+void cleanAllLists();

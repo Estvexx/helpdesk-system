@@ -8,6 +8,8 @@
 
 ELEM_TICKET *headTickets = NULL;
 
+void cleanupIntermediateTickets() { cleanupTickets(headTickets); }
+
 DateTime getCurrentDateTime() {
   DateTime d;
   time_t t = time(NULL);
@@ -79,14 +81,12 @@ int createTicket(TICKET_INFO ticket) {
   nextTicketId++;
   new->data.technicianId = -1; // deixar -1 porque nao tem tecnico associado
   new->data.status = STATUS_OPEN;
-  strcpy(new->data.solution, "");
   new->data.openedAt = getCurrentDateTime();
   new->data.closedAt.day = 0;
   new->data.closedAt.month = 0;
   new->data.closedAt.year = 0;
   new->data.closedAt.hour = 0;
   new->data.closedAt.min = 0;
-  strcpy(new->data.solution, "");
   strcpy(new->data.actions, "");
   strcpy(new->data.tools, "");
   new->history = NULL;
@@ -310,9 +310,6 @@ void printInfosTicket(TICKET_INFO ticket) {
 
   printf("---------------------------------------------------------------\n");
   printf("Descricao:   %s\n", ticket.description);
-  printf("Solucao:     %s\n",
-         (strcmp(ticket.solution, "") == 0) ? "N/D" : ticket.solution);
-  printf("===============================================================\n\n");
 }
 
 void listAllTickets() {
@@ -414,7 +411,7 @@ int assignTechnician(int ticket_id, int technicianId) {
 
       h.date = getCurrentDateTime();
       strcpy(h.user, "admin");
-      strcpy(h.actionType, "ATRIBUICAO");
+      strcpy(h.actionType, "ATRIBUICAO DE TICKET A TECNICO");
       if (temp->data.technicianId == -1) {
         strcpy(h.previousTechnician, "N/D");
       } else {
@@ -694,13 +691,12 @@ int updateTicketStatus(int ticket_id, int logged_userId) {
   getStatus(newStatus, h.currentStatus);
 
   if (newStatus == STATUS_RESOLVED) {
+    char solucao[500];
     puts("Descreva a solução aplicada:");
-    fgets(temp->data.solution, sizeof(temp->data.solution), stdin);
-    temp->data.solution[strcspn(temp->data.solution, "\n")] = 0;
+    fgets(solucao, sizeof(solucao), stdin);
+    solucao[strcspn(solucao, "\n")] = 0;
     temp->data.closedAt = getCurrentDateTime();
-    snprintf(h.description, 300, "Ticket resolvido. Solução: %s",
-             temp->data.solution);
-
+    snprintf(h.description, 300, "Ticket resolvido. Solução: %s", solucao);
   } else if (newStatus == STATUS_CLOSED) {
     puts("Descreva as ações realizadas:\n");
     fgets(temp->data.actions, sizeof(temp->data.actions), stdin);
@@ -807,7 +803,7 @@ int acceptTicket(int tecnicoId, int ticketId) {
       HISTORY_INFO h;
       h.date = getCurrentDateTime();
       strcpy(h.user, "tecnico");
-      strcpy(h.actionType, "ACEITACAO");
+      strcpy(h.actionType, "ACEITACAO DO TECNICO");
       snprintf(h.currentTechnician, 30, "%d", tecnicoId);
       snprintf(h.previousTechnician, 30, "%d", tecnicoId);
       getStatus(STATUS_OPEN, h.previousStatus);
@@ -899,4 +895,92 @@ int delegateTicket(int ticket_id, int logged_userId) {
          newTechnicianId);
 
   return 0;
+}
+
+int addComment(int ticket_id, int logged_userId) {
+  ELEM_TICKET *temp = headTickets;
+
+  while (temp != NULL && temp->data.id != ticket_id) {
+    temp = temp->next;
+  }
+
+  if (temp == NULL) {
+    printf("Ticket #%d não encontrado.\n", ticket_id);
+    return -1;
+  }
+
+  if (temp->data.technicianId != logged_userId) {
+    puts("Este ticket não está atribuído a si");
+    return -1;
+  }
+
+  if (temp->data.status == STATUS_CLOSED) {
+    puts("Não é possível comentar um ticket fechado");
+    return -1;
+  }
+
+  char comentario[300];
+  puts("Comentário: ");
+  fgets(comentario, sizeof(comentario), stdin);
+  comentario[strcspn(comentario, "\n")] = 0;
+
+  // Histórico
+  HISTORY_INFO h;
+  h.date = getCurrentDateTime();
+  snprintf(h.user, MAX_STR, "%d", logged_userId);
+  strcpy(h.actionType, "COMENTARIO");
+  snprintf(h.previousTechnician, 30, "%d", temp->data.technicianId);
+  snprintf(h.currentTechnician, 30, "%d", temp->data.technicianId);
+  getStatus(temp->data.status, h.previousStatus);
+  getStatus(temp->data.status, h.currentStatus);
+  strcpy(h.description, comentario);
+
+  addHistory(temp, h);
+
+  printf("Comentário adicionado ao ticket #%d com sucesso!\n", ticket_id);
+  return 0;
+}
+
+void averageTimePerTechnician() {
+  if (headTickets == NULL) {
+    puts("Nenhum ticket registado.");
+    return;
+  }
+
+  long minutos[100] = {0};
+  int contagem[100] = {0};
+
+  ELEM_TICKET *temp = headTickets;
+
+  while (temp != NULL) {
+    if ((temp->data.status == STATUS_RESOLVED ||
+         temp->data.status == STATUS_CLOSED) &&
+        temp->data.technicianId != -1) {
+
+      int id = temp->data.technicianId;
+      long diff = differenceInMinutes(temp->data.openedAt, temp->data.closedAt);
+
+      minutos[id] += diff;
+      contagem[id]++;
+    }
+    temp = temp->next;
+  }
+
+  printf("\n--- TEMPO MEDIO DE RESOLUCAO POR TECNICO ---\n");
+  printf("%-10s | %-15s | %-10s\n", "Tecnico", "Tempo Medio", "Tickets");
+  printf("-----------+-----------------+------------\n");
+
+  int encontrou = 0;
+  for (int i = 0; i < 100; i++) {
+    if (contagem[i] > 0) {
+      float media = (float)minutos[i] / contagem[i];
+      float horas = media / 60;
+      printf("#%-9d | %.1f horas       | %d\n", i, horas, contagem[i]);
+      encontrou = 1;
+    }
+  }
+
+  if (!encontrou) {
+    puts("Nenhum ticket resolvido.");
+  }
 }

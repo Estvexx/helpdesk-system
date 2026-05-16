@@ -190,3 +190,78 @@ int diasNoMes(int month, int year) {
     return 30;
   }
 }
+
+void cleanAllLists() {
+  cleanupIntermediateTickets();
+  cleanupIntermediateTicketsTypes();
+  cleanupIntermediateUsers();
+}
+
+int calcMinHoras(DateTime dataIni, DateTime dataFim) {
+  int retirarhora_em_min = ((24 - dataIni.hour) + dataFim.hour) * 60;
+  int diferenca = dataIni.min - dataFim.min;
+  if (diferenca < 0) {
+    diferenca = abs(diferenca);
+    retirarhora_em_min += diferenca;
+  } else {
+    retirarhora_em_min -= diferenca;
+  }
+  return retirarhora_em_min;
+}
+
+long calcMinDias(DateTime dataIni, DateTime dataFim) {
+  long somaMin = 0;
+  int diasRestMes = diasNoMes(dataIni.month, dataIni.year) - dataIni.day - 1;
+  somaMin += (long)diasRestMes * 24 * 60;
+  int diasInicioFim = dataFim.day - 1;
+  somaMin += (long)diasInicioFim * 24 * 60;
+  return somaMin;
+}
+
+long differenceInMinutes(DateTime dataIni, DateTime dataFim) {
+  long somaMin = 0;
+
+  // Caso Base -> Datas iguais retorna logo 0
+  if (dataIni.year == dataFim.year && dataIni.month == dataFim.month &&
+      dataIni.day == dataFim.day && dataIni.hour == dataFim.hour &&
+      dataIni.min == dataFim.min)
+    return 0;
+
+  // Segundo caso -> Exatamente o mesmo dia porem em horas diferentes
+  if (dataIni.year == dataFim.year && dataIni.month == dataFim.month &&
+      dataIni.day == dataFim.day) {
+    return ((dataFim.hour - dataIni.hour) * 60) + (dataFim.min - dataIni.min);
+  }
+
+  // Terceiro Caso -> Exatamente mesmo ano/mes porem dias e horas diferentes
+  if (dataIni.year == dataFim.year && dataIni.month == dataFim.month) {
+    int retirarhora_em_min = calcMinHoras(dataIni, dataFim);
+    retirarhora_em_min += (dataFim.day - dataIni.day - 1) * 24 * 60;
+    return retirarhora_em_min;
+  }
+
+  // Quarto Caso -> Mesmo ano mas mes diferente
+  if (dataIni.year == dataFim.year) {
+    somaMin += calcMinHoras(dataIni, dataFim);
+    somaMin += calcMinDias(dataIni, dataFim);
+    for (int m = dataIni.month + 1; m < dataFim.month; m++) {
+      somaMin += (long)diasNoMes(m, dataIni.year) * 24 * 60;
+    }
+    return somaMin;
+  }
+
+  // Quinto Caso -> Anos diferentes
+  somaMin += calcMinHoras(dataIni, dataFim);
+  somaMin += calcMinDias(dataIni, dataFim);
+  for (int m = dataIni.month + 1; m <= 12; m++) {
+    somaMin += (long)diasNoMes(m, dataIni.year) * 24 * 60;
+  }
+  for (int m = 1; m < dataFim.month; m++) {
+    somaMin += (long)diasNoMes(m, dataFim.year) * 24 * 60;
+  }
+  for (int a = dataIni.year + 1; a < dataFim.year; a++) {
+    int diasAno = ((a % 4 == 0 && a % 100 != 0) || (a % 400 == 0)) ? 366 : 365;
+    somaMin += (long)diasAno * 24 * 60;
+  }
+  return somaMin;
+}
