@@ -137,6 +137,9 @@ void sortTicketsByTechnician();
 void sortTicketsByDate();
 void sortTicketsByPriority();
 
+//RELATÓRIOS
+int generateMonthReport(int month, int year);
+
 // ======================= PARTE TECNICO =======================
 void showTicketByTechnician(int id); // feito
 
@@ -171,4 +174,6 @@ void tableHeaders();
 void deleteType(int typeId);
 void headTypes(int typeId, char *str);
 void getTypeUtil(int typeId, char *str);
+
 void seederTypes();
+void seederTickets();

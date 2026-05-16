@@ -3,6 +3,8 @@
 #include <string.h>
 #include <time.h>
 
+#define REPORTS_PATH "reports\\"
+
 ELEM_TICKET *headTickets = NULL;
 
 DateTime getCurrentDateTime()
@@ -23,6 +25,43 @@ void printTicketHistory(int ticketId) { printHistory(ticketId, headTickets); }
 void deleteType(int typeId) { deleteTicketType(typeId, headTickets); }
 
 int nextTicketId = 1;
+
+void seederTickets()
+{
+    TICKET_INFO t;
+
+    t.typeId = 1;
+    t.priority = 1; 
+    strcpy(t.user, "Maria Joao");
+    strcpy(t.description, "O rato do computador nao responde nem acende a luz laser.");
+    createTicket(t);
+
+    t.typeId = 2;
+    t.priority = 2; 
+    strcpy(t.user, "Rui Costa");
+    strcpy(t.description, "O Microsoft Excel bloqueia imediatamente sempre que tento abrir o ficheiro de contabilidade.");
+    createTicket(t);
+
+    t.typeId = 3;
+    t.priority = 4; 
+    strcpy(t.user, "Carlos Silva");
+    strcpy(t.description, "Todo o departamento de vendas esta completamente sem acesso a internet desde as 9h00.");
+    createTicket(t);
+
+    t.typeId = 4; 
+    t.priority = 3; 
+    strcpy(t.user, "Ana Ferreira");
+    strcpy(t.description, "Conta bloqueada no sistema ERP apos falhar a password 3 vezes. Preciso de reset urgente.");
+    createTicket(t);
+
+    t.typeId = 5; 
+    t.priority = 1; 
+    strcpy(t.user, "Sofia Mendes");
+    strcpy(t.description, "A cadeira do meu posto de trabalho partiu uma roda e esta desequilibrada.");
+    createTicket(t);
+
+    puts("\n[SISTEMA] 5 Tickets de teste gerados com sucesso!");
+}
 
 int createTicket(TICKET_INFO ticket)
 {
@@ -704,5 +743,46 @@ int updateTicketStatus(int ticket_id, int logged_userId)
   temp->data.status = newStatus;
 
   printf("Estado do ticket #%d alterado para '%s' com sucesso!\n", ticket_id, strStatus);
+  return 0;
+}
+
+int generateMonthReport(int month, int year)
+{
+
+  char fileName[50];
+
+  sprintf(fileName, REPORTS_PATH "Relatorio_%d_%d.txt", month, year);
+
+  FILE *fp = fopen(fileName, "w");
+  if (fp == NULL)
+  {
+    printf("Erro ao criar ficheiro.");
+    return -1;
+  }
+
+  int totalTickets = 0;
+
+  ELEM_TICKET *temp = headTickets;
+
+  while (temp != NULL)
+  {
+    if (temp->data.openedAt.month == month && temp->data.openedAt.year == year)
+    {
+      totalTickets++;
+    }
+    temp = temp->next;
+  }
+
+  fprintf(fp, "========================================================\n");
+  fprintf(fp, "             RELATORIO MENSAL DE HELPDESK               \n");
+  fprintf(fp, "                  %02d/%04d                     \n", month, year);
+  fprintf(fp, "========================================================\n\n");
+
+  fprintf(fp, "RESUMO:\n");
+  fprintf(fp, "--------------------------------------------------------\n");
+  fprintf(fp, "Total de tickets abertos no mes: %d\n", totalTickets);
+
+  fclose(fp);
+
   return 0;
 }

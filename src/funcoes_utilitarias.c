@@ -95,7 +95,7 @@ void getPriority(int prioridade, char *texto)
 void tableHeaders()
 {
   printf("\n%-5s | %-9s | %-12s | %-10s | %-15s | %-10s |%-16s\n", "ID", "Tipo", "Estado", "Prioridade", "Utilizador", "Tecnico", "Data Abertura");
-  printf("------+-----------+--------------+------------+-----------------+-----------+-----------------\n");
+  printf("------+-----------+--------------+------------+-----------------+------------+-----------------\n");
 }
 
 int confirmDelete()

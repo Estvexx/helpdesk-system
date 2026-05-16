@@ -380,8 +380,64 @@ void adminMenu()
       break;
     case 14: /* tempoMedioPorCategoria() */
       break;
-    case 15: /* gerarRelatorio() */
+    case 15:
+    {
+      int optionReport;
+      int isRunning = 0;
+
+      do
+      {
+        puts("Tipo de relatório:");
+        puts("1 - Mensal");
+        puts("2 - Semanal");
+
+        printf("Opcao: ");
+
+        scanf("%d", &optionReport);
+
+        clearBuffer();
+
+        switch (optionReport)
+        {
+        case 1:
+        {
+          int month;
+          int year;
+
+          printf("Introduza o mes e ano (mm/YYYY): ");
+
+          if (scanf("%d/%d", &month, &year) != 2)
+          {
+            clearBuffer();
+            puts("Formato invalido.");
+            break;
+          }
+
+          clearBuffer();
+          generateMonthReport(month, year);
+          isRunning = 1;
+          waitForKey();
+
+          break;
+        }
+        case 2:
+        {
+          puts("Relatorio semanal ainda nao implementado.");
+          isRunning = 1;
+
+          break;
+        }
+        default:
+        {
+          puts("Opcao invalida.");
+          break;
+        }
+        }
+
+      } while (!isRunning);
+
       break;
+    }
     case 16: /* alertasSLA() */
       break;
     case 0:
@@ -430,7 +486,8 @@ void technicianMenu(char *username, int logged_userId)
       scanf("%d", &ticketId);
       clearBuffer();
 
-      if(ticketId == 0) {
+      if (ticketId == 0)
+      {
         waitForKey();
         break;
       }
@@ -469,6 +526,7 @@ int main()
   createAdmin();
 
   seederTypes();
+  seederTickets();
   while (1)
   {
     system("cls");
@@ -499,17 +557,15 @@ int main()
       pass[strcspn(pass, "\n")] = 0;
       int logged_userId = -1;
 
-      
       int perfil = login(username, pass, &logged_userId);
-      
-
-      
 
       if (perfil == -1)
       {
         printf("\nCredenciais invalidas!\n");
         waitForKey();
-      } else if(perfil == -2) {
+      }
+      else if (perfil == -2)
+      {
         puts("\nTécnico ainda não validado! Contacte o administrador de sistema\n");
         waitForKey();
       }
