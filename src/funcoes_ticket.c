@@ -697,6 +697,11 @@ int updateTicketStatus(int ticket_id, int logged_userId)
   char strStatus[30];
   getStatus(temp->data.status, strStatus);
 
+  if(temp->data.status == STATUS_OPEN) {
+    puts("Impossível alterar estado de um ticket aberto");
+    return -1;
+  }
+  
   printf("Estado atual: %d - %s", temp->data.status, strStatus);
 
   int newStatus;
@@ -742,7 +747,10 @@ int updateTicketStatus(int ticket_id, int logged_userId)
   getStatus(newStatus, strStatus);
   temp->data.status = newStatus;
 
+
   printf("Estado do ticket #%d alterado para '%s' com sucesso!\n", ticket_id, strStatus);
+
+
   return 0;
 }
 
