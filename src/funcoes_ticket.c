@@ -10,7 +10,8 @@ ELEM_TICKET *headTickets = NULL;
 
 void cleanupIntermediateTickets() { cleanupTickets(headTickets); }
 
-DateTime getCurrentDateTime() {
+DateTime getCurrentDateTime()
+{
   DateTime d;
   time_t t = time(NULL);
   struct tm *tm = localtime(&t);
@@ -28,7 +29,8 @@ void deleteType(int typeId) { deleteTicketType(typeId, headTickets); }
 
 int nextTicketId = 1;
 
-void seederTickets() {
+void seederTickets()
+{
   TICKET_INFO t;
 
   t.typeId = 1;
@@ -69,9 +71,11 @@ void seederTickets() {
   puts("\n[SISTEMA] 5 Tickets de teste gerados com sucesso!");
 }
 
-int createTicket(TICKET_INFO ticket) {
+int createTicket(TICKET_INFO ticket)
+{
   ELEM_TICKET *new = malloc(sizeof(ELEM_TICKET));
-  if (new == NULL) {
+  if (new == NULL)
+  {
     puts("Erro ao alocar memória");
     return -1;
   }
@@ -98,10 +102,12 @@ int createTicket(TICKET_INFO ticket) {
   return 0;
 }
 
-int deleteTicket(int id) {
+int deleteTicket(int id)
+{
   int isConfirmed;
 
-  if (headTickets == NULL) {
+  if (headTickets == NULL)
+  {
     puts("Nenhum ticket registado para remover.");
     return -1;
   }
@@ -109,12 +115,14 @@ int deleteTicket(int id) {
   ELEM_TICKET *temp = headTickets;
   ELEM_TICKET *prev = NULL;
 
-  while (temp != NULL && temp->data.id != id) {
+  while (temp != NULL && temp->data.id != id)
+  {
     prev = temp;
     temp = temp->next;
   }
 
-  if (temp == NULL) {
+  if (temp == NULL)
+  {
     printf("Ticket #%d não encontrado!\n", id);
     return -1;
   }
@@ -125,22 +133,27 @@ int deleteTicket(int id) {
 
   isConfirmed = confirmDelete();
 
-  if (isConfirmed == 1) {
+  if (isConfirmed == 1)
+  {
     puts("Remoção cancelada");
     return -1;
   }
 
   // remover da lista
-  if (prev == NULL) {
+  if (prev == NULL)
+  {
     headTickets = temp->next;
-  } else {
+  }
+  else
+  {
     prev->next = temp->next;
   }
 
   // libertar histórico
   ELEM_HISTORY *histTemp = temp->history;
 
-  while (histTemp != NULL) {
+  while (histTemp != NULL)
+  {
     ELEM_HISTORY *aux = histTemp;
     histTemp = histTemp->next;
     free(aux);
@@ -152,17 +165,21 @@ int deleteTicket(int id) {
   return 0;
 }
 
-int updateTicket(int ticketId) {
+int updateTicket(int ticketId)
+{
   int option, running = 1;
 
   ELEM_TICKET *temp = headTickets;
 
-  while (temp != NULL) {
-    if (temp->data.id == ticketId) {
+  while (temp != NULL)
+  {
+    if (temp->data.id == ticketId)
+    {
       puts("\n=== TICKET ENCONTRADO ===");
       printInfosTicket(temp->data);
 
-      do {
+      do
+      {
         puts("=== ALTERAR INFORMAÇÕES ===");
         puts("1 - Alterar Tipo");
         puts("2 - Alterar Descrição");
@@ -175,20 +192,25 @@ int updateTicket(int ticketId) {
         // AVISO Falta informar o user se a actualização foi bem sucedida (isso
         // será feito quando forem feitas as validações)
 
-        switch (option) {
+        switch (option)
+        {
         case 1:
           // Alterar Tipo
           int realId, displayId;
-          do {
+          do
+          {
             printf("Novo tipo:");
             listTicketTypes();
             printf("Opção: ");
             scanf("%d", &displayId);
 
             realId = getRealTypeId(displayId);
-            if (realId == -1) {
+            if (realId == -1)
+            {
               printf("Opção inválida");
-            } else {
+            }
+            else
+            {
               temp->data.typeId = realId;
               break;
             }
@@ -234,16 +256,20 @@ int updateTicket(int ticketId) {
   return -1;
 }
 
-void printInfoFormatTable(TICKET_INFO ticket) {
+void printInfoFormatTable(TICKET_INFO ticket)
+{
   char typeStr[9], statusStr[20], priorityStr[10], techStr[20], dataStr[20];
 
   getTypeUtil(ticket.typeId, typeStr);
   getStatus(ticket.status, statusStr);
   getPriority(ticket.priority, priorityStr);
 
-  if (ticket.technicianId == -1) {
+  if (ticket.technicianId == -1)
+  {
     strcpy(techStr, "N/D");
-  } else {
+  }
+  else
+  {
     sprintf(techStr, "%d", ticket.technicianId);
   }
 
@@ -255,7 +281,8 @@ void printInfoFormatTable(TICKET_INFO ticket) {
          typeStr, statusStr, priorityStr, ticket.user, techStr, dataStr);
 }
 
-void printInfosTicket(TICKET_INFO ticket) {
+void printInfosTicket(TICKET_INFO ticket)
+{
   char typeStr[15], statusStr[20], priorityStr[10];
   char techStr[20], openDateStr[30], closeDateStr[30],
       estimatedConclusionDateStr[30];
@@ -265,9 +292,12 @@ void printInfosTicket(TICKET_INFO ticket) {
   getPriority(ticket.priority, priorityStr);
 
   // Formatar string do Técnico
-  if (ticket.technicianId == -1) {
+  if (ticket.technicianId == -1)
+  {
     strcpy(techStr, "N/D");
-  } else {
+  }
+  else
+  {
     sprintf(techStr, "%d", ticket.technicianId);
   }
 
@@ -277,9 +307,12 @@ void printInfosTicket(TICKET_INFO ticket) {
           ticket.openedAt.min);
 
   if (ticket.closedAt.day == 0 && ticket.closedAt.month == 0 &&
-      ticket.closedAt.year == 0) {
+      ticket.closedAt.year == 0)
+  {
     strcpy(closeDateStr, "N/D");
-  } else {
+  }
+  else
+  {
     sprintf(closeDateStr, "%02d/%02d/%04d %02d:%02d", ticket.closedAt.day,
             ticket.closedAt.month, ticket.closedAt.year, ticket.closedAt.hour,
             ticket.closedAt.min);
@@ -287,9 +320,12 @@ void printInfosTicket(TICKET_INFO ticket) {
 
   if (ticket.estimatedConclusion.day == 0 &&
       ticket.estimatedConclusion.month == 0 &&
-      ticket.estimatedConclusion.year == 0) {
+      ticket.estimatedConclusion.year == 0)
+  {
     strcpy(estimatedConclusionDateStr, "N/D");
-  } else {
+  }
+  else
+  {
     sprintf(estimatedConclusionDateStr, "%02d/%02d/%04d %02d:%02d",
             ticket.closedAt.day, ticket.closedAt.month, ticket.closedAt.year,
             ticket.closedAt.hour, ticket.closedAt.min);
@@ -312,15 +348,18 @@ void printInfosTicket(TICKET_INFO ticket) {
   printf("Descricao:   %s\n", ticket.description);
 }
 
-void listAllTickets() {
-  if (headTickets == NULL) {
+void listAllTickets()
+{
+  if (headTickets == NULL)
+  {
     puts("Nenhum ticket registado.");
     return;
   }
 
   ELEM_TICKET *temp = headTickets;
   tableHeaders();
-  while (temp != NULL) {
+  while (temp != NULL)
+  {
     printInfoFormatTable(temp->data);
 
     temp = temp->next;
@@ -328,20 +367,25 @@ void listAllTickets() {
   printf("\n");
 }
 
-int getTicketCount() {
+int getTicketCount()
+{
   ELEM_TICKET *temp = headTickets;
   int count = 0;
-  while (temp != NULL) {
+  while (temp != NULL)
+  {
     count++;
     temp = temp->next;
   }
   return count;
 }
 
-int existeUserbyId(int id) {
+int existeUserbyId(int id)
+{
   ELEM_TICKET *temp = headTickets;
-  while (temp != NULL) {
-    if (temp->data.id == id) {
+  while (temp != NULL)
+  {
+    if (temp->data.id == id)
+    {
       return 0;
     }
     temp = temp->next;
@@ -349,11 +393,14 @@ int existeUserbyId(int id) {
   return -1;
 }
 
-void showTicketById(int id) {
+void showTicketById(int id)
+{
   ELEM_TICKET *temp = headTickets;
 
-  while (temp != NULL) {
-    if (temp->data.id == id) {
+  while (temp != NULL)
+  {
+    if (temp->data.id == id)
+    {
       printInfosTicket(temp->data);
       return;
     }
@@ -362,8 +409,10 @@ void showTicketById(int id) {
   puts("Ticket nao encontrado.");
 }
 
-void showTicketByTechnician(int id) {
-  if (headTickets == NULL) {
+void showTicketByTechnician(int id)
+{
+  if (headTickets == NULL)
+  {
     puts("Nenhum ticket registado no sistema.");
     return;
   }
@@ -374,35 +423,44 @@ void showTicketByTechnician(int id) {
 
   tableHeaders();
 
-  while (temp != NULL) {
-    if (temp->data.technicianId == id) {
+  while (temp != NULL)
+  {
+    if (temp->data.technicianId == id)
+    {
       printInfoFormatTable(temp->data);
       encontrou = 1;
     }
     temp = temp->next;
   }
-  if (!encontrou) {
+  if (!encontrou)
+  {
     puts("Nenhum atribuido a si");
   }
   printf("\n");
 }
 
-int assignTechnician(int ticket_id, int technicianId) {
+int assignTechnician(int ticket_id, int technicianId)
+{
   ELEM_TICKET *temp = headTickets;
 
-  while (temp != NULL) {
-    if (temp->data.id == ticket_id) {
-      if (isTechnicianValidated(technicianId) == -1) {
+  while (temp != NULL)
+  {
+    if (temp->data.id == ticket_id)
+    {
+      if (isTechnicianValidated(technicianId) == -1)
+      {
         puts("Tecnico nao encontrado");
         return -1;
       }
-      if (isTechnicianValidated(technicianId) == 0) {
+      if (isTechnicianValidated(technicianId) == 0)
+      {
         puts("Tecnico deve ser validado");
         return -1;
       }
 
       // Se o status nao for open nao pode atribuir tenico
-      if (temp->data.status != STATUS_OPEN) {
+      if (temp->data.status != STATUS_OPEN)
+      {
         puts("Ticket ja esta em atendimento ou fechado. Impossivel alterar "
              "tecnico.");
         return -1;
@@ -412,16 +470,20 @@ int assignTechnician(int ticket_id, int technicianId) {
       h.date = getCurrentDateTime();
       strcpy(h.user, "admin");
       strcpy(h.actionType, "ATRIBUICAO DE TICKET A TECNICO");
-      if (temp->data.technicianId == -1) {
+      if (temp->data.technicianId == -1)
+      {
         strcpy(h.previousTechnician, "N/D");
-      } else {
+      }
+      else
+      {
         snprintf(h.previousTechnician, 30, "%d", temp->data.technicianId);
       }
       snprintf(h.currentTechnician, 30, "%d", technicianId);
       getStatus(temp->data.status, h.previousStatus);
       temp->data.technicianId = technicianId;
 
-      if (temp->data.status == STATUS_OPEN) {
+      if (temp->data.status == STATUS_OPEN)
+      {
         temp->data.status = STATUS_WAITING_USER;
       }
       getStatus(temp->data.status, h.currentStatus);
@@ -445,8 +507,10 @@ int assignTechnician(int ticket_id, int technicianId) {
 // ========================== Listar Tickets por FILTROS
 // =================================
 
-void listTicketsByStatus(int status) {
-  if (headTickets == NULL) {
+void listTicketsByStatus(int status)
+{
+  if (headTickets == NULL)
+  {
     puts("Nenhum ticket registado no sistema.");
     return;
   }
@@ -456,22 +520,27 @@ void listTicketsByStatus(int status) {
 
   tableHeaders();
 
-  while (temp != NULL) {
-    if (temp->data.status == status) {
+  while (temp != NULL)
+  {
+    if (temp->data.status == status)
+    {
       printInfoFormatTable(temp->data);
       found = 1;
     }
     temp = temp->next;
   }
 
-  if (found == 0) {
+  if (found == 0)
+  {
     printf("Nenhum ticket encontrado com esse estado.\n");
   }
   printf("\n");
 }
 
-void listTicketsByPriority(int priority) {
-  if (headTickets == NULL) {
+void listTicketsByPriority(int priority)
+{
+  if (headTickets == NULL)
+  {
     puts("Nenhum ticket registado no sistema.");
     return;
   }
@@ -481,22 +550,27 @@ void listTicketsByPriority(int priority) {
 
   tableHeaders();
 
-  while (temp != NULL) {
-    if (temp->data.priority == priority) {
+  while (temp != NULL)
+  {
+    if (temp->data.priority == priority)
+    {
       printInfoFormatTable(temp->data);
       found = 1;
     }
     temp = temp->next;
   }
 
-  if (found == 0) {
+  if (found == 0)
+  {
     printf("Nenhum ticket encontrado com essa prioridade.\n");
   }
   printf("\n");
 }
 
-void listTicketsByType(int type) {
-  if (headTickets == NULL) {
+void listTicketsByType(int type)
+{
+  if (headTickets == NULL)
+  {
     puts("Nenhum ticket registado no sistema.");
     return;
   }
@@ -506,8 +580,10 @@ void listTicketsByType(int type) {
 
   tableHeaders();
 
-  while (temp != NULL) {
-    if (temp->data.typeId == type) {
+  while (temp != NULL)
+  {
+    if (temp->data.typeId == type)
+    {
 
       printInfoFormatTable(temp->data);
       found = 1;
@@ -515,7 +591,8 @@ void listTicketsByType(int type) {
     temp = temp->next;
   }
 
-  if (found == 0) {
+  if (found == 0)
+  {
     printf("Nenhum ticket encontrado com esse tipo.\n");
   }
   printf("\n");
@@ -524,8 +601,10 @@ void listTicketsByType(int type) {
 // ========================== Ordenar a lista por tipo
 // =================================
 
-void sortTicketsByPriority() {
-  if (headTickets == NULL || headTickets->next == NULL) {
+void sortTicketsByPriority()
+{
+  if (headTickets == NULL || headTickets->next == NULL)
+  {
     puts("Operação impossivel de executar");
     return;
   }
@@ -533,12 +612,15 @@ void sortTicketsByPriority() {
   ELEM_TICKET *limit = NULL;
   int swapped = 1;
 
-  while (swapped) {
+  while (swapped)
+  {
     swapped = 0;
     ELEM_TICKET *current = headTickets;
 
-    while (current->next != limit) {
-      if (current->data.priority < current->next->data.priority) {
+    while (current->next != limit)
+    {
+      if (current->data.priority < current->next->data.priority)
+      {
         TICKET_INFO temp = current->data;
         current->data = current->next->data;
         current->next->data = temp;
@@ -556,8 +638,10 @@ void sortTicketsByPriority() {
   puts("Ordenado com sucesso");
 }
 
-void sortTicketsByDate() {
-  if (headTickets == NULL || headTickets->next == NULL) {
+void sortTicketsByDate()
+{
+  if (headTickets == NULL || headTickets->next == NULL)
+  {
     puts("Operação impossivel de executar");
     return;
   }
@@ -565,13 +649,16 @@ void sortTicketsByDate() {
   ELEM_TICKET *limit = NULL;
   int swapped = 1;
 
-  while (swapped) {
+  while (swapped)
+  {
     swapped = 0;
     ELEM_TICKET *current = headTickets;
 
-    while (current->next != limit) {
+    while (current->next != limit)
+    {
       if (compareDates(current->data.openedAt, current->next->data.openedAt) >
-          0) {
+          0)
+      {
         TICKET_INFO temp = current->data;
         current->data = current->next->data;
         current->next->data = temp;
@@ -589,8 +676,10 @@ void sortTicketsByDate() {
   puts("Ordenado com sucesso");
 }
 
-void sortTicketsByTechnician() {
-  if (headTickets == NULL || headTickets->next == NULL) {
+void sortTicketsByTechnician()
+{
+  if (headTickets == NULL || headTickets->next == NULL)
+  {
     puts("Operação impossivel de executar");
     return;
   }
@@ -598,12 +687,15 @@ void sortTicketsByTechnician() {
   ELEM_TICKET *limit = NULL;
   int swapped = 1;
 
-  while (swapped) {
+  while (swapped)
+  {
     swapped = 0;
     ELEM_TICKET *current = headTickets;
 
-    while (current->next != limit) {
-      if (current->data.technicianId > current->next->data.technicianId) {
+    while (current->next != limit)
+    {
+      if (current->data.technicianId > current->next->data.technicianId)
+      {
         TICKET_INFO temp = current->data;
         current->data = current->next->data;
         current->next->data = temp;
@@ -622,20 +714,24 @@ void sortTicketsByTechnician() {
   puts("Ordenado com sucesso");
 }
 
-int updateTicketStatus(int ticket_id, int logged_userId) {
+int updateTicketStatus(int ticket_id, int logged_userId)
+{
   ELEM_TICKET *temp = headTickets;
 
-  while (temp != NULL && temp->data.id != ticket_id) {
+  while (temp != NULL && temp->data.id != ticket_id)
+  {
     temp = temp->next;
   }
 
-  if (temp == NULL) {
+  if (temp == NULL)
+  {
     printf("Ticket #%d não encontrado.\n", ticket_id);
     return -1;
   }
 
   if (temp->data.technicianId != logged_userId &&
-      isAdmin(logged_userId) == -1) {
+      isAdmin(logged_userId) == -1)
+  {
     printf("Apenas é possível alterar o estado dos tickets a si atribuidos.\n");
     return -1;
   }
@@ -645,11 +741,13 @@ int updateTicketStatus(int ticket_id, int logged_userId) {
   printf("Estado atual: %d - %s\n", temp->data.status, strStatus);
 
   // Verificar se pode ser alterado
-  if (temp->data.status == STATUS_OPEN) {
+  if (temp->data.status == STATUS_OPEN)
+  {
     puts("Ticket em estado Aberto. Utilize 'Aceitar Ticket' primeiro.");
     return -1;
   }
-  if (temp->data.status == STATUS_CLOSED) {
+  if (temp->data.status == STATUS_CLOSED)
+  {
     puts("Ticket já está fechado. Não pode ser alterado.");
     return -1;
   }
@@ -657,13 +755,18 @@ int updateTicketStatus(int ticket_id, int logged_userId) {
   int newStatus;
   char acao[20];
 
-  if (temp->data.status == STATUS_IN_PROGRESS) {
+  if (temp->data.status == STATUS_IN_PROGRESS)
+  {
     newStatus = STATUS_RESOLVED;
     strcpy(acao, "RESOLUCAO");
-  } else if (temp->data.status == STATUS_RESOLVED) {
+  }
+  else if (temp->data.status == STATUS_RESOLVED)
+  {
     newStatus = STATUS_CLOSED;
     strcpy(acao, "FECHO");
-  } else {
+  }
+  else
+  {
     printf("Estado '%s' não permite alteração.\n", strStatus);
     return -1;
   }
@@ -675,7 +778,8 @@ int updateTicketStatus(int ticket_id, int logged_userId) {
   scanf("%d", &confirm);
   clearBuffer();
 
-  if (confirm != 1) {
+  if (confirm != 1)
+  {
     puts("Operação cancelada.");
     return -1;
   }
@@ -690,14 +794,17 @@ int updateTicketStatus(int ticket_id, int logged_userId) {
   getStatus(temp->data.status, h.previousStatus);
   getStatus(newStatus, h.currentStatus);
 
-  if (newStatus == STATUS_RESOLVED) {
+  if (newStatus == STATUS_RESOLVED)
+  {
     char solucao[500];
     puts("Descreva a solução aplicada:");
     fgets(solucao, sizeof(solucao), stdin);
     solucao[strcspn(solucao, "\n")] = 0;
     temp->data.closedAt = getCurrentDateTime();
-    snprintf(h.description, 300, "Ticket resolvido. Solução: %s", solucao);
-  } else if (newStatus == STATUS_CLOSED) {
+    snprintf(h.description, 600, "Ticket resolvido. Solução: %s", solucao);
+  }
+  else if (newStatus == STATUS_CLOSED)
+  {
     puts("Descreva as ações realizadas:\n");
     fgets(temp->data.actions, sizeof(temp->data.actions), stdin);
     temp->data.actions[strcspn(temp->data.actions, "\n")] = 0;
@@ -706,7 +813,7 @@ int updateTicketStatus(int ticket_id, int logged_userId) {
     fgets(temp->data.tools, sizeof(temp->data.tools), stdin);
     temp->data.tools[strcspn(temp->data.tools, "\n")] = 0;
 
-    snprintf(h.description, 300, "Ticket fechado. Ações: %s | Ferramentas: %s",
+    snprintf(h.description, 800, "Ticket fechado. Ações: %s | Ferramentas: %s",
              temp->data.actions, temp->data.tools);
   }
 
@@ -720,14 +827,16 @@ int updateTicketStatus(int ticket_id, int logged_userId) {
   return 0;
 }
 
-int generateMonthReport(int month, int year) {
+int generateMonthReport(int month, int year)
+{
 
   char fileName[50];
 
   sprintf(fileName, REPORTS_PATH "Relatorio_%d_%d.txt", month, year);
 
   FILE *fp = fopen(fileName, "w");
-  if (fp == NULL) {
+  if (fp == NULL)
+  {
     printf("Erro ao criar ficheiro.");
     return -1;
   }
@@ -736,9 +845,11 @@ int generateMonthReport(int month, int year) {
 
   ELEM_TICKET *temp = headTickets;
 
-  while (temp != NULL) {
+  while (temp != NULL)
+  {
     if (temp->data.openedAt.month == month &&
-        temp->data.openedAt.year == year) {
+        temp->data.openedAt.year == year)
+    {
       totalTickets++;
     }
     temp = temp->next;
@@ -759,19 +870,24 @@ int generateMonthReport(int month, int year) {
   return 0;
 }
 
-int acceptTicket(int tecnicoId, int ticketId) {
+int acceptTicket(int tecnicoId, int ticketId)
+{
   ELEM_TICKET *temp = headTickets;
 
-  while (temp != NULL) {
+  while (temp != NULL)
+  {
     // É necessario verificar se o ticket está associado a esse mesmo tecnico
-    if (temp->data.id == ticketId) {
-      if (temp->data.technicianId != tecnicoId) {
+    if (temp->data.id == ticketId)
+    {
+      if (temp->data.technicianId != tecnicoId)
+      {
         puts("Este ticket nao esta atribuido a si.");
         return -1;
       }
 
       // Verificar se o ticket ainda está a espera de repstoa
-      if (temp->data.status != STATUS_WAITING_USER) {
+      if (temp->data.status != STATUS_WAITING_USER)
+      {
         puts("Este ticket ja foi aceite ou ja nao esta atribuido a si.");
         return -1;
       }
@@ -829,24 +945,29 @@ int acceptTicket(int tecnicoId, int ticketId) {
   return -1;
 }
 
-int delegateTicket(int ticket_id, int logged_userId) {
+int delegateTicket(int ticket_id, int logged_userId)
+{
   ELEM_TICKET *temp = headTickets;
 
-  while (temp != NULL && temp->data.id != ticket_id) {
+  while (temp != NULL && temp->data.id != ticket_id)
+  {
     temp = temp->next;
   }
 
-  if (temp == NULL) {
+  if (temp == NULL)
+  {
     printf("Ticket #%d não encontrado.\n", ticket_id);
     return -1;
   }
 
-  if (temp->data.technicianId != logged_userId) {
+  if (temp->data.technicianId != logged_userId)
+  {
     printf("Este ticket não está atribuído a si.\n");
     return -1;
   }
 
-  if (temp->data.status == STATUS_CLOSED) {
+  if (temp->data.status == STATUS_CLOSED)
+  {
     printf("Não é possível delegar um ticket fechado.\n");
     return -1;
   }
@@ -857,16 +978,19 @@ int delegateTicket(int ticket_id, int logged_userId) {
   scanf("%d", &newTechnicianId);
   clearBuffer();
 
-  if (newTechnicianId == logged_userId) {
+  if (newTechnicianId == logged_userId)
+  {
     printf("Não pode delegar um ticket para si próprio.\n");
     return -1;
   }
 
-  if (isTechnicianValidated(newTechnicianId) == -1) {
+  if (isTechnicianValidated(newTechnicianId) == -1)
+  {
     printf("Técnico #%d não encontrado.\n", newTechnicianId);
     return -1;
   }
-  if (isTechnicianValidated(newTechnicianId) == 0) {
+  if (isTechnicianValidated(newTechnicianId) == 0)
+  {
     printf("Técnico #%d ainda não foi validado.\n", newTechnicianId);
     return -1;
   }
@@ -884,7 +1008,7 @@ int delegateTicket(int ticket_id, int logged_userId) {
   snprintf(h.currentTechnician, 30, "%d", newTechnicianId);
   getStatus(temp->data.status, h.previousStatus);
   getStatus(temp->data.status, h.currentStatus);
-  snprintf(h.description, 300, "Ticket delegado ao técnico #%d. Motivo: %s",
+  snprintf(h.description, 500, "Ticket delegado ao técnico #%d. Motivo: %s",
            newTechnicianId, motivo);
 
   temp->data.technicianId = newTechnicianId;
@@ -897,24 +1021,29 @@ int delegateTicket(int ticket_id, int logged_userId) {
   return 0;
 }
 
-int addComment(int ticket_id, int logged_userId) {
+int addComment(int ticket_id, int logged_userId)
+{
   ELEM_TICKET *temp = headTickets;
 
-  while (temp != NULL && temp->data.id != ticket_id) {
+  while (temp != NULL && temp->data.id != ticket_id)
+  {
     temp = temp->next;
   }
 
-  if (temp == NULL) {
+  if (temp == NULL)
+  {
     printf("Ticket #%d não encontrado.\n", ticket_id);
     return -1;
   }
 
-  if (temp->data.technicianId != logged_userId) {
+  if (temp->data.technicianId != logged_userId)
+  {
     puts("Este ticket não está atribuído a si");
     return -1;
   }
 
-  if (temp->data.status == STATUS_CLOSED) {
+  if (temp->data.status == STATUS_CLOSED)
+  {
     puts("Não é possível comentar um ticket fechado");
     return -1;
   }
@@ -941,8 +1070,10 @@ int addComment(int ticket_id, int logged_userId) {
   return 0;
 }
 
-void averageTimePerTechnician() {
-  if (headTickets == NULL) {
+void averageTimePerTechnician()
+{
+  if (headTickets == NULL)
+  {
     puts("Nenhum ticket registado.");
     return;
   }
@@ -952,10 +1083,12 @@ void averageTimePerTechnician() {
 
   ELEM_TICKET *temp = headTickets;
 
-  while (temp != NULL) {
+  while (temp != NULL)
+  {
     if ((temp->data.status == STATUS_RESOLVED ||
          temp->data.status == STATUS_CLOSED) &&
-        temp->data.technicianId != -1) {
+        temp->data.technicianId != -1)
+    {
 
       int id = temp->data.technicianId;
       long diff = differenceInMinutes(temp->data.openedAt, temp->data.closedAt);
@@ -971,8 +1104,10 @@ void averageTimePerTechnician() {
   printf("-----------+-----------------+------------\n");
 
   int encontrou = 0;
-  for (int i = 0; i < 100; i++) {
-    if (contagem[i] > 0) {
+  for (int i = 0; i < 100; i++)
+  {
+    if (contagem[i] > 0)
+    {
       float media = (float)minutos[i] / contagem[i];
       float horas = media / 60;
       printf("#%-9d | %.1f horas       | %d\n", i, horas, contagem[i]);
@@ -980,7 +1115,68 @@ void averageTimePerTechnician() {
     }
   }
 
-  if (!encontrou) {
+  if (!encontrou)
+  {
     puts("Nenhum ticket resolvido.");
   }
+}
+
+int exportTicketsCSV(char *username, int userId)
+{
+  if (headTickets == NULL)
+  {
+    puts("Não existem tickets registados no sistema.");
+    return -1;
+  }
+
+  char fileName[60];
+
+  snprintf(fileName, sizeof(fileName), "%s_tickets_report.csv", username);
+
+  FILE *fp = fopen(fileName, "w");
+
+  if (fp == NULL)
+  {
+    puts("Erro ao criar o ficheiro CSV.");
+    return -1;
+  }
+
+  fprintf(fp, "ID,Tipo,Prioridade,Estado,Utilizador,Data Abertura\n");
+
+  ELEM_TICKET *temp = headTickets;
+
+  char charType[50];
+  char charPriority[20];
+  char charStatus[20];
+  
+  int count = 0; 
+
+  while (temp != NULL)
+  {
+    if (temp->data.technicianId == userId)
+    {
+      getTypeUtil(temp->data.typeId, charType); 
+      getPriority(temp->data.priority, charPriority);
+      getStatus(temp->data.status, charStatus);
+
+      fprintf(fp, "%d,%s,%s,%s,%s,%02d/%02d/%04d %02d:%02d\n", temp->data.id, charType, charPriority, charStatus, temp->data.user,temp->data.openedAt.day, temp->data.openedAt.month, temp->data.openedAt.year,temp->data.openedAt.hour, temp->data.openedAt.min);
+      
+      count++;
+    }
+    
+    temp = temp->next;
+  }
+
+  fclose(fp);
+
+  if (count == 0) 
+  {
+    printf("Não existem tickets atribuidos a %s para exportar.\n", username);
+  } 
+  else 
+  {
+    printf("\nExportação concluída! %d tickets guardados no ficheiro '%s'.\n", count, fileName);
+  }
+
+  return 0;
 }

@@ -125,6 +125,7 @@ int assignTechnician(int ticket_id, int technicianId);// feito
 int updateTicketStatus(int ticket_id, int logged_userId); // Feito
 int acceptTicket(int tecnicoId, int ticketId); // Feitos
 int delegateTicket(int ticket_id, int logged_userId); // Feito
+int exportTicketsCSV(char *username, int userId);
 
 void printInfosTicket(TICKET_INFO ticket);     // Feito
 void printInfoFormatTable(TICKET_INFO ticket); // Feito

@@ -3,11 +3,13 @@
 
 void cleanupUsers(ELEM_USER *headUsers) {
   ELEM_USER *temp = headUsers;
+  
   while (temp != NULL) {
     ELEM_USER *next = temp->next;
     free(temp);
     temp = next;
   }
+
   headUsers = NULL;
 }
 
