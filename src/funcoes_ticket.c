@@ -8,6 +8,8 @@
 
 ELEM_TICKET *headTickets = NULL;
 
+void createStatsToReports(char *fileName, char *fileHeader, ReportStats stats);
+
 void cleanupIntermediateTickets() { cleanupTickets(headTickets); }
 
 DateTime getCurrentDateTime()
@@ -135,7 +137,7 @@ int deleteTicket(int id)
 
   if (isConfirmed == 1)
   {
-    puts("Remoção cancelada");
+    puts("\nRemoção cancelada.");
     return -1;
   }
 
@@ -165,7 +167,7 @@ int deleteTicket(int id)
   return 0;
 }
 
-int updateTicket(int ticketId)
+int updateTicket(int ticketId, int logged_userId)
 {
   int option, running = 1;
 
@@ -180,17 +182,15 @@ int updateTicket(int ticketId)
 
       do
       {
-        puts("=== ALTERAR INFORMAÇÕES ===");
+        puts("\n=== ALTERAR INFORMAÇÕES ===");
         puts("1 - Alterar Tipo");
         puts("2 - Alterar Descrição");
         puts("3 - Alterar Prioridade");
         puts("4 - Alterar Estado");
         puts("0 - Voltar");
-        printf("Opção: ");
+        printf("\nOpção: ");
         scanf("%d", &option);
         clearBuffer();
-        // AVISO Falta informar o user se a actualização foi bem sucedida (isso
-        // será feito quando forem feitas as validações)
 
         switch (option)
         {
@@ -199,49 +199,57 @@ int updateTicket(int ticketId)
           int realId, displayId;
           do
           {
-            printf("Novo tipo:");
+            printf("\nNovo tipo:\n");
             listTicketTypes();
-            printf("Opção: ");
+            printf("\nOpção: ");
             scanf("%d", &displayId);
-
+            clearBuffer();
             realId = getRealTypeId(displayId);
             if (realId == -1)
             {
-              printf("Opção inválida");
+              puts("\nOpção inválida");
             }
             else
             {
               temp->data.typeId = realId;
+              puts("\nTipo atualizado com sucesso!");
               break;
             }
           } while (1);
 
-          clearBuffer();
           break;
         case 2:
           // Alterar Descrição
           printf("Descrição: ");
           fgets(temp->data.description, sizeof(temp->data.description), stdin);
+          temp->data.description[strcspn(temp->data.description, "\n")] = 0;
           break;
         case 3:
           // Alterar Prioridade
-          printf("Prioridade (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
-          scanf("%d", &temp->data.priority);
-          clearBuffer();
+          do
+          {
+            printf("\nPrioridade (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
+            if (scanf("%d", &temp->data.priority) != 1 || temp->data.priority < 1 || temp->data.priority > 4)
+            {
+              clearBuffer();
+              puts("\nPrioridade inválida!\n");
+            }
+            else
+            {
+              clearBuffer();
+              break;
+            }
+          } while (1);
+
           break;
         case 4:
-          // Alterar Estado
-          printf("Estado (1-Aberto, 2-Em Atend., 3-Esp. User, 4-Resolvido, "
-                 "5-Fechado): ");
-          scanf("%d", &temp->data.status);
-          clearBuffer();
-
+          updateTicketStatus(ticketId, logged_userId);
           break;
         case 0:
           running = 0;
           return 0;
         default:
-          puts("Opção Inválida!");
+          puts("\nOpção Inválida!");
           break;
         }
         waitForKey();
@@ -277,8 +285,9 @@ void printInfoFormatTable(TICKET_INFO ticket)
           ticket.openedAt.month, ticket.openedAt.year, ticket.openedAt.hour,
           ticket.openedAt.min);
 
-  printf("%-5d | %-9s | %-12s | %-10s | %-15s | %-10s | %-16s\n", ticket.id,
-         typeStr, statusStr, priorityStr, ticket.user, techStr, dataStr);
+  printf("%-5d | %-9s | %-12s | %-10s | %-15s | %-10s | %-16s | %-5d\n",
+         ticket.id, typeStr, statusStr, priorityStr, ticket.user, techStr,
+         dataStr, getSLA(ticket.priority));
 }
 
 void printInfosTicket(TICKET_INFO ticket)
@@ -343,6 +352,7 @@ void printInfosTicket(TICKET_INFO ticket)
          "Previsao:", estimatedConclusionDateStr);
   printf("%-12s %-18s | %-12s %-18s\n", "Estado:", statusStr,
          "Fecho:", closeDateStr);
+  printf("%-12s %-18d\n", "SLA:", getSLA(ticket.priority));
 
   printf("---------------------------------------------------------------\n");
   printf("Descricao:   %s\n", ticket.description);
@@ -406,7 +416,7 @@ void showTicketById(int id)
     }
     temp = temp->next;
   }
-  puts("Ticket nao encontrado.");
+  puts("Ticket não encontrado.");
 }
 
 void showTicketByTechnician(int id)
@@ -417,7 +427,7 @@ void showTicketByTechnician(int id)
     return;
   }
 
-  int encontrou = 0;
+  int found = 0;
 
   ELEM_TICKET *temp = headTickets;
 
@@ -428,11 +438,11 @@ void showTicketByTechnician(int id)
     if (temp->data.technicianId == id)
     {
       printInfoFormatTable(temp->data);
-      encontrou = 1;
+      found = 1;
     }
     temp = temp->next;
   }
-  if (!encontrou)
+  if (!found)
   {
     puts("Nenhum atribuido a si");
   }
@@ -449,7 +459,7 @@ int assignTechnician(int ticket_id, int technicianId)
     {
       if (isTechnicianValidated(technicianId) == -1)
       {
-        puts("Tecnico nao encontrado");
+        puts("Tecnico não encontrado");
         return -1;
       }
       if (isTechnicianValidated(technicianId) == 0)
@@ -493,8 +503,6 @@ int assignTechnician(int ticket_id, int technicianId)
       // Adicionar histórico
       addHistory(temp, h);
 
-      printf("Ticket #%d atribuido ao tecnico #%d com sucesso!\n", ticket_id,
-             technicianId);
       return 0;
     }
     temp = temp->next;
@@ -821,51 +829,7 @@ int updateTicketStatus(int ticket_id, int logged_userId)
 
   addHistory(temp, h);
 
-  printf("Estado do ticket #%d alterado para '%s' com sucesso!\n", ticket_id,
-         novoStr);
-
-  return 0;
-}
-
-int generateMonthReport(int month, int year)
-{
-
-  char fileName[50];
-
-  sprintf(fileName, REPORTS_PATH "Relatorio_%d_%d.txt", month, year);
-
-  FILE *fp = fopen(fileName, "w");
-  if (fp == NULL)
-  {
-    printf("Erro ao criar ficheiro.");
-    return -1;
-  }
-
-  int totalTickets = 0;
-
-  ELEM_TICKET *temp = headTickets;
-
-  while (temp != NULL)
-  {
-    if (temp->data.openedAt.month == month &&
-        temp->data.openedAt.year == year)
-    {
-      totalTickets++;
-    }
-    temp = temp->next;
-  }
-
-  fprintf(fp, "========================================================\n");
-  fprintf(fp, "             RELATORIO MENSAL DE HELPDESK               \n");
-  fprintf(fp, "                  %02d/%04d                     \n", month,
-          year);
-  fprintf(fp, "========================================================\n\n");
-
-  fprintf(fp, "RESUMO:\n");
-  fprintf(fp, "--------------------------------------------------------\n");
-  fprintf(fp, "Total de tickets abertos no mes: %d\n", totalTickets);
-
-  fclose(fp);
+  printf("Estado alterado para '%s'.\n", novoStr);
 
   return 0;
 }
@@ -1015,9 +979,6 @@ int delegateTicket(int ticket_id, int logged_userId)
 
   addHistory(temp, h);
 
-  printf("Ticket #%d delegado ao técnico #%d com sucesso!\n", ticket_id,
-         newTechnicianId);
-
   return 0;
 }
 
@@ -1066,7 +1027,6 @@ int addComment(int ticket_id, int logged_userId)
 
   addHistory(temp, h);
 
-  printf("Comentário adicionado ao ticket #%d com sucesso!\n", ticket_id);
   return 0;
 }
 
@@ -1103,7 +1063,7 @@ void averageTimePerTechnician()
   printf("%-10s | %-15s | %-10s\n", "Tecnico", "Tempo Medio", "Tickets");
   printf("-----------+-----------------+------------\n");
 
-  int encontrou = 0;
+  int found = 0;
   for (int i = 0; i < 100; i++)
   {
     if (contagem[i] > 0)
@@ -1111,11 +1071,65 @@ void averageTimePerTechnician()
       float media = (float)minutos[i] / contagem[i];
       float horas = media / 60;
       printf("#%-9d | %.1f horas       | %d\n", i, horas, contagem[i]);
-      encontrou = 1;
+      found = 1;
     }
   }
 
-  if (!encontrou)
+  if (!found)
+  {
+    puts("Nenhum ticket resolvido.");
+  }
+}
+
+void averageTimePerType()
+{
+  if (headTickets == NULL)
+  {
+    puts("Nenhum ticket registado.");
+    return;
+  }
+
+  long minutos[100] = {0};
+  int contagem[100] = {0};
+
+  ELEM_TICKET *temp = headTickets;
+
+  while (temp != NULL)
+  {
+    if ((temp->data.status == STATUS_RESOLVED ||
+         temp->data.status == STATUS_CLOSED))
+    {
+
+      int id = temp->data.typeId;
+      long diff = differenceInMinutes(temp->data.openedAt, temp->data.closedAt);
+
+      minutos[id] += diff;
+      contagem[id]++;
+    }
+    temp = temp->next;
+  }
+
+  printf("\n--- TEMPO MEDIO DE RESOLUCAO POR TIPO ---\n");
+  printf("%-10s | %-15s | %-10s\n", "Tipo", "Tempo Medio", "Tickets");
+  printf("-----------+-----------------+------------\n");
+
+  int found = 0;
+  for (int i = 0; i < 100; i++)
+  {
+    if (contagem[i] > 0)
+    {
+      char typeName[50];
+      getTypeUtil(i, typeName);
+
+      float media = (float)minutos[i] / contagem[i];
+      float horas = media / 60;
+
+      printf("%-10s | %.1f horas       | %d\n", typeName, horas, contagem[i]);
+      found = 1;
+    }
+  }
+
+  if (!found)
   {
     puts("Nenhum ticket resolvido.");
   }
@@ -1148,35 +1162,254 @@ int exportTicketsCSV(char *username, int userId)
   char charType[50];
   char charPriority[20];
   char charStatus[20];
-  
-  int count = 0; 
+
+  int count = 0;
 
   while (temp != NULL)
   {
     if (temp->data.technicianId == userId)
     {
-      getTypeUtil(temp->data.typeId, charType); 
+      getTypeUtil(temp->data.typeId, charType);
       getPriority(temp->data.priority, charPriority);
       getStatus(temp->data.status, charStatus);
 
-      fprintf(fp, "%d,%s,%s,%s,%s,%02d/%02d/%04d %02d:%02d\n", temp->data.id, charType, charPriority, charStatus, temp->data.user,temp->data.openedAt.day, temp->data.openedAt.month, temp->data.openedAt.year,temp->data.openedAt.hour, temp->data.openedAt.min);
-      
+      fprintf(fp, "%d,%s,%s,%s,%s,%02d/%02d/%04d %02d:%02d\n", temp->data.id, charType, charPriority, charStatus, temp->data.user, temp->data.openedAt.day, temp->data.openedAt.month, temp->data.openedAt.year, temp->data.openedAt.hour, temp->data.openedAt.min);
+
       count++;
     }
-    
+
     temp = temp->next;
   }
 
   fclose(fp);
 
-  if (count == 0) 
+  if (count == 0)
   {
-    printf("Não existem tickets atribuidos a %s para exportar.\n", username);
-  } 
-  else 
-  {
-    printf("\nExportação concluída! %d tickets guardados no ficheiro '%s'.\n", count, fileName);
+    printf("\nNenhum ticket para exportar.\n");
+    return -1;
   }
 
   return 0;
+}
+
+// Calcular as estatisticas para o relatorio
+ReportStats extractStats(DateTime startDate, DateTime endDate)
+{
+  ReportStats stats = {0};
+  ELEM_TICKET *temp = headTickets;
+
+  while (temp != NULL)
+  {
+    if (compareDates(temp->data.openedAt, startDate) >= 0 &&
+        compareDates(temp->data.openedAt, endDate) <= 0)
+    {
+      stats.totalTickets++;
+
+      if (temp->data.status == STATUS_RESOLVED || temp->data.status == STATUS_CLOSED)
+      {
+        stats.totalResolved++;
+
+        // Calcula o tempo de res. do ticket
+        long resTime = differenceInMinutes(temp->data.openedAt, temp->data.closedAt);
+        // Calcula o tempo total de resolução
+        stats.totalMinutesToResolve += resTime;
+
+        // Calc. número de resoluções tendo em conta o SLA
+        int slaLimit = getSLA(temp->data.priority);
+        if (slaLimit != -1) // Se não der erro executa
+        {
+          if (resTime > slaLimit)
+            stats.slaViolations++;
+          else
+            stats.slaMet++;
+        }
+      }
+      else
+      {
+        stats.pendingTickets++;
+      }
+
+      switch (temp->data.priority)
+      {
+      case 4:
+        stats.countCritical++;
+        break;
+      case 3:
+        stats.countHigh++;
+        break;
+      case 2:
+        stats.countMedium++;
+        break;
+      case 1:
+        stats.countLow++;
+        break;
+      }
+    }
+    temp = temp->next;
+  }
+
+  return stats;
+}
+
+int generateMonthReport(int month, int year)
+{
+  char fileName[80];
+  snprintf(fileName, sizeof(fileName), REPORTS_PATH "Relatorio_Mensal_%02d_%04d.txt", month, year);
+
+  // Define as data de começo e fim para passar á função extractStats
+  DateTime startDate = {.day = 1, .month = month, .year = year, .hour = 0, .min = 0};
+  DateTime endDate = {.day = diasNoMes(month, year), .month = month, .year = year, .hour = 23, .min = 59};
+
+  ReportStats stats = extractStats(startDate, endDate);
+
+  char fileHeader[200];
+  snprintf(fileHeader, sizeof(fileHeader),
+           "             RELATORIO MENSAL DE HELPDESK               \n                 Mes: %02d / Ano: %04d                      \n",
+           month, year);
+
+  createStatsToReports(fileName, fileHeader, stats);
+
+  printf("\nRelatorio mensal gerado com sucesso! Guardado como '%s'.\n", fileName);
+  return 0;
+}
+
+int generateWeeklyReport(DateTime startDate)
+{
+  DateTime endDate = addTimeToDateTime(startDate, 144, 0);
+  endDate.hour = 23;
+  endDate.min = 59;
+
+  char fileName[80];
+  snprintf(fileName, sizeof(fileName), REPORTS_PATH "Relatorio_Semana_%02d%02d%04d.txt",
+           startDate.day, startDate.month, startDate.year);
+
+  // Chama a function para calc. as stats. visto que repetiria muito codigo
+  ReportStats stats = extractStats(startDate, endDate);
+
+  char fileHeader[200];
+  snprintf(fileHeader, sizeof(fileHeader),
+           "             RELATORIO SEMANAL DE HELPDESK              \n        Periodo: %02d/%02d/%04d a %02d/%02d/%04d        \n",
+           startDate.day, startDate.month, startDate.year, endDate.day, endDate.month, endDate.year);
+
+  createStatsToReports(fileName, fileHeader, stats);
+
+  printf("\nRelatorio gerado com sucesso! Guardado como '%s'.\n", fileName);
+  return 0;
+}
+
+void createStatsToReports(char *fileName, char *fileHeader, ReportStats stats)
+{
+  FILE *fp = fopen(fileName, "w");
+  if (fp == NULL)
+  {
+    puts("Erro ao criar ficheiro de relatorio.");
+    return;
+  }
+
+  fprintf(fp, "========================================================\n");
+  fprintf(fp, "%s", fileHeader);
+  fprintf(fp, "========================================================\n\n");
+
+  if (stats.totalTickets == 0)
+  {
+    fprintf(fp, "Nenhum ticket reportado neste periodo.\n");
+  }
+  else
+  {
+    float successRate = ((float)stats.totalResolved / stats.totalTickets) * 100.0;
+    long avgResolutionTime = (stats.totalResolved > 0) ? (stats.totalMinutesToResolve / stats.totalResolved) : 0;
+
+    fprintf(fp, "[1] VOLUME E PRODUTIVIDADE\n");
+    fprintf(fp, "--------------------------------------------------------\n");
+    fprintf(fp, "Total de tickets abertos:     %d\n", stats.totalTickets);
+    fprintf(fp, "Tickets resolvidos/fechados:  %d (%.1f%%)\n", stats.totalResolved, successRate);
+    fprintf(fp, "Tickets pendentes:            %d\n\n", stats.pendingTickets);
+
+    fprintf(fp, "[2] DISTRIBUICAO POR PRIORIDADE\n");
+    fprintf(fp, "--------------------------------------------------------\n");
+    fprintf(fp, "  - Critica: %d\n", stats.countCritical);
+    fprintf(fp, "  - Alta:    %d\n", stats.countHigh);
+    fprintf(fp, "  - Media:   %d\n", stats.countMedium);
+    fprintf(fp, "  - Baixa:   %d\n\n", stats.countLow);
+
+    fprintf(fp, "[3] TEMPOS E SLA\n");
+    fprintf(fp, "--------------------------------------------------------\n");
+    if (stats.totalResolved > 0)
+    {
+      fprintf(fp, "Tempo medio de resolucao:     %ld horas e %ld minutos\n", avgResolutionTime / 60, avgResolutionTime % 60);
+      fprintf(fp, "SLA Cumprido:                 %d ticket(s)\n", stats.slaMet);
+      fprintf(fp, "SLA Violado:                  %d ticket(s)\n", stats.slaViolations);
+    }
+    else
+    {
+      fprintf(fp, "Sem dados de resolucao calculaveis para este periodo.\n");
+    }
+  }
+
+  fprintf(fp, "\n========================================================\n");
+  fprintf(fp, "Relatorio gerado automaticamente pelo Sistema.\n");
+
+  fclose(fp);
+}
+
+int alertTicketSLA(int *alertSLA)
+{
+
+  ELEM_TICKET *temp = headTickets;
+  FILE *fp = fopen("alertSLA.dat", "wb");
+
+  *alertSLA = 1;
+
+  if (fp == NULL)
+  {
+    puts("Nao foi possivel criar o ficheiro de alertas SLA.");
+    return -1;
+  }
+
+  while (temp != NULL)
+  {
+
+    // Caso ticket ainda aberto, ou seja, nao tem data fim
+    if ((temp->data.closedAt.year == 0) && differenceInMinutes(temp->data.openedAt, getCurrentDateTime()) > getSLA(temp->data.priority))
+    {
+      fwrite(&(temp->data), sizeof(TICKET_INFO), 1, fp);
+
+      *alertSLA = 0; // Ativar o alerta
+    }
+
+    temp = temp->next;
+  }
+
+  fclose(fp);
+
+  return 0;
+}
+
+void printAlertsSLA()
+{
+  FILE *fp = fopen("alertSLA.dat", "rb");
+  if (fp == NULL)
+  {
+    puts("Nao existem alertas SLA de momento ou erro ao abrir ficheiro.");
+    return;
+  }
+
+  TICKET_INFO temp;
+
+  tableHeaders();
+
+  int found = 0;
+
+  while (fread(&temp, sizeof(TICKET_INFO), 1, fp) == 1)
+  {
+    printInfoFormatTable(temp);
+    found = 1;
+  }
+
+  fclose(fp);
+
+  if (!found)
+  {
+    puts("\nNenhum ticket encontrado no ficheiro de alertas.");
+  }
 }

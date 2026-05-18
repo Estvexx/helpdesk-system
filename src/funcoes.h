@@ -98,6 +98,22 @@ typedef struct elemTicketType
 
 DateTime getCurrentDateTime(); // Obter data atual
 
+//Estrutura para os reports
+typedef struct {
+    int totalTickets;
+    int totalResolved;
+    int pendingTickets;
+    int countCritical;
+    int countHigh;
+    int countMedium;
+    int countLow;
+    long totalMinutesToResolve;
+    long maxResolutionTime;
+    int maxResolutionTicketId;
+    int slaMet;
+    int slaViolations;
+} ReportStats;
+
 // Retorna -1 se der erro e 0 sucesso
 //             GERAL : -1 ERRO -> 0 SUCESSO
 // ======================= PARTE INICIAL USERS =======================
@@ -115,7 +131,7 @@ void listAllTechnicians();                             // Feito
 
 // ======================= PARTE TICKETS =======================
 int createTicket(TICKET_INFO ticket); // Feito
-int updateTicket(int ticketId);       // Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
+int updateTicket(int ticketId, int logged_userId );       // Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
 int deleteTicket(int ticketId);       // Retorna 1 se for cancelado pelo user
 void listAllTickets();                // feito
 int existeUserbyId(int id);           // feito
@@ -143,8 +159,15 @@ void sortTicketsByDate();
 void sortTicketsByPriority();
 
 //RELATÓRIOS
+int generateWeeklyReport(DateTime startDate);
 int generateMonthReport(int month, int year);
 
+//ALERTAS SLA
+int alertTicketSLA(int *alertSLA);
+void printAlertsSLA();
+
+void averageTimePerTechnician();
+void averageTimePerType();
 // ======================= PARTE TECNICO =======================
 void showTicketByTechnician(int id); // feito
 
@@ -165,6 +188,7 @@ int updateTicketType(int typeId);                           // Feito
 void listTicketTypes();                                     // Feito
 int getRealTypeId(int displayIndex);                        // Feito
 int getTicketTypeCount();                                   // Feito
+
 // ======================= PARTE UTILITARIAS =======================
 
 void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTickets); // Feito
@@ -186,6 +210,9 @@ void tableHeaders(); // Feito
 void deleteType(int typeId); // Feito
 void headTypes(int typeId, char *str); // Feito
 void getTypeUtil(int typeId, char *str); // Feito
+int getSLA(int priority);
+
+void createStatsToReports(char *fileName, char *fileHeader, ReportStats stats);
 
 void seederTypes(); // Feito
 void seederTickets(); // Feito
