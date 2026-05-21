@@ -135,6 +135,7 @@ int deleteTicket(int ticketId);       // Retorna 1 se for cancelado pelo user
 void listAllTickets();                // feito
 int existeUserbyId(int id);           // feito
 void showTicketById(int id);          // feito
+void showTicketPendentByTechnician(int id); //feito
 int getTicketCount();                 // feito
 int assignTechnician(int ticket_id, int technicianId);// feito
 int updateTicketStatus(int ticket_id, int logged_userId); // Feito
@@ -156,6 +157,7 @@ void listTicketsByType(int type);         // Feito
 void sortTicketsByTechnician();
 void sortTicketsByDate();
 void sortTicketsByPriority();
+void sortTicketsById();
 
 //RELATÓRIOS
 int generateWeeklyReport(DateTime startDate);
@@ -195,6 +197,7 @@ void getStatus(int status, char *str); // Feito
 void getPriority(int prioridade, char *texto); // Feito
 void clearBuffer(); // Feito
 void waitForKey(); // Feito
+int charIsValid(char *str, size_t numMin, size_t numMax);
 
 // Datas                   -------
 DateTime addTimeToDateTime(DateTime dt, int hours, int minutes); // Feito

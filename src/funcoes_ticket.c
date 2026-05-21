@@ -36,7 +36,7 @@ void inicializarIds_Ticket() {
   ELEM_TICKET *temp = headTickets;
   while (temp != NULL) {
     if (temp->data.id > nextTicketId) {
-      nextTicketId = temp->data.id;
+      nextTicketId = temp->data.id + 1;
     }
     temp = temp->next;
   }
@@ -436,23 +436,48 @@ void showTicketByTechnician(int id) {
   printf("\n");
 }
 
+void showTicketPendentByTechnician(int id) {
+  if (headTickets == NULL) {
+    puts("Nenhum ticket registado no sistema.");
+    return;
+  }
+
+  int found = 0;
+
+  ELEM_TICKET *temp = headTickets;
+
+  tableHeaders();
+
+  while (temp != NULL) {
+    if (temp->data.technicianId == id && temp->data.status == STATUS_OPEN) {
+      printInfoFormatTable(temp->data);
+      found = 1;
+    }
+    temp = temp->next;
+  }
+  if (!found) {
+    puts("Nenhum atribuido a si");
+  }
+  printf("\n");
+}
+
 int assignTechnician(int ticket_id, int technicianId) {
   ELEM_TICKET *temp = headTickets;
 
   while (temp != NULL) {
     if (temp->data.id == ticket_id) {
       if (isTechnicianValidated(technicianId) == -1) {
-        puts("Tecnico não encontrado");
+        puts("\nTecnico não encontrado");
         return -1;
       }
       if (isTechnicianValidated(technicianId) == 0) {
-        puts("Tecnico deve ser validado");
+        puts("\nTecnico deve ser validado");
         return -1;
       }
 
       // Se o status nao for open nao pode atribuir tenico
       if (temp->data.status != STATUS_OPEN) {
-        puts("Ticket ja esta em atendimento ou fechado. Impossivel alterar "
+        puts("\nTicket ja esta em atendimento ou fechado. Impossivel alterar "
              "tecnico.");
         return -1;
       }
@@ -474,7 +499,7 @@ int assignTechnician(int ticket_id, int technicianId) {
         temp->data.status = STATUS_WAITING_USER;
       }
       getStatus(temp->data.status, h.currentStatus);
-      snprintf(h.description, 300, "Ticket atribuido ao tecnico #%d",
+      snprintf(h.description, 300, "\nTicket atribuido ao tecnico #%d",
                technicianId);
 
       // Adicionar histórico
@@ -627,6 +652,39 @@ void sortTicketsByDate() {
         ELEM_HISTORY *tempHistory = current->history;
         current->history = current->next->history;
         current->next->history = tempHistory;
+        swapped = 1;
+      }
+      current = current->next;
+    }
+    limit = current;
+  }
+  puts("Ordenado com sucesso");
+}
+
+void sortTicketsById() {
+  if (headTickets == NULL || headTickets->next == NULL) {
+    puts("Operação impossivel de executar");
+    return;
+  }
+
+  ELEM_TICKET *limit = NULL;
+  int swapped = 1;
+
+  while (swapped) {
+    swapped = 0;
+    ELEM_TICKET *current = headTickets;
+
+    while (current->next != limit) {
+      if (current->data.id > current->next->data.id) {
+        TICKET_INFO temp = current->data;
+        current->data = current->next->data;
+        current->next->data = temp;
+
+        // Aqui levo o historico com ele tambem, nao ordeno so a info do ticket
+        ELEM_HISTORY *tempHistory = current->history;
+        current->history = current->next->history;
+        current->next->history = tempHistory;
+
         swapped = 1;
       }
       current = current->next;
@@ -1313,6 +1371,7 @@ int saveTicketsToFile(const char *filename) {
   FILE *fp = fopen(filename, "wb");
   if (fp == NULL) {
     printf("Erro: Não foi possível guardar tickets\n");
+    waitForKey();
     return -1;
   }
 
@@ -1354,6 +1413,7 @@ int loadTicketsFromFile(const char *filename) {
   FILE *fp = fopen(filename, "rb");
   if (fp == NULL) {
     printf("Ficheiro %s não encontrado\n", filename);
+    waitForKey();
     return -1;
   }
 
