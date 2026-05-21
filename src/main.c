@@ -1,7 +1,9 @@
 #include "funcoes.h"
+#include "input/input.h"
 #include "persistencia.h"
 #include "ui/ui.h"
 
+#include <securitybaseapi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -19,24 +21,13 @@ void menuAdminFilter() {
     puts("2  - Filtrar tickets por tipo");
     puts("3  - Filtrar tickets por estado");
     puts("0  - Voltar");
-    printf("Opcao: ");
-    scanf("%d", &filterOption);
-    clearBuffer();
+    filterOption = readInt("Opção: ");
 
     switch (filterOption) {
     case 1:
-      do {
-        printf("\nQual a prioridade? (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
-        if (scanf("%d", &filterValue) == 1 && filterValue >= 1 &&
-            filterValue <= 4) {
-          clearBuffer();
-          listTicketsByPriority(filterValue);
-          break;
-        } else {
-          clearBuffer();
-          puts("\nOpção inválida!");
-        }
-      } while (1);
+      filterValue = readIntRange(
+          "\nQual a prioridade? (1-Baixa, 2-Media, 3-Alta, 4-Critica): ", 1, 4);
+      listTicketsByPriority(filterValue);
 
       waitForKey();
       break;
@@ -48,10 +39,9 @@ void menuAdminFilter() {
       do {
         puts("\nTipos disponíveis:");
         listTicketTypes();
+        int max = getTicketTypeCount();
 
-        printf("\nOpção: ");
-        scanf("%d", &displayId);
-        clearBuffer();
+        displayId = readIntRange("Opção: ", 1, max);
 
         realId = getRealTypeId(displayId);
 
@@ -67,23 +57,11 @@ void menuAdminFilter() {
       break;
     }
     case 3:
-      do {
-        printf("\nQual o estado? (1-Aberto, 2-Em Atendimento, 3-Espera User, "
-               "4-Resolvido, 5-Fechado): ");
-
-        if (scanf("%d", &filterValue) == 1 && filterValue >= 1 &&
-            filterValue <= 5) {
-          clearBuffer();
-          listTicketsByStatus(filterValue);
-
-          break;
-        } else {
-          clearBuffer();
-          puts("\nOpção inválida!");
-        }
-
-      } while (1);
-
+      filterValue = readIntRange(
+          "Qual o estado? (1-Aberto, 2-Em Atendimento, 3-Espera User, "
+          "4-Resolvido, 5-Fechado): ",
+          1, 5);
+      listTicketsByStatus(filterValue);
       waitForKey();
       break;
 
@@ -96,7 +74,6 @@ void menuAdminFilter() {
       waitForKey();
       break;
     }
-
   } while (!running);
 }
 
@@ -114,9 +91,7 @@ void menuAdminOrder() {
     puts("3  - Ordenar tickets por tecnico");
     puts("4  - Ordenar tickets por ID");
     puts("0  - Voltar");
-    printf("Opcao: ");
-    scanf("%d", &orderOption);
-    clearBuffer();
+    orderOption = readInt("Opção: ");
     switch (orderOption) {
 
     case 1:
@@ -147,7 +122,7 @@ void menuAdminOrder() {
 }
 
 void menuManagmentTypes() {
-  int orderOption;
+  int typeOption;
   int running = 0;
 
   do {
@@ -159,10 +134,8 @@ void menuManagmentTypes() {
     puts("3  - Editar");
     puts("4  - Remover");
     puts("0  - Voltar");
-    printf("Opcao: ");
-    scanf("%d", &orderOption);
-    clearBuffer();
-    switch (orderOption) {
+    typeOption = readInt("Opção: ");
+    switch (typeOption) {
 
     case 1:
       puts("\n=== LISTAR TIPOS ===");
@@ -238,7 +211,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
     puts("12 - Ver historico de um ticket");
     puts("13 - Tempo medio de resolucao por tecnico");
     puts("14 - Tempo medio de resolucao por categoria");
-    puts("15 - Gerar relatorio semanal/mensal");
+    puts("15 - Gerar relatorio");
     puts("16 - Alertas de tickets fora do SLA");
     puts("0  - Logout");
     puts("====================================");
@@ -451,9 +424,10 @@ void adminMenu(int *alertSLA, int logged_userId) {
 
       do {
         puts("Tipo de relatório:");
-        puts("1 - Mensal");
-        puts("2 - Semanal");
-
+        puts("1 - Mensal Estatístico");
+        puts("2 - Semanal Estatístico");
+        puts("3 - Pedidos registados e resolvidos");
+        puts("0 - Voltar");
         printf("Opcao: ");
 
         scanf("%d", &optionReport);
@@ -505,6 +479,18 @@ void adminMenu(int *alertSLA, int logged_userId) {
           isRunning = 1;
 
           waitForKey();
+          break;
+        }
+        case 3: {
+          if (createPeriodicReports() == 0) {
+            puts("SUCESSO: Relatório gerado com sucesso.");
+          } else {
+            puts("ERRO: Não foi possível gerar relatório.");
+          }
+
+        } break;
+        case 0: {
+          isRunning = 1;
           break;
         }
         default: {
@@ -676,16 +662,11 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
       if (*alertSLA == 0) {
         printAlertsSLA();
       }
-
       waitForKey();
       break;
     case 0:
       printf("Logout...\n");
-      if (alertTicketSLA(alertSLA) == 0) {
-        puts("SUCESSO: Alerta gerado com sucesso.");
-      } else {
-        puts("ERRO: Não foi possível gerar Alerta.");
-      }
+
       break;
     default:
       printf("Opcao invalida!\n");

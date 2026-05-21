@@ -162,7 +162,7 @@ void sortTicketsById();
 //RELATÓRIOS
 int generateWeeklyReport(DateTime startDate);
 int generateMonthReport(int month, int year);
-
+int createPeriodicReports();
 //ALERTAS SLA
 int alertTicketSLA(int *alertSLA);
 void printAlertsSLA();
@@ -214,7 +214,8 @@ void headTypes(int typeId, char *str); // Feito
 void getTypeUtil(int typeId, char *str); // Feito
 int getSLA(int priority);
 
-void createStatsToReports(char *fileName, char *fileHeader, ReportStats stats);
+int createStatsToReports(char *fileName, char *fileHeader, ReportStats stats);
+
 
 void seederTypes(); // Feito
 void seederTickets(); // Feito
@@ -248,3 +249,5 @@ int backupAllData(void);
 int loadAllData(void);
 
 int checkAdminValidated();
+
+int charIsValid(char *str, size_t numMin, size_t numMax);
