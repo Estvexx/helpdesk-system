@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
-SRC = src/main.c src/funcoes_users.c src/funcoes_ticket.c src/funcoes_utilitarias.c src/funcoes_historico.c src/funcoes_ticketTypes.c src/funcoes_exit.c src/persistencia.c src/ui/ui.c src/input/input.c
+SRC = src/main.c src/funcoes_users.c src/funcoes_ticket.c src/funcoes_utilitarias.c src/funcoes_historico.c src/funcoes_ticketTypes.c src/funcoes_exit.c src/persistencia.c src/ui/ui.c src/input/input.c src/logs/log.c
 OUT = exe
 DATAOUT = data/*.dat
 

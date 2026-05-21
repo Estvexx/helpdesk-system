@@ -1,3 +1,4 @@
+#ifndef FUNCOES_H
 #define FUNCOES_H
 
 #include <stdio.h>
@@ -251,3 +252,5 @@ int loadAllData(void);
 int checkAdminValidated();
 
 int charIsValid(char *str, size_t numMin, size_t numMax);
+
+#endif
