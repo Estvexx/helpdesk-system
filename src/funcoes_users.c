@@ -54,7 +54,7 @@ int createAdmin() {
   strcpy(new->info.username, "admin");
   strcpy(new->info.password, "admin");
   new->info.perfil = PERFIL_ADMIN;
-  new->info.isValidated = 1;
+  new->info.isValidated = 0;
   new->next = head;
   head = new;
   return 0;
@@ -108,6 +108,17 @@ int getUserCount() {
   return count;
 }
 
+int checkAdminValidated() {
+  ELEM_USER *temp = head;
+  while (temp != NULL) {
+    if (temp->info.perfil == PERFIL_ADMIN && temp->info.isValidated == 1) {
+      return 0;
+    }
+    temp = temp->next;
+  }
+  return -1;
+}
+
 int login(char *username, char *password, int *id) {
   if (userExistsByUsername(username) != 0) {
     return -1;
@@ -116,7 +127,7 @@ int login(char *username, char *password, int *id) {
   ELEM_USER *temp = head;
   while (temp != NULL) {
     if (strcmp(temp->info.username, username) == 0) {
-      if (temp->info.isValidated == 0) {
+      if (temp->info.isValidated == 0 && temp->info.perfil != PERFIL_ADMIN) {
         return -2;
       }
       if (strcmp(temp->info.password, password) == 0) {
@@ -136,6 +147,9 @@ int changePassword(char *username, char *newPassword) {
   while (temp != NULL) {
     if (strcmp(temp->info.username, username) == 0) {
       strcpy(temp->info.password, newPassword);
+      if(temp->info.perfil == PERFIL_ADMIN) {
+        temp->info.isValidated = 1;
+      }
       return 0;
     }
     temp = temp->next;

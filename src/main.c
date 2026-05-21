@@ -686,9 +686,15 @@ int main() {
   inicializarIds_TicketType();
   inicializarIds_Users();
 
-  if (getTicketCount() == 0 && getUserCount() == 0) {
+  if(getUserCount() == 0) {
     createAdmin();
+  }
+
+  if (checkAdminValidated() == -1) {
     needNewPass = 0;
+  }
+  
+  if(getTicketCount() == 0)  {
     seederTypes();
     seederTickets();
   }

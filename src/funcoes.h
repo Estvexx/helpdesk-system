@@ -243,3 +243,5 @@ int loadCategoryTypesFromFile(const char *charfilename);
 
 int backupAllData(void);
 int loadAllData(void);
+
+int checkAdminValidated();
