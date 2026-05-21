@@ -46,7 +46,7 @@ void menuAdminFilter() {
         realId = getRealTypeId(displayId);
 
         if (realId == -1) {
-          puts("\nOpção inválida.");
+          puts("Opção inválida.");
         }
 
       } while (realId == -1);
@@ -149,7 +149,11 @@ void menuManagmentTypes() {
                    sizeof(ticketType.name));
       } while (charIsValid(ticketType.name, 3, sizeof(ticketType.name) - 1) ==
                -1);
-      createTicketType(ticketType);
+      if (createTicketType(ticketType) == 0) {
+        puts("\nSUCESSO: Tipo de ticket criado com sucesso.");
+      } else {
+        puts("\nERRO: Não foi possível criar o tipo de ticket.");
+      }
       waitForKey();
       break;
     }
@@ -159,9 +163,14 @@ void menuManagmentTypes() {
       int realId = getRealTypeId(displayId);
 
       if (realId == -1) {
-        puts("\nOpção inválida.");
+        puts("Opção inválida.");
+      } else {
+        if (updateTicketType(realId) == 0) {
+          puts("\nSUCESSO: Tipo de ticket atualizado com sucesso.");
+        } else {
+          puts("\nERRO: Não foi possível atualizar o tipo de ticket.");
+        }
       }
-      updateTicketType(realId);
       waitForKey();
       break;
     }
@@ -171,9 +180,14 @@ void menuManagmentTypes() {
       int realId = getRealTypeId(displayId);
 
       if (realId == -1) {
-        puts("\nOpção inválida.");
+        puts("Opção inválida.");
+      } else {
+        if (deleteType(realId) == 0) {
+          puts("\nSUCESSO: Tipo de ticket removido com sucesso.");
+        } else {
+          puts("\nERRO: Não foi possível remover o tipo de ticket.");
+        }
       }
-      deleteType(realId);
       waitForKey();
       break;
     }
@@ -214,7 +228,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
     puts("16 - Alertas de tickets fora do SLA");
     puts("0  - Logout");
     puts("====================================");
-    option = readInt("Opcao: ");
+    option = readInt("Opção: ");
 
     switch (option) {
     case 1: {
@@ -233,7 +247,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
         realId = getRealTypeId(displayId);
 
         if (realId == -1) {
-          puts("\nOpção inválida.");
+          puts("Opção inválida.");
         }
 
       } while (realId == -1);
@@ -253,7 +267,11 @@ void adminMenu(int *alertSLA, int logged_userId) {
         readString("Utilizador que reportou: ", ticket.user, MAX_STR);
       } while (charIsValid(ticket.user, 3, MAX_STR - 1) == -1);
 
-      createTicket(ticket);
+      if (createTicket(ticket) == 0) {
+        puts("\nSUCESSO: Ticket criado com sucesso.");
+      } else {
+        puts("\nERRO: Não foi possível criar o ticket.");
+      }
       waitForKey();
       break;
     }
@@ -265,9 +283,9 @@ void adminMenu(int *alertSLA, int logged_userId) {
       int ticketId;
       ticketId = readInt("Introduza o #ID do ticket que deseja editar: ");
       if (updateTicket(ticketId, logged_userId) == 0) {
-        printf("Ticket #%d atualizado com sucesso!\n", ticketId);
+        printf("\nSUCESSO: Ticket #%d atualizado com sucesso!\n", ticketId);
       } else {
-        printf("Erro ao atualizar o ticket #%d.\n", ticketId);
+        printf("\nERRO: Não foi possível atualizar o ticket #%d.\n", ticketId);
       }
       waitForKey();
       break;
@@ -287,7 +305,9 @@ void adminMenu(int *alertSLA, int logged_userId) {
       listAllTickets();
       int ticketId = 0;
       ticketId = readInt("Digita o id do ticket a visualizar: ");
-      showTicketById(ticketId);
+      if(showTicketById(ticketId) == -1) {
+        puts("\nERRO: Não foi possível encontrar o ticket.");
+      }
       waitForKey();
       break;
     }
@@ -298,7 +318,11 @@ void adminMenu(int *alertSLA, int logged_userId) {
       listAllTickets();
       int ticketId;
       ticketId = readInt("Introduza o ticket que deseja remover: ");
-      deleteTicket(ticketId);
+      if (deleteTicket(ticketId) == 0) {
+        printf("\nSUCESSO: Ticket #%d removido com sucesso.\n", ticketId);
+      } else {
+        printf("\nERRO: Não foi possível remover o ticket #%d.\n", ticketId);
+      }
       waitForKey();
       break;
     }
@@ -331,7 +355,11 @@ void adminMenu(int *alertSLA, int logged_userId) {
       userId = readInt("ID do tecnico a validar (0 para cancelar): ");
 
       if (userId != 0) {
-        validateTechnician(userId);
+        if (validateTechnician(userId) == 0) {
+          puts("\nSUCESSO: Técnico validado com sucesso.");
+        } else {
+          puts("\nERRO: Não foi possível validar o técnico.");
+        }
       }
       waitForKey();
       break;
@@ -350,10 +378,10 @@ void adminMenu(int *alertSLA, int logged_userId) {
       tecnicoId = readInt("ID do tecnico: ");
 
       if (assignTechnician(ticketId, tecnicoId) == 0) {
-        printf("SUCESSO: Técnico #%d atribuído ao ticket #%d com sucesso.",
+        printf("\nSUCESSO: Técnico #%d atribuído ao ticket #%d com sucesso.",
                tecnicoId, ticketId);
       } else {
-        printf("ERRO: Não foi possível atribuir o técnico #%d ao ticket #%d.",
+        printf("\nERRO: Não foi possível atribuir o técnico #%d ao ticket #%d.",
                tecnicoId, ticketId);
       }
       waitForKey();
@@ -396,7 +424,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
         puts("2 - Semanal Estatístico");
         puts("3 - Pedidos registados e resolvidos");
         puts("0 - Voltar");
-        optionReport = readInt("Opcao: ");
+        optionReport = readInt("Opção: ");
 
         switch (optionReport) {
         case 1: {
@@ -404,18 +432,20 @@ void adminMenu(int *alertSLA, int logged_userId) {
           int year;
           char dateInput[20];
 
-          readString("Introduza o mês e ano (mm/YYYY): ", dateInput,
-                     sizeof(dateInput));
+          do {
+            readString("Introduza o mês e ano (mm/YYYY): ", dateInput,
+                       sizeof(dateInput));
+          } while (charIsValid(dateInput, 7, 7) == -1);
 
           if (sscanf(dateInput, "%d/%d", &month, &year) != 2) {
-            puts("Formato invalido.");
+            puts("\nERRO: Formato invalido.");
             break;
           }
 
-          if (generateMonthReport(month, year) == -1) {
-            puts("ERRO: Não foi possível gerar relatório.");
+          if (generateMonthReport(month, year) == 0) {
+            puts("\nSUCESSO: Relatório gerado com sucesso.");
           } else {
-            puts("SUCESSO: Relatório gerado com sucesso.");
+            puts("\nERRO: Não foi possível gerar relatório.");
           }
           isRunning = 1;
           waitForKey();
@@ -426,19 +456,22 @@ void adminMenu(int *alertSLA, int logged_userId) {
           DateTime startDate;
           char dateInput[20];
 
-          readString("Introduza o dia, mês e ano (dd/mm/YYYY): ", dateInput,
-                     sizeof(dateInput));
+          do {
+            readString("Introduza o dia, mês e ano (dd/mm/YYYY): ", dateInput,
+                       sizeof(dateInput));
+          } while (charIsValid(dateInput, 10, 10) == -1);
           if (sscanf(dateInput, "%d/%d/%d", &startDate.day, &startDate.month,
                      &startDate.year) != 3) {
-            puts("Formato invalido.");
+            puts("\nERRO: Formato invalido.");
             break;
           }
 
           if (generateWeeklyReport(startDate) == 0) {
-            puts("SUCESSO: Relatório gerado com sucesso.");
+            puts("\nSUCESSO: Relatório gerado com sucesso.");
           } else {
-            puts("ERRO: Não foi possível gerar relatório.");
+            puts("\nERRO: Não foi possível gerar relatório.");
           }
+
           isRunning = 1;
 
           waitForKey();
@@ -446,9 +479,9 @@ void adminMenu(int *alertSLA, int logged_userId) {
         }
         case 3: {
           if (createPeriodicReports() == 0) {
-            puts("SUCESSO: Relatório gerado com sucesso.");
+            puts("\nSUCESSO: Relatório gerado com sucesso.");
           } else {
-            puts("ERRO: Não foi possível gerar relatório.");
+            puts("\nERRO: Não foi possível gerar relatório.");
           }
 
         } break;
@@ -457,7 +490,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
           break;
         }
         default: {
-          puts("Opcao invalida.");
+          puts("Opção invalida.");
           break;
         }
         }
@@ -470,11 +503,11 @@ void adminMenu(int *alertSLA, int logged_userId) {
       system("cls");
       Navbar();
       Title("ALERTAS", "👁️");
-      puts("A criar alertas SLA .");
+      puts("\nERRO: A criar alertas SLA .");
       if (alertTicketSLA(alertSLA) == 0) {
-        puts("SUCESSO: Alerta gerado com sucesso.");
+        puts("\nSUCESSO: Alerta gerado com sucesso.");
       } else {
-        puts("ERRO: Não foi possível gerar Alerta.");
+        puts("\nERRO: Não foi possível gerar Alerta.");
       }
       waitForKey();
       break;
@@ -508,7 +541,7 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
     printf("6 - Exportar tickets para CSV\n");
     printf("0 - Logout\n");
     printf("==============================\n");
-    option = readInt("Opcao: ");
+    option = readInt("Opção: ");
 
     switch (option) {
     case 1:
@@ -521,15 +554,15 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
       idTicket = readInt("\nID do ticket a aceitar (0 para cancelar): ");
 
       if (idTicket == 0) {
-        puts("Operacao cancelada.");
+        puts("\nERRO: Operacao cancelada.");
         waitForKey();
         break;
       }
 
       if (acceptTicket(logged_userId, idTicket) == 0) {
-        printf("SUCESSO: Ticket #%d aceite com sucesso.", idTicket);
+        printf("\nSUCESSO: Ticket #%d aceite com sucesso.", idTicket);
       } else {
-        printf("ERRO: Não foi possível aceitar ticket #%d.", idTicket);
+        printf("\nERRO: Não foi possível aceitar ticket #%d.", idTicket);
       }
 
       waitForKey();
@@ -565,7 +598,7 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
       idTicket = readInt("\nID do ticket para comentar (0 para cancelar): ");
 
       if (idTicket == 0) {
-        puts("Operação cancelada.");
+        puts("\nERRO: Operação cancelada.");
         waitForKey();
         break;
       }
@@ -615,7 +648,7 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
 
       break;
     default:
-      printf("Opcao invalida!\n");
+      printf("Opção invalida!\n");
       waitForKey();
     }
   } while (option != 0);
@@ -637,7 +670,9 @@ int main() {
   inicializarIds_Users();
 
   if (getUserCount() == 0) {
-    createAdmin();
+    if (createAdmin() != 0) {
+      puts("\nERRO: Não foi possível criar o utilizador administrador.");
+    }
   }
 
   if (checkAdminValidated() == -1) {
@@ -657,7 +692,7 @@ int main() {
     puts("2 - Registar");
     puts("3 - Alterar PW");
     puts("0 - Sair");
-    option = readInt("Opcao: ");
+    option = readInt("Opção: ");
     system("cls");
 
     if (option == 0)
@@ -679,10 +714,10 @@ int main() {
       int perfil = login(username, pass, &logged_userId);
 
       if (perfil == -1) {
-        printf("\nCredenciais invalidas!\n");
+        printf("\nERRO: Credenciais invalidas!\n");
         waitForKey();
       } else if (perfil == -2) {
-        puts("\nTécnico ainda não validado! Contacte o administrador de "
+        puts("\nERRO: Técnico ainda não validado! Contacte o administrador de "
              "sistema\n");
         waitForKey();
       } else if (perfil == PERFIL_ADMIN) {
@@ -698,7 +733,7 @@ int main() {
           do {
             readString("\nNova password: ", newPassword, MAX_STR);
 
-          } while ((charIsValid(newPassword, 5, MAX_STR)) == -1);
+          } while ((charIsValid(newPassword, 5, MAX_STR - 1)) == -1);
 
           if (changePassword(username, newPassword) == 0) {
             puts("Password alterada com sucesso!");
@@ -707,7 +742,7 @@ int main() {
             waitForKey();
             system("cls");
           } else {
-            puts("Ocorreu um erro ao alterar palavra-passe");
+            puts("\nERRO: Ocorreu um erro ao alterar palavra-passe");
           }
         }
         adminMenu(&alertSLA, logged_userId);
@@ -734,11 +769,11 @@ int main() {
 
       user.perfil = PERFIL_TECNICO;
 
-      if (registerUser(user) == -1) {
-        printf("ERRO: Registo mal sucedido\n");
-        break;
+      if (registerUser(user) == 0) {
+        puts("Utilizador criado com sucesso");
+      } else {
+        printf("\nERRO: Registo mal sucedido\n");
       }
-      puts("Utilizador criado com sucesso");
       waitForKey();
       system("cls");
       break;
@@ -757,7 +792,7 @@ int main() {
       if (changePassword(username, newPassword) == 0) {
         puts("Password alterada com sucesso!");
       } else {
-        puts("Ocorreu um erro ao alterar palavra-passe");
+        puts("\nERRO: Ocorreu um erro ao alterar palavra-passe");
       }
       waitForKey();
       system("cls");

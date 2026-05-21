@@ -4,7 +4,7 @@
 void addHistory(ELEM_TICKET *ticket, HISTORY_INFO history) {
   ELEM_HISTORY *newHistory = malloc(sizeof(ELEM_HISTORY));
   if (newHistory == NULL) {
-    puts("Erro ao alocar memóra");
+    puts("\nERRO: Falha ao alocar memóra");
     return;
   }
   newHistory->data = history;
@@ -20,7 +20,7 @@ void printHistory(int ticketId, ELEM_TICKET *headTickets) {
     if (temp->data.id == ticketId) {
       ELEM_HISTORY *h = temp->history;
       if (h == NULL) {
-        puts("Sem histórico para este ticket");
+        puts("\nERRO: Sem histórico para este ticket");
         return;
       }
       while (h != NULL) {
@@ -40,5 +40,5 @@ void printHistory(int ticketId, ELEM_TICKET *headTickets) {
     }
     temp = temp->next;
   }
-  puts("Ticket não encontrado");
+  puts("\nERRO: Ticket não encontrado");
 }

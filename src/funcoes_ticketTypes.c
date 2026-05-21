@@ -1,5 +1,6 @@
 #include "funcoes.h"
 #include "stdio.h"
+#include "input/input.h"
 
 ELEM_TICKET_TYPE *headTicketsTypes = NULL;
 
@@ -48,7 +49,7 @@ int createTicketType(TICKET_TYPE ticketType) // Necessário inserir no fim
   ELEM_TICKET_TYPE *newType = malloc(sizeof(ELEM_TICKET_TYPE));
 
   if (newType == NULL) {
-    puts("Erro ao alocar memória para o tipo de ticket.");
+    puts("\nERRO: Falha ao alocar memória para o tipo de ticket.");
     return -1;
   }
 
@@ -70,9 +71,6 @@ int createTicketType(TICKET_TYPE ticketType) // Necessário inserir no fim
     temp->next = newType;
   }
 
-  printf("Tipo de ticket '%s' criado com sucesso com o ID #%d!\n",
-         newType->data.name, newType->data.id);
-
   return 0;
 }
 
@@ -80,7 +78,7 @@ int deleteTicketType(int typeId, ELEM_TICKET *headTickets) {
   int isConfirmed;
 
   if (headTicketsTypes == NULL) {
-    puts("Nenhum tipo registado para remover.");
+    puts("\nERRO: Nenhum tipo registado para remover.");
     return -1;
   }
 
@@ -93,7 +91,7 @@ int deleteTicketType(int typeId, ELEM_TICKET *headTickets) {
   }
 
   if (temp == NULL) {
-    puts("Tipo não encontrado!");
+    puts("\nERRO: Tipo não encontrado!");
     return -1;
   }
 
@@ -102,7 +100,7 @@ int deleteTicketType(int typeId, ELEM_TICKET *headTickets) {
 
   while (auxTicket != NULL) {
     if (auxTicket->data.typeId == typeId) {
-      puts("Impossível remover, existem tickets associados a este tipo.");
+      puts("\nERRO: Impossível remover, existem tickets associados a este tipo.");
       return -1;
     }
     auxTicket = auxTicket->next;
@@ -111,7 +109,7 @@ int deleteTicketType(int typeId, ELEM_TICKET *headTickets) {
   isConfirmed = confirmDelete();
 
   if (isConfirmed == 1) {
-    puts("Remoção cancelada.");
+    puts("\nRemoção cancelada.");
     return -1;
   }
 
@@ -130,7 +128,7 @@ int deleteTicketType(int typeId, ELEM_TICKET *headTickets) {
 
 int updateTicketType(int typeId) {
   if (headTicketsTypes == NULL) {
-    puts("Nenhum tipo de ticket registado para editar.");
+    puts("\nERRO: Nenhum tipo de ticket registado para editar.");
     return -1;
   }
 
@@ -140,17 +138,17 @@ int updateTicketType(int typeId) {
     if (temp->data.id == typeId) {
       printf("ID: %d | Nome Atual: %s\n", temp->data.id, temp->data.name);
 
-      printf("Novo nome: ");
-      fgets(temp->data.name, sizeof(temp->data.name), stdin);
-      temp->data.name[strcspn(temp->data.name, "\n")] = 0;
+      do {
+        readString("Novo nome: ", temp->data.name, sizeof(temp->data.name));
+      } while (charIsValid(temp->data.name, 3, sizeof(temp->data.name) - 1) ==
+               -1);
 
-      printf("Tipo de ticket atualizado com sucesso!\n");
       return 0;
     }
     temp = temp->next;
   }
 
-  printf("Tipo de ticket com o ID %d não encontrado!\n", typeId);
+  printf("\nERRO: Tipo de ticket com o ID %d não encontrado!\n", typeId);
   return -1;
 }
 
@@ -200,7 +198,7 @@ int getTicketTypeCount() {
 int saveCategoryTypesToFile(const char *filename) {
   FILE *fp = fopen(filename, "wb");
   if (fp == NULL) {
-    printf("Erro: Não foi possível guardar categorias\n");
+    printf("\nERRO: Não foi possível guardar categorias\n");
     waitForKey();
     return -1;
   }

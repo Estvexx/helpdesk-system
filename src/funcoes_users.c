@@ -45,7 +45,7 @@ int isAdmin(int logged_userId) {
 int createAdmin() {
   ELEM_USER *new = malloc(sizeof(ELEM_USER));
   if (new == NULL) {
-    puts("Erro ao alocar a memóra");
+    puts("\nERRO: Falha ao alocar a memóra");
     return -1;
   }
   new->info.id = nextUserId;
@@ -68,7 +68,7 @@ int registerUser(USER_INFO newUser) {
 
   ELEM_USER *new = malloc(sizeof(ELEM_USER));
   if (new == NULL) {
-    puts("Erro ao alocar a memória");
+    puts("\nERRO: Falha ao alocar a memória");
     return -1;
   }
 
@@ -265,7 +265,7 @@ int isTechnicianValidated(int userId) {
 int saveUsersToFile(const char *filename) {
   FILE *fp = fopen(filename, "wb");
   if (fp == NULL) {
-    printf("Erro: Não foi possível guardar utilizadores\n");
+    printf("\nERRO: Não foi possível guardar utilizadores\n");
     waitForKey();
     return -1;
   }

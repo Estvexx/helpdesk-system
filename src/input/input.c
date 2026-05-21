@@ -12,7 +12,7 @@ int readInt(const char *prompt) {
   printf("%s", prompt);
   while (scanf("%d", &num) != 1) {
     clearBuffer();
-    printf("\nValor inválido!\n %s", prompt);
+    printf("\nValor inválido!\n%s", prompt);
   }
   clearBuffer();
   return num;

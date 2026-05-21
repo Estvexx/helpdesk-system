@@ -134,7 +134,7 @@ int updateTicket(int ticketId, int logged_userId );       // Ainda alterações 
 int deleteTicket(int ticketId);       // Retorna 1 se for cancelado pelo user
 void listAllTickets();                // feito
 int existeUserbyId(int id);           // feito
-void showTicketById(int id);          // feito
+int showTicketById(int id);          // feito
 void showTicketPendentByTechnician(int id); //feito
 int getTicketCount();                 // feito
 int assignTechnician(int ticket_id, int technicianId);// feito
@@ -209,7 +209,7 @@ int diasNoMes(int month, int year); // Feito
 int confirmDelete(); // 0 - confirma / 1 - cancela
 void tableHeaders(); // Feito
 
-void deleteType(int typeId); // Feito
+int deleteType(int typeId); // Feito
 void headTypes(int typeId, char *str); // Feito
 void getTypeUtil(int typeId, char *str); // Feito
 int getSLA(int priority);

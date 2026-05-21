@@ -1,6 +1,7 @@
 #include "funcoes.h"
 #include <stdio.h>
 #include <string.h>
+#include "input/input.h"
 
 void clearBuffer() {
   int c;
@@ -105,25 +106,14 @@ void tableHeaders() {
 }
 
 int confirmDelete() {
-  int confirmDelete;
   do {
     puts("Confirmar remoção?");
     puts("0 - Continuar");
     puts("1 - Cancelar");
-    printf("\nOpção: ");
-
-    if (scanf("%d", &confirmDelete) != 1 ||
-        (confirmDelete != 0 && confirmDelete != 1)) {
-      clearBuffer();
-      puts("\nOpção inválida.\n");
-    } else {
-      clearBuffer();
-      break;
-    }
+    int confirmDelete = readIntRange("\nOpção: ", 0, 1);
+    return confirmDelete;
 
   } while (1);
-
-  return confirmDelete;
 }
 
 void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTicketsTypes) {
