@@ -30,18 +30,6 @@ int readIntRange(const char *prompt, int min, int max) {
   return num;
 }
 
-// Lê um inteiro e aplica filtro personalizado
-int readIntFilter(const char *prompt, const char *errorMsg) {
-  int num;
-  printf("%s", prompt);
-  while (scanf("%d", &num) != 1) {
-    clearBuffer();
-    printf("%s\n%s", errorMsg, prompt);
-  }
-  clearBuffer();
-  return num;
-}
-
 // ===== LEITURA DE STRINGS =====
 
 // Lê uma string genérica
@@ -51,7 +39,7 @@ void readString(const char *prompt, char *buffer, int maxLen) {
   buffer[strcspn(buffer, "\n")] = 0;
 }
 
-int charIsValid(char *str, size_t numMin, size_t numMax) {
+int validateStringLength(char *str, size_t numMin, size_t numMax) {
   size_t lenght = strlen(str);
 
   if (lenght < numMin) {

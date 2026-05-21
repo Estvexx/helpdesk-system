@@ -7,7 +7,6 @@
 
 int readInt(const char *prompt);
 int readIntRange(const char *prompt, int min, int max);
-int readIntFilter(const char *prompt, const char *errorMsg);
 void readString(const char *prompt, char *buffer, int maxLen);
-int charIsValid(char *str, size_t numMin, size_t numMax);
+int validateStringLength(char *str, size_t numMin, size_t numMax);
 

@@ -239,8 +239,9 @@ int updateTicket(int ticketId, int logged_userId) {
           do {
             readString("Descrição: ", temp->data.description,
                        sizeof(temp->data.description));
-          } while (charIsValid(temp->data.description, 5,
-                               sizeof(temp->data.description) - 1) == -1);
+          } while (validateStringLength(temp->data.description, 5,
+                                        sizeof(temp->data.description) - 1) ==
+                   -1);
           puts("\nSUCESSO: Descrição atualizada");
           break;
         case 3:
@@ -811,21 +812,21 @@ int updateTicketStatus(int ticket_id, int logged_userId) {
     char solucao[500];
     do {
       readString("Descreva a solução aplicada: ", solucao, sizeof(solucao));
-    } while (charIsValid(solucao, 5, sizeof(solucao) - 1) == -1);
+    } while (validateStringLength(solucao, 5, sizeof(solucao) - 1) == -1);
     temp->data.closedAt = getCurrentDateTime();
     snprintf(h.description, 600, "Ticket resolvido. Solução: %s", solucao);
   } else if (newStatus == STATUS_CLOSED) {
     do {
       readString("Descreva as ações realizadas: ", temp->data.actions,
                  sizeof(temp->data.actions));
-    } while (charIsValid(temp->data.actions, 5,
-                         sizeof(temp->data.actions) - 1) == -1);
+    } while (validateStringLength(temp->data.actions, 5,
+                                  sizeof(temp->data.actions) - 1) == -1);
 
     do {
       readString("Ferramentas utilizadas: ", temp->data.tools,
                  sizeof(temp->data.tools));
-    } while (charIsValid(temp->data.tools, 3, sizeof(temp->data.tools) - 1) ==
-             -1);
+    } while (validateStringLength(temp->data.tools, 3,
+                                  sizeof(temp->data.tools) - 1) == -1);
 
     snprintf(h.description, 800, "Ticket fechado. Ações: %s | Ferramentas: %s",
              temp->data.actions, temp->data.tools);
@@ -949,7 +950,7 @@ int delegateTicket(int ticket_id, int logged_userId) {
   char motivo[300];
   do {
     readString("Motivo da delegação: ", motivo, sizeof(motivo));
-  } while (charIsValid(motivo, 3, sizeof(motivo) - 1) == -1);
+  } while (validateStringLength(motivo, 3, sizeof(motivo) - 1) == -1);
 
   HISTORY_INFO h;
   h.date = getCurrentDateTime();
@@ -994,7 +995,7 @@ int addComment(int ticket_id, int logged_userId) {
   char comentario[300];
   do {
     readString("Comentário: ", comentario, sizeof(comentario));
-  } while (charIsValid(comentario, 3, sizeof(comentario) - 1) == -1);
+  } while (validateStringLength(comentario, 3, sizeof(comentario) - 1) == -1);
 
   // Histórico
   HISTORY_INFO h;
@@ -1388,7 +1389,6 @@ int saveTicketsToFile(const char *filename) {
   FILE *fp = fopen(filename, "wb");
   if (fp == NULL) {
     printf("\nERRO: Não foi possível guardar tickets\n");
-    waitForKey();
     return -1;
   }
 
@@ -1430,7 +1430,6 @@ int loadTicketsFromFile(const char *filename) {
   FILE *fp = fopen(filename, "rb");
   if (fp == NULL) {
     printf("Ficheiro %s não encontrado\n", filename);
-    waitForKey();
     return -1;
   }
 

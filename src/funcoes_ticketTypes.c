@@ -1,6 +1,6 @@
 #include "funcoes.h"
-#include "stdio.h"
 #include "input/input.h"
+#include "stdio.h"
 
 ELEM_TICKET_TYPE *headTicketsTypes = NULL;
 
@@ -100,7 +100,8 @@ int deleteTicketType(int typeId, ELEM_TICKET *headTickets) {
 
   while (auxTicket != NULL) {
     if (auxTicket->data.typeId == typeId) {
-      puts("\nERRO: Impossível remover, existem tickets associados a este tipo.");
+      puts("\nERRO: Impossível remover, existem tickets associados a este "
+           "tipo.");
       return -1;
     }
     auxTicket = auxTicket->next;
@@ -140,8 +141,8 @@ int updateTicketType(int typeId) {
 
       do {
         readString("Novo nome: ", temp->data.name, sizeof(temp->data.name));
-      } while (charIsValid(temp->data.name, 3, sizeof(temp->data.name) - 1) ==
-               -1);
+      } while (validateStringLength(temp->data.name, 3,
+                                    sizeof(temp->data.name) - 1) == -1);
 
       return 0;
     }
@@ -199,7 +200,6 @@ int saveCategoryTypesToFile(const char *filename) {
   FILE *fp = fopen(filename, "wb");
   if (fp == NULL) {
     printf("\nERRO: Não foi possível guardar categorias\n");
-    waitForKey();
     return -1;
   }
 
@@ -221,7 +221,6 @@ int loadCategoryTypesFromFile(const char *filename) {
   FILE *fp = fopen(filename, "rb");
   if (fp == NULL) {
     printf("Ficheiro %s não encontrado\n", filename);
-    waitForKey();
     return -1;
   }
 

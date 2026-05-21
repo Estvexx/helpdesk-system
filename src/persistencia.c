@@ -3,23 +3,41 @@
 #include <stdio.h>
 
 int loadAllData(void) {
-  puts("\n=== Carregando dados persistidos ===");
+  int resultCategories;
+  int resultUsers;
+  int resultTickets;
 
-  loadCategoryTypesFromFile("data/categories.dat");
-  loadUsersFromFile("data/users.dat");
-  loadTicketsFromFile("data/tickets.dat");
+  puts("\n=== A carregar dados persistidos ===");
 
-  puts("");
+  resultCategories = loadCategoryTypesFromFile("data/categories.dat");
+  resultUsers = loadUsersFromFile("data/users.dat");
+  resultTickets = loadTicketsFromFile("data/tickets.dat");
+
+  if (resultCategories != 0 || resultUsers != 0 || resultTickets != 0) {
+    puts("\nAVISO: Nem todos os dados foram carregados com sucesso.\n");
+    waitForKey();
+    return -1;
+  }
+
   return 0;
 }
 
 int backupAllData(void) {
-  printf("\n=== Guardando dados ===\n");
+  int resultUsers;
+  int resultTickets;
+  int resultCategories;
 
-  saveUsersToFile("data/users.dat");
-  saveTicketsToFile("data/tickets.dat");
-  saveCategoryTypesToFile("data/categories.dat");
+  printf("\n=== A guardar dados ===\n");
 
-  puts("✓ Dados guardados com sucesso!\n");
+  resultUsers = saveUsersToFile("data/users.dat");
+  resultTickets = saveTicketsToFile("data/tickets.dat");
+  resultCategories = saveCategoryTypesToFile("data/categories.dat");
+
+  // Basta 1 ser diferente de 0 (sucesso) para lancar este erro
+  if (resultUsers != 0 || resultTickets != 0 || resultCategories != 0) {
+    waitForKey();
+    puts("\nERRO: Nem todos os dados foram guardados com sucesso.\n");
+    return -1;
+  }
   return 0;
 }

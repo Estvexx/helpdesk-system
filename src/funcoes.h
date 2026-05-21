@@ -199,7 +199,7 @@ void getStatus(int status, char *str); // Feito
 void getPriority(int prioridade, char *texto); // Feito
 void clearBuffer(); // Feito
 void waitForKey(); // Feito
-int charIsValid(char *str, size_t numMin, size_t numMax);
+int validateStringLength(char *str, size_t numMin, size_t numMax);
 
 // Datas                   -------
 DateTime addTimeToDateTime(DateTime dt, int hours, int minutes); // Feito
@@ -252,6 +252,6 @@ int loadAllData(void);
 
 int checkAdminValidated();
 
-int charIsValid(char *str, size_t numMin, size_t numMax);
+int validateStringLength(char *str, size_t numMin, size_t numMax);
 
 #endif

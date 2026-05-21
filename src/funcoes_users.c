@@ -266,7 +266,6 @@ int saveUsersToFile(const char *filename) {
   FILE *fp = fopen(filename, "wb");
   if (fp == NULL) {
     printf("\nERRO: Não foi possível guardar utilizadores\n");
-    waitForKey();
     return -1;
   }
 
@@ -288,7 +287,6 @@ int loadUsersFromFile(const char *filename) {
   FILE *fp = fopen(filename, "rb");
   if (fp == NULL) {
     printf("Ficheiro %s não encontrado (primeira execução?)\n", filename);
-    waitForKey();
     return -1;
   }
 
