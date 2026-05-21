@@ -686,7 +686,7 @@ int main() {
   inicializarIds_TicketType();
   inicializarIds_Users();
 
-  if (getTicketCount() == 0 && (getUserCount() == 0 || getUserCount() == 1)) {
+  if (getTicketCount() == 0 && getUserCount() == 0) {
     createAdmin();
     needNewPass = 0;
     seederTypes();
