@@ -12,7 +12,7 @@ int readInt(const char *prompt) {
   printf("%s", prompt);
   while (scanf("%d", &num) != 1) {
     clearBuffer();
-    printf("\nValor inválido! %s", prompt);
+    printf("\nValor inválido!\n %s", prompt);
   }
   clearBuffer();
   return num;
@@ -24,7 +24,7 @@ int readIntRange(const char *prompt, int min, int max) {
   do {
     num = readInt(prompt);
     if (num < min || num > max) {
-      printf("\nOpção inválida! (%d-%d)", min, max);
+      printf("\nOpção inválida! (%d-%d)\n", min, max);
     }
   } while (num < min || num > max);
   return num;
@@ -55,10 +55,10 @@ int charIsValid(char *str, size_t numMin, size_t numMax) {
   size_t lenght = strlen(str);
 
   if (lenght < numMin) {
-    printf("\nInvalido, minimo %zu caracteres.", numMin);
+    printf("\nInvalido, minimo %zu caracteres.\n", numMin);
     return -1;
   } else if (lenght > numMax) {
-    printf("\nInvalido, maximo %zu caracteres.", numMax);
+    printf("\nInvalido, maximo %zu caracteres.\n", numMax);
     return -1;
   } else {
     return 0;

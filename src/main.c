@@ -144,18 +144,18 @@ void menuManagmentTypes() {
       break;
     case 2: {
       TICKET_TYPE ticketType;
-      puts("\nInsira o nome do novo tipo: ");
-      fgets(ticketType.name, sizeof(ticketType.name), stdin);
-      ticketType.name[strcspn(ticketType.name, "\n")] = 0;
+      do {
+        readString("\nInsira o nome do novo tipo: ", ticketType.name,
+                   sizeof(ticketType.name));
+      } while (charIsValid(ticketType.name, 3, sizeof(ticketType.name) - 1) ==
+               -1);
       createTicketType(ticketType);
       waitForKey();
       break;
     }
     case 3: {
       int displayId;
-      printf("\nIntroduza o #ID do ticket que deseja editar: ");
-      scanf("%d", &displayId);
-      clearBuffer();
+      displayId = readInt("\nIntroduza o #ID do ticket que deseja editar: ");
       int realId = getRealTypeId(displayId);
 
       if (realId == -1) {
@@ -167,9 +167,7 @@ void menuManagmentTypes() {
     }
     case 4: {
       int displayId;
-      printf("\nIntroduza o #ID do ticket que deseja eliminar: ");
-      scanf("%d", &displayId);
-      clearBuffer();
+      displayId = readInt("\nIntroduza o #ID do ticket que deseja eliminar: ");
       int realId = getRealTypeId(displayId);
 
       if (realId == -1) {
@@ -215,9 +213,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
     puts("16 - Alertas de tickets fora do SLA");
     puts("0  - Logout");
     puts("====================================");
-    printf("Opcao: ");
-    scanf("%d", &option);
-    clearBuffer();
+    option = readInt("Opcao: ");
 
     switch (option) {
     case 1: {
@@ -227,20 +223,11 @@ void adminMenu(int *alertSLA, int logged_userId) {
       TICKET_INFO ticket;
       int realId, displayId;
       do {
-        system("cls");
-        Navbar();
-        Title("CRIAR TICKET", "➕");
-        puts("Tipos disponíveis:");
+        puts("\nTipos disponíveis:");
         listTicketTypes();
+        int max = getTicketTypeCount();
 
-        printf("\nOpção: ");
-
-        if (scanf("%d", &displayId) != 1) {
-          puts("\nEntrada inválida.");
-          continue;
-        }
-
-        clearBuffer();
+        displayId = readIntRange("Opção: ", 1, max);
 
         realId = getRealTypeId(displayId);
 
@@ -252,25 +239,18 @@ void adminMenu(int *alertSLA, int logged_userId) {
 
       ticket.typeId = realId;
 
-      printf("Descricao: ");
-      fgets(ticket.description, 500, stdin);
-      ticket.description[strcspn(ticket.description, "\n")] = 0;
+      do {
+        readString("Descricao: ", ticket.description,
+                   sizeof(ticket.description));
+      } while (charIsValid(ticket.description, 5,
+                           sizeof(ticket.description) - 1) == -1);
+
+      ticket.priority = readIntRange(
+          "Prioridade (1-Baixa, 2-Media, 3-Alta, 4-Critica): ", 1, 4);
 
       do {
-        printf("Prioridade (1-Baixa, 2-Media, 3-Alta, 4-Critica): ");
-        if (scanf("%d", &ticket.priority) != 1 || ticket.priority < 1 ||
-            ticket.priority > 4) {
-          clearBuffer();
-          puts("Prioridade inválida!");
-        } else {
-          clearBuffer();
-          break;
-        }
-      } while (1);
-
-      printf("Utilizador que reportou: ");
-      fgets(ticket.user, MAX_STR, stdin);
-      ticket.user[strcspn(ticket.user, "\n")] = 0;
+        readString("Utilizador que reportou: ", ticket.user, MAX_STR);
+      } while (charIsValid(ticket.user, 3, MAX_STR - 1) == -1);
 
       createTicket(ticket);
       waitForKey();
@@ -282,9 +262,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
       Title("EDITAR TICKET", "✏️");
       listAllTickets();
       int ticketId;
-      printf("Introduza o #ID do ticket que deseja editar: ");
-      scanf("%d", &ticketId);
-      clearBuffer();
+      ticketId = readInt("Introduza o #ID do ticket que deseja editar: ");
       if (updateTicket(ticketId, logged_userId) == 0) {
         printf("Ticket #%d atualizado com sucesso!\n", ticketId);
       } else {
@@ -307,9 +285,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
       Title("VER TICKET", "🎫");
       listAllTickets();
       int ticketId = 0;
-      printf("Digita o id do ticket a visualizar: ");
-      scanf("%i", &ticketId);
-      clearBuffer();
+      ticketId = readInt("Digita o id do ticket a visualizar: ");
       showTicketById(ticketId);
       waitForKey();
       break;
@@ -318,10 +294,9 @@ void adminMenu(int *alertSLA, int logged_userId) {
       system("cls");
       Navbar();
       Title("ELIMINAR TICKET", "🗑️");
+      listAllTickets();
       int ticketId;
-      printf("Introduza o ticket que deseja remover: ");
-      scanf("%d", &ticketId);
-      clearBuffer();
+      ticketId = readInt("Introduza o ticket que deseja remover: ");
       deleteTicket(ticketId);
       waitForKey();
       break;
@@ -352,9 +327,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
       listPendingTechnicians();
 
       int userId;
-      printf("ID do tecnico a validar (0 para cancelar): ");
-      scanf("%d", &userId);
-      clearBuffer();
+      userId = readInt("ID do tecnico a validar (0 para cancelar): ");
 
       if (userId != 0) {
         validateTechnician(userId);
@@ -368,16 +341,12 @@ void adminMenu(int *alertSLA, int logged_userId) {
       Title("ATRIBUIR TECNICOS", "📝");
       int ticketId, tecnicoId;
       listAllTickets();
-      printf("ID do ticket: ");
-      scanf("%d", &ticketId);
-      clearBuffer();
+      ticketId = readInt("ID do ticket: ");
       system("cls");
       Navbar();
       Title("ATRIBUIR TECNICOS", "📝");
       listAllTechnicians();
-      printf("ID do tecnico: ");
-      scanf("%d", &tecnicoId);
-      clearBuffer();
+      tecnicoId = readInt("ID do tecnico: ");
 
       if (assignTechnician(ticketId, tecnicoId) == 0) {
         printf("SUCESSO: Técnico #%d atribuído ao ticket #%d com sucesso.",
@@ -394,9 +363,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
       Navbar();
       Title("HISTORICO TICKETS", "📜");
       int id;
-      printf("ID do ticket: ");
-      scanf("%d", &id);
-      clearBuffer();
+      id = readInt("ID do ticket: ");
       printTicketHistory(id);
       waitForKey();
       break;
@@ -428,26 +395,21 @@ void adminMenu(int *alertSLA, int logged_userId) {
         puts("2 - Semanal Estatístico");
         puts("3 - Pedidos registados e resolvidos");
         puts("0 - Voltar");
-        printf("Opcao: ");
-
-        scanf("%d", &optionReport);
-
-        clearBuffer();
+        optionReport = readInt("Opcao: ");
 
         switch (optionReport) {
         case 1: {
           int month;
           int year;
+          char dateInput[20];
 
-          printf("Introduza o mês e ano (mm/YYYY): ");
+          readString("Introduza o mês e ano (mm/YYYY): ", dateInput,
+                     sizeof(dateInput));
 
-          if (scanf("%d/%d", &month, &year) != 2) {
-            clearBuffer();
+          if (sscanf(dateInput, "%d/%d", &month, &year) != 2) {
             puts("Formato invalido.");
             break;
           }
-
-          clearBuffer();
 
           if (generateMonthReport(month, year) == -1) {
             puts("ERRO: Não foi possível gerar relatório.");
@@ -461,15 +423,15 @@ void adminMenu(int *alertSLA, int logged_userId) {
         }
         case 2: {
           DateTime startDate;
+          char dateInput[20];
 
-          printf("Introduza o dia, mês e ano (dd/mm/YYYY): ");
-          if (scanf("%d/%d/%d", &startDate.day, &startDate.month,
-                    &startDate.year) != 3) {
-            clearBuffer();
+          readString("Introduza o dia, mês e ano (dd/mm/YYYY): ", dateInput,
+                     sizeof(dateInput));
+          if (sscanf(dateInput, "%d/%d/%d", &startDate.day, &startDate.month,
+                     &startDate.year) != 3) {
             puts("Formato invalido.");
             break;
           }
-          clearBuffer();
 
           if (generateWeeklyReport(startDate) == 0) {
             puts("SUCESSO: Relatório gerado com sucesso.");
@@ -545,9 +507,7 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
     printf("6 - Exportar tickets para CSV\n");
     printf("0 - Logout\n");
     printf("==============================\n");
-    printf("Opcao: ");
-    scanf("%d", &option);
-    clearBuffer();
+    option = readInt("Opcao: ");
 
     switch (option) {
     case 1:
@@ -557,16 +517,7 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
     case 2: {
       int idTicket;
       showTicketPendentByTechnician(logged_userId);
-      do {
-        printf("\nID do ticket a aceitar (0 para cancelar): ");
-        if (scanf("%d", &idTicket) != 1) {
-          clearBuffer();
-          puts("\nEntrada inválida.");
-        } else {
-          clearBuffer();
-          break;
-        }
-      } while (1);
+      idTicket = readInt("\nID do ticket a aceitar (0 para cancelar): ");
 
       if (idTicket == 0) {
         puts("Operacao cancelada.");
@@ -586,10 +537,8 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
     case 3: {
       showTicketByTechnician(logged_userId);
       int ticketId;
-      printf("\nIntroduza o ID do ticket que deseja atualizar o estado: (0 "
-             "para cancelar): ");
-      scanf("%d", &ticketId);
-      clearBuffer();
+      ticketId = readInt("\nIntroduza o ID do ticket que deseja atualizar o "
+                         "estado: (0 para cancelar): ");
 
       if (ticketId == 0) {
         waitForKey();
@@ -612,9 +561,7 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
 
       showTicketByTechnician(logged_userId);
 
-      puts("\nID do ticket para comentar (0 para cancelar): ");
-      scanf("%d", &idTicket);
-      clearBuffer();
+      idTicket = readInt("\nID do ticket para comentar (0 para cancelar): ");
 
       if (idTicket == 0) {
         puts("Operação cancelada.");
@@ -635,9 +582,7 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
     case 5: {
       showTicketByTechnician(logged_userId);
       int idTicket;
-      printf("ID do ticket a delegar: ");
-      scanf("%d", &idTicket);
-      clearBuffer();
+      idTicket = readInt("ID do ticket a delegar: ");
 
       if (delegateTicket(idTicket, logged_userId) == 0) {
         printf("\nSUCESSO: Ticket #%d delegado ao técnico com sucesso.",
@@ -711,9 +656,7 @@ int main() {
     puts("2 - Registar");
     puts("3 - Alterar PW");
     puts("0 - Sair");
-    printf("Opcao: ");
-    scanf("%d", &option);
-    clearBuffer();
+    option = readInt("Opcao: ");
     system("cls");
 
     if (option == 0)
@@ -723,13 +666,13 @@ int main() {
     case 1:
       Navbar();
       Title("LOGIN", "🔐");
-      puts("Username: ");
-      fgets(username, MAX_STR, stdin);
-      username[strcspn(username, "\n")] = 0;
+      do {
+        readString("Username: ", username, MAX_STR);
+      } while (charIsValid(username, 3, MAX_STR - 1) == -1);
 
-      puts("Password: ");
-      fgets(pass, MAX_STR, stdin);
-      pass[strcspn(pass, "\n")] = 0;
+      do {
+        readString("Password: ", pass, MAX_STR);
+      } while (charIsValid(pass, 5, MAX_STR - 1) == -1);
       int logged_userId = -1;
 
       int perfil = login(username, pass, &logged_userId);
@@ -752,9 +695,7 @@ int main() {
           Navbar();
           puts("\n=== Primeiro login: altere a password! ===\n");
           do {
-            printf("\nNova password: ");
-            fgets(newPassword, MAX_STR, stdin);
-            newPassword[strcspn(newPassword, "\n")] = 0;
+            readString("\nNova password: ", newPassword, MAX_STR);
 
           } while ((charIsValid(newPassword, 5, MAX_STR)) == -1);
 
@@ -778,17 +719,17 @@ int main() {
     case 2:
       Navbar();
       Title("REGISTAR", "📝");
-      printf("Nome: ");
-      fgets(user.name, MAX_STR, stdin);
-      user.name[strcspn(user.name, "\n")] = 0;
+      do {
+        readString("Nome: ", user.name, MAX_STR);
+      } while (charIsValid(user.name, 3, MAX_STR - 1) == -1);
 
-      printf("Username: ");
-      fgets(user.username, MAX_STR, stdin);
-      user.username[strcspn(user.username, "\n")] = 0;
+      do {
+        readString("Username: ", user.username, MAX_STR);
+      } while (charIsValid(user.username, 3, MAX_STR - 1) == -1);
 
-      printf("Password: ");
-      fgets(user.password, MAX_STR, stdin);
-      user.password[strcspn(user.password, "\n")] = 0;
+      do {
+        readString("Password: ", user.password, MAX_STR);
+      } while (charIsValid(user.password, 5, MAX_STR - 1) == -1);
 
       user.perfil = PERFIL_TECNICO;
 
@@ -804,13 +745,13 @@ int main() {
     case 3:
       Navbar();
       Title("ESQUECEU PASSWORD", "🔄");
-      printf("Username: ");
-      fgets(username, MAX_STR, stdin);
-      username[strcspn(username, "\n")] = 0;
+      do {
+        readString("Username: ", username, MAX_STR);
+      } while (charIsValid(username, 3, MAX_STR - 1) == -1);
 
-      printf("Password: ");
-      fgets(newPassword, MAX_STR, stdin);
-      newPassword[strcspn(newPassword, "\n")] = 0;
+      do {
+        readString("Password: ", newPassword, MAX_STR);
+      } while (charIsValid(newPassword, 5, MAX_STR - 1) == -1);
 
       if (changePassword(username, newPassword) == 0) {
         puts("Password alterada com sucesso!");

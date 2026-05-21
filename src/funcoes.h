@@ -249,5 +249,3 @@ int backupAllData(void);
 int loadAllData(void);
 
 int checkAdminValidated();
-
-int charIsValid(char *str, size_t numMin, size_t numMax);
