@@ -1221,7 +1221,7 @@ int generateMonthReport(int month, int year) {
   // Define as data de começo e fim para passar á função extractStats
   DateTime startDate = {
       .day = 1, .month = month, .year = year, .hour = 0, .min = 0};
-  DateTime endDate = {.day = diasNoMes(month, year),
+  DateTime endDate = {.day = daysInMonth(month, year),
                       .month = month,
                       .year = year,
                       .hour = 23,

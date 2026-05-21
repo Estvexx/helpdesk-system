@@ -205,7 +205,7 @@ int validateStringLength(char *str, size_t numMin, size_t numMax);
 DateTime addTimeToDateTime(DateTime dt, int hours, int minutes); // Feito
 int compareDates(DateTime d1, DateTime d2); // Feito
 long differenceInMinutes(DateTime inicio, DateTime fim); // Feito
-int diasNoMes(int month, int year); // Feito
+int daysInMonth(int month, int year); // Feito
 //                          --------
 
 int confirmDelete(); // 0 - confirma / 1 - cancela
