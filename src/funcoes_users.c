@@ -6,6 +6,19 @@ ELEM_USER *head = NULL;
 
 void cleanupIntermediateUsers() { cleanupUsers(head); };
 
+int nextUserId = 1;
+
+void inicializarIds_Users() {
+  // AQUI NAO PRECISO DE VERIFICAR SE A LSITA ESTA VAZIA
+  ELEM_USER *temp = head;
+  while (temp != NULL) {
+    if (temp->info.id > nextUserId) {
+      nextUserId = temp->info.id;
+    }
+    temp = temp->next;
+  }
+}
+
 // ======================= PARTE USERS =======================
 
 // Return 1 - erro / Return 0 é admin / Return -1 não é
@@ -28,13 +41,15 @@ int isAdmin(int logged_userId) {
 
   return 1;
 }
+
 int createAdmin() {
   ELEM_USER *new = malloc(sizeof(ELEM_USER));
   if (new == NULL) {
     puts("Erro ao alocar a memóra");
     return -1;
   }
-  new->info.id = 1;
+  new->info.id = nextUserId;
+  nextUserId++;
   strcpy(new->info.name, "Administrador");
   strcpy(new->info.username, "admin");
   strcpy(new->info.password, "admin");
@@ -58,7 +73,8 @@ int registerUser(USER_INFO newUser) {
   }
 
   new->info = newUser;
-  new->info.id = getUserCount() + 1;
+  new->info.id = nextUserId;
+  nextUserId++;
 
   new->info.isValidated = 0;
 
@@ -230,4 +246,53 @@ int isTechnicianValidated(int userId) {
   }
 
   return -1; // utilizador não encontrado
+}
+
+int saveUsersToFile(const char *filename) {
+  FILE *fp = fopen(filename, "wb");
+  if (fp == NULL) {
+    printf("Erro: Não foi possível guardar utilizadores\n");
+    return -1;
+  }
+
+  int count = getUserCount();
+  fwrite(&count, sizeof(int), 1, fp);
+
+  ELEM_USER *temp = head;
+  while (temp != NULL) {
+    fwrite(&(temp->info), sizeof(USER_INFO), 1, fp);
+    temp = temp->next;
+  }
+
+  fclose(fp);
+  printf("%d utilizadores guardados em: %s\n", count, filename);
+  return 0;
+}
+
+int loadUsersFromFile(const char *filename) {
+  FILE *fp = fopen(filename, "rb");
+  if (fp == NULL) {
+    printf("Ficheiro %s não encontrado (primeira execução?)\n", filename);
+    return -1;
+  }
+
+  int count;
+  fread(&count, sizeof(int), 1, fp);
+
+  for (int i = 0; i < count; i++) {
+    ELEM_USER *new = malloc(sizeof(ELEM_USER));
+    if (new == NULL) {
+      fclose(fp);
+      return -1;
+    }
+
+    fread(&(new->info), sizeof(USER_INFO), 1, fp);
+
+    new->next = head;
+    head = new;
+  }
+
+  fclose(fp);
+  printf("%d utilizadores carregados de: %s\n", count, filename);
+  return 0;
 }

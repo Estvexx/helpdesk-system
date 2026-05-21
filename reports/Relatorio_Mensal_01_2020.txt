@@ -1,0 +1,9 @@
+========================================================
+             RELATORIO MENSAL DE HELPDESK               
+                 Mes: 01 / Ano: 2020                      
+========================================================
+
+Nenhum ticket reportado neste periodo.
+
+========================================================
+Relatorio gerado automaticamente pelo Sistema.

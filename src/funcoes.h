@@ -6,12 +6,6 @@
 
 #define MAX_STR 100
 
-#define TYPE_HARDWARE 1 // TIPO_HARDWARE
-#define TYPE_SOFTWARE 2 // TIPO_SOFTWARE
-#define TYPE_NETWORK 3  // TIPO_REDE
-#define TYPE_ACCESS 4   // TIPO_ACESSO
-#define TYPE_OTHER 5    // TIPO_OUTRO
-
 #define STATUS_OPEN 1          // ESTADO_ABERTO
 #define STATUS_WAITING_USER 2 // ESTADO_ESPERA_TECNICO
 #define STATUS_IN_PROGRESS 3  // ESTADO_EM_ATENDIMENTO
@@ -47,8 +41,8 @@ typedef struct history
 {
     DateTime date;
     char user[MAX_STR];
-    char description[300];
-    char actionType[30];
+    char description[800];
+    char actionType[200];
     char previousTechnician[30];
     char currentTechnician[30];
     char previousStatus[30];
@@ -114,6 +108,11 @@ typedef struct {
     int slaViolations;
 } ReportStats;
 
+
+// INICIALIZADOR DE IDS
+void inicializarIds_Users();
+void inicializarIds_Ticket();
+void inicializarIds_TicketType();
 // Retorna -1 se der erro e 0 sucesso
 //             GERAL : -1 ERRO -> 0 SUCESSO
 // ======================= PARTE INICIAL USERS =======================
@@ -230,3 +229,17 @@ void cleanupIntermediateTickets();
 void cleanupIntermediateTicketsTypes();
 
 void cleanAllLists();
+
+// PERSISTENCIA DOS DADOS
+
+int saveUsersToFile(const char *filename);
+int loadUsersFromFile(const char *charfilename);
+
+int saveTicketsToFile(const char *filename);
+int loadTicketsFromFile(const char *charfilename);
+
+int saveCategoryTypesToFile(const char *filename);
+int loadCategoryTypesFromFile(const char *charfilename);
+
+int backupAllData(void);
+int loadAllData(void);
