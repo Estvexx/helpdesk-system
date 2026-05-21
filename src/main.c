@@ -231,14 +231,14 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
     puts("7  - Ordenar tickets");
     puts("8  - Adicionar/Remover/Editar categorias");
     puts("9  - Listar tecnicos");
-    puts("10 - Validar tecnicos pendentes");
-    puts("11 - Atribuir tecnico a ticket");
-    puts("12 - Ver historico de um ticket");
-    puts("13 - Tempo medio de resolucao por tecnico");
-    puts("14 - Tempo medio de resolucao por categoria");
-    puts("15 - Gerar relatorio");
-    puts("15 - Gerar relatorio");
-    puts("16 - Alertas de tickets fora do SLA");
+    puts("10 - Validar tecnicos pendentes"); // aqui no 10 esta correto
+    puts("11 - Tickets sem tecnicos associados");
+    puts("12 - Atribuir tecnico a ticket");
+    puts("13 - Ver historico de um ticket");
+    puts("14 - Tempo medio de resolucao por tecnico");
+    puts("15 - Tempo medio de resolucao por categoria");
+    puts("16 - Gerar relatorio");
+    puts("17 - Alertas de tickets fora do SLA");
     puts("0  - Logout");
     puts("====================================");
     option = readInt("Opção: ");
@@ -282,7 +282,8 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
 
       if (createTicket(ticket) == 0) {
         char details[160];
-        snprintf(details, sizeof(details), "Ticket criado para %s", ticket.user);
+        snprintf(details, sizeof(details), "Ticket criado para %s",
+                 ticket.user);
         logSuccess(username, "CRIAR_TICKET", details);
         puts("\nSUCESSO: Ticket criado com sucesso.");
       } else {
@@ -389,7 +390,28 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       waitForKey();
       break;
     }
-    case 11: {
+    case 11:
+      system("cls");
+      Navbar();
+      Title("VALIDAR TECNICOS", "✅");
+      listPendentTickts();
+
+      int userId;
+      userId = readInt("ID do tecnico a validar (0 para cancelar): ");
+
+      if (userId != 0) {
+        if (validateTechnician(userId) == 0) {
+          char details[80];
+          snprintf(details, sizeof(details), "Tecnico #%d validado", userId);
+          logSuccess(username, "VALIDAR_TECNICO", details);
+          puts("\nSUCESSO: Técnico validado com sucesso.");
+        } else {
+          puts("\nERRO: Não foi possível validar o técnico.");
+        }
+      }
+      waitForKey();
+      break;
+    case 12: {
       system("cls");
       Navbar();
       Title("ATRIBUIR TECNICOS", "📝");
@@ -416,7 +438,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       waitForKey();
       break;
     }
-    case 12: {
+    case 13: {
       system("cls");
       Navbar();
       Title("HISTORICO TICKETS", "📜");
@@ -427,7 +449,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       waitForKey();
       break;
     }
-    case 13:
+    case 14:
       system("cls");
       Navbar();
       Title("TEMPO MÉDIO", "⏳");
@@ -435,7 +457,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       logEvent(username, "TEMPO_MEDIO", "Tempo medio por tecnico consultado");
       waitForKey();
       break;
-    case 14:
+    case 15:
       system("cls");
       Navbar();
       Title("TEMPO MÉDIO", "⏳");
@@ -443,7 +465,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       logEvent(username, "TEMPO_MEDIO", "Tempo medio por categoria consultado");
       waitForKey();
       break;
-    case 15: {
+    case 16: {
       system("cls");
       Navbar();
       Title("RELATORIO", "📋");
@@ -535,7 +557,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
 
       break;
     }
-    case 16:
+    case 17:
       system("cls");
       Navbar();
       Title("ALERTAS", "👁️");
@@ -776,6 +798,40 @@ int main() {
       if (perfil == -1) {
         logError(username, "LOGIN", "Credenciais invalidas");
         printf("\nERRO: Credenciais invalidas!\n");
+        if (userExistsByUsername(username) != 0) {
+          int registerOption =
+              readIntRange("Deseja criar conta? (1-Sim / 0-Nao): ", 0, 1);
+
+          if (registerOption == 1) {
+            system("cls");
+            Navbar();
+            Title("REGISTAR", "📝");
+            do {
+              readString("Nome: ", user.name, MAX_STR);
+            } while (charIsValid(user.name, 3, MAX_STR - 1) == -1);
+
+            do {
+              readString("Username: ", user.username, MAX_STR);
+            } while (charIsValid(user.username, 3, MAX_STR - 1) == -1);
+
+            do {
+              readString("Password: ", user.password, MAX_STR);
+            } while (charIsValid(user.password, 5, MAX_STR - 1) == -1);
+
+            user.perfil = PERFIL_TECNICO;
+
+            if (registerUser(user) == 0) {
+              logSuccess(user.username, "REGISTAR", "Utilizador criado");
+              puts("\nSUCESSO: Utilizador criado com sucesso");
+            } else {
+              logError(user.username, "REGISTAR", "Registo mal sucedido");
+              printf("\nERRO: Registo mal sucedido\n");
+            }
+            system("cls");
+          }
+        } else {
+          puts("\nERRO: Password invalida.");
+        }
         waitForKey();
       } else if (perfil == -2) {
         logError(username, "LOGIN", "Tecnico ainda nao validado");

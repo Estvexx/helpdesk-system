@@ -3,3 +3,44 @@
 [21/05/2026 21:41] ERRO | admin | LOGIN | Credenciais invalidas
 [21/05/2026 21:42] SUCESSO | fra | REGISTAR | Utilizador criado
 [21/05/2026 21:42] SISTEMA | BACKUP | Dados guardados
+[21/05/2026 22:06] SISTEMA | LOAD | Dados carregados
+[21/05/2026 22:06] ERRO | adma | LOGIN | Credenciais invalidas
+[21/05/2026 22:07] SUCESSO | 23345 | REGISTAR | Utilizador criado
+[21/05/2026 22:07] SISTEMA | BACKUP | Dados guardados
+[21/05/2026 22:08] SISTEMA | LOAD | Dados carregados
+[21/05/2026 22:08] ERRO | nando | LOGIN | Credenciais invalidas
+[21/05/2026 22:09] ERRO | aaaa | LOGIN | Credenciais invalidas
+[21/05/2026 22:09] SUCESSO | franc | REGISTAR | Utilizador criado
+[21/05/2026 22:13] SISTEMA | BACKUP | Dados guardados
+[21/05/2026 22:13] SISTEMA | LOAD | Dados carregados
+[21/05/2026 22:13] ERRO | admin | LOGIN | Credenciais invalidas
+[21/05/2026 22:13] SUCESSO | admin | LOGIN | Autenticado como administrador
+[21/05/2026 22:14] SUCESSO | admin | ALTERAR_PW | Password alterada
+[21/05/2026 22:14] admin | LOGOUT | Logout do administrador
+[21/05/2026 22:14] SISTEMA | BACKUP | Dados guardados
+[21/05/2026 22:14] SISTEMA | LOAD | Dados carregados
+[21/05/2026 22:14] SISTEMA | SEED | Dados iniciais criados
+[21/05/2026 22:14] SUCESSO | admin | LOGIN | Autenticado como administrador
+[21/05/2026 22:14] SUCESSO | admin | ALTERAR_PW | Password alterada
+[21/05/2026 22:14] admin | LOGOUT | Logout do administrador
+[21/05/2026 22:15] SUCESSO | franc | REGISTAR | Utilizador criado
+[21/05/2026 22:15] SUCESSO | admin | LOGIN | Autenticado como administrador
+[21/05/2026 22:16] SUCESSO | admin | VALIDAR_TECNICO | Tecnico #2 validado
+[21/05/2026 22:17] admin | ATRIBUIR_TECNICO | Ticket #1 -> Tecnico #2
+[21/05/2026 22:17] admin | LOGOUT | Logout do administrador
+[21/05/2026 22:17] SUCESSO | franc | LOGIN | Autenticado como tecnico
+[21/05/2026 22:17] franc | LISTAR_MEUS_TICKETS | Tickets do tecnico listados
+[21/05/2026 22:17] franc | LOGOUT | Logout do tecnico
+[21/05/2026 22:17] SUCESSO | admin | LOGIN | Autenticado como administrador
+[21/05/2026 22:19] admin | LOGOUT | Logout do administrador
+[21/05/2026 22:19] ERRO | dfgtyçlkokiujgtrfawssasfdgfhg | LOGIN | Credenciais invalidas
+[21/05/2026 22:19] SUCESSO | rod | REGISTAR | Utilizador criado
+[21/05/2026 22:19] SUCESSO | admin | LOGIN | Autenticado como administrador
+[21/05/2026 22:20] admin | VER_HISTORICO | Historico de ticket consultado
+[21/05/2026 22:20] admin | LOGOUT | Logout do administrador
+[21/05/2026 22:20] ERRO | fran | LOGIN | Credenciais invalidas
+[21/05/2026 22:20] SUCESSO | franc | LOGIN | Autenticado como tecnico
+[21/05/2026 22:21] franc | LISTAR_MEUS_TICKETS | Tickets do tecnico listados
+[21/05/2026 22:24] franc | ACEITAR_TICKET | Operacao cancelada
+[21/05/2026 22:24] franc | LOGOUT | Logout do tecnico
+[21/05/2026 22:24] SISTEMA | BACKUP | Dados guardados

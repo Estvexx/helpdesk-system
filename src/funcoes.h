@@ -134,6 +134,7 @@ int createTicket(TICKET_INFO ticket); // Feito
 int updateTicket(int ticketId, int logged_userId );       // Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
 int deleteTicket(int ticketId);       // Retorna 1 se for cancelado pelo user
 void listAllTickets();                // feito
+void listPendentTickts();               // FEITO
 int existeUserbyId(int id);           // feito
 int showTicketById(int id);          // feito
 void showTicketPendentByTechnician(int id); //feito
