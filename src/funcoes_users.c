@@ -13,7 +13,7 @@ void inicializarIds_Users() {
   ELEM_USER *temp = head;
   while (temp != NULL) {
     if (temp->info.id > nextUserId) {
-      nextUserId = temp->info.id;
+      nextUserId = temp->info.id + 1;
     }
     temp = temp->next;
   }
@@ -147,7 +147,7 @@ int changePassword(char *username, char *newPassword) {
   while (temp != NULL) {
     if (strcmp(temp->info.username, username) == 0) {
       strcpy(temp->info.password, newPassword);
-      if(temp->info.perfil == PERFIL_ADMIN) {
+      if (temp->info.perfil == PERFIL_ADMIN) {
         temp->info.isValidated = 1;
       }
       return 0;
@@ -266,6 +266,7 @@ int saveUsersToFile(const char *filename) {
   FILE *fp = fopen(filename, "wb");
   if (fp == NULL) {
     printf("Erro: Não foi possível guardar utilizadores\n");
+    waitForKey();
     return -1;
   }
 
@@ -287,6 +288,7 @@ int loadUsersFromFile(const char *filename) {
   FILE *fp = fopen(filename, "rb");
   if (fp == NULL) {
     printf("Ficheiro %s não encontrado (primeira execução?)\n", filename);
+    waitForKey();
     return -1;
   }
 

@@ -109,10 +109,10 @@ void menuAdminOrder() {
     system("cls");
     Navbar();
     Title("ORDENAR TICKETS", "🔃");
-    puts("\n== ORDENAR ==");
     puts("1  - Ordenar tickets por data");
     puts("2  - Ordenar tickets por prioridade");
     puts("3  - Ordenar tickets por tecnico");
+    puts("4  - Ordenar tickets por ID");
     puts("0  - Voltar");
     printf("Opcao: ");
     scanf("%d", &orderOption);
@@ -129,6 +129,10 @@ void menuAdminOrder() {
       break;
     case 3:
       sortTicketsByTechnician();
+      listAllTickets();
+      break;
+    case 4:
+      sortTicketsById();
       listAllTickets();
       break;
     case 0:
@@ -176,28 +180,28 @@ void menuManagmentTypes() {
     }
     case 3: {
       int displayId;
-      puts("\nIntroduza o #ID do ticket que deseja editar: ");
+      printf("\nIntroduza o #ID do ticket que deseja editar: ");
       scanf("%d", &displayId);
       clearBuffer();
       int realId = getRealTypeId(displayId);
 
-        if (realId == -1) {
-          puts("\nOpção inválida.");
-        }
+      if (realId == -1) {
+        puts("\nOpção inválida.");
+      }
       updateTicketType(realId);
       waitForKey();
       break;
     }
     case 4: {
       int displayId;
-      puts("\nIntroduza o #ID do ticket que deseja eliminar: ");
+      printf("\nIntroduza o #ID do ticket que deseja eliminar: ");
       scanf("%d", &displayId);
       clearBuffer();
       int realId = getRealTypeId(displayId);
 
-        if (realId == -1) {
-          puts("\nOpção inválida.");
-        }
+      if (realId == -1) {
+        puts("\nOpção inválida.");
+      }
       deleteType(realId);
       waitForKey();
       break;
@@ -207,6 +211,7 @@ void menuManagmentTypes() {
       break;
     default:
       puts("Opção inválida!");
+      waitForKey();
       break;
     }
 
@@ -249,6 +254,9 @@ void adminMenu(int *alertSLA, int logged_userId) {
       TICKET_INFO ticket;
       int realId, displayId;
       do {
+        system("cls");
+        Navbar();
+        Title("CRIAR TICKET", "➕");
         puts("Tipos disponíveis:");
         listTicketTypes();
 
@@ -324,6 +332,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
       system("cls");
       Navbar();
       Title("VER TICKET", "🎫");
+      listAllTickets();
       int ticketId = 0;
       printf("Digita o id do ticket a visualizar: ");
       scanf("%i", &ticketId);
@@ -385,10 +394,14 @@ void adminMenu(int *alertSLA, int logged_userId) {
       Navbar();
       Title("ATRIBUIR TECNICOS", "📝");
       int ticketId, tecnicoId;
+      listAllTickets();
       printf("ID do ticket: ");
       scanf("%d", &ticketId);
       clearBuffer();
-
+      system("cls");
+      Navbar();
+      Title("ATRIBUIR TECNICOS", "📝");
+      listAllTechnicians();
       printf("ID do tecnico: ");
       scanf("%d", &tecnicoId);
       clearBuffer();
@@ -571,7 +584,7 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
       break;
     case 2: {
       int idTicket;
-      showTicketByTechnician(logged_userId);
+      showTicketPendentByTechnician(logged_userId);
       do {
         printf("\nID do ticket a aceitar (0 para cancelar): ");
         if (scanf("%d", &idTicket) != 1) {
@@ -599,6 +612,7 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
       break;
     }
     case 3: {
+      showTicketByTechnician(logged_userId);
       int ticketId;
       printf("\nIntroduza o ID do ticket que deseja atualizar o estado: (0 "
              "para cancelar): ");
@@ -647,8 +661,8 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
       break;
     }
     case 5: {
+      showTicketByTechnician(logged_userId);
       int idTicket;
-      system("cls");
       printf("ID do ticket a delegar: ");
       scanf("%d", &idTicket);
       clearBuffer();
@@ -704,15 +718,15 @@ int main() {
   inicializarIds_TicketType();
   inicializarIds_Users();
 
-  if(getUserCount() == 0) {
+  if (getUserCount() == 0) {
     createAdmin();
   }
 
   if (checkAdminValidated() == -1) {
     needNewPass = 0;
   }
-  
-  if(getTicketCount() == 0)  {
+
+  if (getTicketCount() == 0) {
     seederTypes();
     seederTickets();
   }
@@ -770,7 +784,7 @@ int main() {
             fgets(newPassword, MAX_STR, stdin);
             newPassword[strcspn(newPassword, "\n")] = 0;
 
-          } while((charIsValid(newPassword, 5, MAX_STR)) == -1);
+          } while ((charIsValid(newPassword, 5, MAX_STR)) == -1);
 
           if (changePassword(username, newPassword) == 0) {
             puts("Password alterada com sucesso!");

@@ -18,7 +18,7 @@ void inicializarIds_TicketType() {
   ELEM_TICKET_TYPE *temp = headTicketsTypes;
   while (temp != NULL) {
     if (temp->data.id > nextTicketTypeId) {
-      nextTicketTypeId = temp->data.id;
+      nextTicketTypeId = temp->data.id + 1;
     }
     temp = temp->next;
   }
@@ -93,7 +93,7 @@ int deleteTicketType(int typeId, ELEM_TICKET *headTickets) {
   }
 
   if (temp == NULL) {
-    printf("Tipo #%d não encontrado!\n", typeId);
+    puts("Tipo não encontrado!");
     return -1;
   }
 
@@ -123,7 +123,7 @@ int deleteTicketType(int typeId, ELEM_TICKET *headTickets) {
 
   free(temp);
 
-  printf("Tipo #%d removido com sucesso!\n", typeId);
+  puts("Tipo removido com sucesso!");
 
   return 0;
 }
@@ -138,7 +138,6 @@ int updateTicketType(int typeId) {
 
   while (temp != NULL) {
     if (temp->data.id == typeId) {
-      printf("\n=== TIPO ENCONTRADO ===\n");
       printf("ID: %d | Nome Atual: %s\n", temp->data.id, temp->data.name);
 
       printf("Novo nome: ");
@@ -202,6 +201,7 @@ int saveCategoryTypesToFile(const char *filename) {
   FILE *fp = fopen(filename, "wb");
   if (fp == NULL) {
     printf("Erro: Não foi possível guardar categorias\n");
+    waitForKey();
     return -1;
   }
 
@@ -223,6 +223,7 @@ int loadCategoryTypesFromFile(const char *filename) {
   FILE *fp = fopen(filename, "rb");
   if (fp == NULL) {
     printf("Ficheiro %s não encontrado\n", filename);
+    waitForKey();
     return -1;
   }
 
