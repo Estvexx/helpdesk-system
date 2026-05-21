@@ -175,21 +175,30 @@ void menuManagmentTypes() {
       break;
     }
     case 3: {
-      int idToUpdate;
+      int displayId;
       puts("\nIntroduza o #ID do ticket que deseja editar: ");
-      scanf("%d", &idToUpdate);
+      scanf("%d", &displayId);
       clearBuffer();
-      updateTicketType(idToUpdate);
+      int realId = getRealTypeId(displayId);
+
+        if (realId == -1) {
+          puts("\nOpção inválida.");
+        }
+      updateTicketType(realId);
       waitForKey();
       break;
     }
     case 4: {
-      int idToDelete;
+      int displayId;
       puts("\nIntroduza o #ID do ticket que deseja eliminar: ");
-      scanf("%d", &idToDelete);
+      scanf("%d", &displayId);
       clearBuffer();
+      int realId = getRealTypeId(displayId);
 
-      deleteType(idToDelete);
+        if (realId == -1) {
+          puts("\nOpção inválida.");
+        }
+      deleteType(realId);
       waitForKey();
       break;
     }
@@ -224,7 +233,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
     puts("12 - Ver historico de um ticket");
     puts("13 - Tempo medio de resolucao por tecnico");
     puts("14 - Tempo medio de resolucao por categoria");
-    puts("15 - Gerar relatorio semanal/mensal");
+    puts("15 - Gerar relatorio");
     puts("16 - Alertas de tickets fora do SLA");
     puts("0  - Logout");
     puts("====================================");
@@ -429,9 +438,10 @@ void adminMenu(int *alertSLA, int logged_userId) {
 
       do {
         puts("Tipo de relatório:");
-        puts("1 - Mensal");
-        puts("2 - Semanal");
-
+        puts("1 - Mensal Estatístico");
+        puts("2 - Semanal Estatístico");
+        puts("3 - Pedidos registados e resolvidos");
+        puts("0 - Voltar");
         printf("Opcao: ");
 
         scanf("%d", &optionReport);
@@ -483,6 +493,19 @@ void adminMenu(int *alertSLA, int logged_userId) {
           isRunning = 1;
 
           waitForKey();
+          break;
+        }
+        case 3: {
+          if(createPeriodicReports() == 0) {
+            puts("SUCESSO: Relatório gerado com sucesso.");
+          } else {
+            puts("ERRO: Não foi possível gerar relatório.");
+          }
+          
+        }
+        break;
+        case 0: {
+          isRunning = 1;
           break;
         }
         default: {
@@ -653,16 +676,11 @@ void technicianMenu(char *username, int logged_userId, int *alertSLA) {
       if (*alertSLA == 0) {
         printAlertsSLA();
       }
-
       waitForKey();
       break;
     case 0:
       printf("Logout...\n");
-      if (alertTicketSLA(alertSLA) == 0) {
-        puts("SUCESSO: Alerta gerado com sucesso.");
-      } else {
-        puts("ERRO: Não foi possível gerar Alerta.");
-      }
+
       break;
     default:
       printf("Opcao invalida!\n");
@@ -747,9 +765,12 @@ int main() {
         if (isLogged != 1 && needNewPass == 0) {
           Navbar();
           puts("\n=== Primeiro login: altere a password! ===\n");
-          printf("Nova password: ");
-          fgets(newPassword, MAX_STR, stdin);
-          newPassword[strcspn(newPassword, "\n")] = 0;
+          do {
+            printf("\nNova password: ");
+            fgets(newPassword, MAX_STR, stdin);
+            newPassword[strcspn(newPassword, "\n")] = 0;
+
+          } while((charIsValid(newPassword, 5, MAX_STR)) == -1);
 
           if (changePassword(username, newPassword) == 0) {
             puts("Password alterada com sucesso!");

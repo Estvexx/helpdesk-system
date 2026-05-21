@@ -49,10 +49,10 @@ void getStatus(int status, char *str)
     strcpy(str, "Aberto");
     break;
   case STATUS_WAITING_USER:
-    strcpy(str, "Esp. Tecnico");
+    strcpy(str, "Espera de Tecnico");
     break;
   case STATUS_IN_PROGRESS:
-    strcpy(str, "Em Atend.");
+    strcpy(str, "Em Atendimento");
     break;
   case STATUS_RESOLVED:
     strcpy(str, "Resolvido");
@@ -320,4 +320,24 @@ long differenceInMinutes(DateTime dataIni, DateTime dataFim)
     somaMin += (long)diasAno * 24 * 60;
   }
   return somaMin;
+}
+
+int charIsValid(char *str, size_t numMin, size_t numMax)
+{
+  size_t lenght = strlen(str); 
+
+  if (lenght < numMin)
+  {
+    printf("\nInvalido, minimo %zu caracteres.", numMin); 
+    return -1;
+  }
+  else if (lenght > numMax)
+  {
+    printf("\nInvalido, maximo %zu caracteres.", numMax);
+    return -1;
+  }
+  else
+  {
+    return 0;
+  }
 }

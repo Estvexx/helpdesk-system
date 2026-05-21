@@ -1,0 +1,24 @@
+========================================================
+             RELATORIO SEMANAL DE HELPDESK              
+        Periodo: 18/05/2026 a 24/05/2026        
+========================================================
+
+[1] VOLUME E PRODUTIVIDADE
+--------------------------------------------------------
+Total de tickets abertos:     5
+Tickets resolvidos/fechados:  0 (0.0%)
+Tickets pendentes:            5
+
+[2] DISTRIBUICAO POR PRIORIDADE
+--------------------------------------------------------
+  - Critica: 1
+  - Alta:    1
+  - Media:   1
+  - Baixa:   2
+
+[3] TEMPOS E SLA
+--------------------------------------------------------
+Sem dados de resolucao calculaveis para este periodo.
+
+========================================================
+Relatorio gerado automaticamente pelo Sistema.

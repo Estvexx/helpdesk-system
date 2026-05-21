@@ -1,0 +1,39 @@
+==================================================
+               TICKETS RESOLVIDOS                 
+==================================================
+
+Nenhum ticket resolvido ou fechado ate ao momento.
+
+
+==================================================
+          TICKETS REGISTADOS E ATIVOS             
+==================================================
+
+ID: #5 | Categoria: Outro | Prioridade: 1
+Utilizador: Sofia Mendes | Estado: Aberto
+Descricao: A cadeira do meu posto de trabalho partiu uma roda e esta desequilibrada.
+Aberto em: 21/05/2026 17:37
+--------------------------------------------------
+ID: #4 | Categoria: Acesso | Prioridade: 3
+Utilizador: Ana Ferreira | Estado: Aberto
+Descricao: Conta bloqueada no sistema ERP apos falhar a password 3 vezes. Preciso de reset urgente.
+Aberto em: 21/05/2026 17:37
+--------------------------------------------------
+ID: #3 | Categoria: Rede | Prioridade: 4
+Utilizador: Carlos Silva | Estado: Aberto
+Descricao: Todo o departamento de vendas esta completamente sem acesso a internet desde as 9h00.
+Aberto em: 21/05/2026 17:37
+--------------------------------------------------
+ID: #2 | Categoria: Software | Prioridade: 2
+Utilizador: Rui Costa | Estado: Aberto
+Descricao: O Microsoft Excel bloqueia imediatamente sempre que tento abrir o ficheiro de contabilidade.
+Aberto em: 21/05/2026 17:37
+--------------------------------------------------
+ID: #1 | Categoria: Hardware | Prioridade: 1
+Utilizador: Maria Joao | Estado: Aberto
+Descricao: O rato do computador nao responde nem acende a luz laser.
+Aberto em: 21/05/2026 17:37
+--------------------------------------------------
+
+==================================================
+Fim do Relatorio Periodico Geral.

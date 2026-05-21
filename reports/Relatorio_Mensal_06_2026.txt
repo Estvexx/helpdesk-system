@@ -1,0 +1,9 @@
+========================================================
+             RELATORIO MENSAL DE HELPDESK               
+                 Mes: 06 / Ano: 2026                      
+========================================================
+
+Nenhum ticket reportado neste periodo.
+
+========================================================
+Relatorio gerado automaticamente pelo Sistema.
