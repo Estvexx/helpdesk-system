@@ -210,6 +210,7 @@ void adminMenu(int *alertSLA, int logged_userId) {
     puts("13 - Tempo medio de resolucao por tecnico");
     puts("14 - Tempo medio de resolucao por categoria");
     puts("15 - Gerar relatorio");
+    puts("15 - Gerar relatorio");
     puts("16 - Alertas de tickets fora do SLA");
     puts("0  - Logout");
     puts("====================================");
