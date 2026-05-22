@@ -127,3 +127,25 @@
 [22/05/2026 10:56] admin | TEMPO_MEDIO | Tempo medio por tecnico consultado
 [22/05/2026 10:56] admin | LOGOUT | Logout do administrador
 [22/05/2026 10:56] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 18:35] SISTEMA | LOAD | Dados carregados
+[22/05/2026 18:35] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 18:42] SISTEMA | LOAD | Dados carregados
+[22/05/2026 18:42] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 18:43] admin | LOGOUT | Logout do administrador
+[22/05/2026 18:43] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 18:48] SISTEMA | LOAD | Dados carregados
+[22/05/2026 18:48] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 18:48] SUCESSO | admin | REMOVER_TICKET | Ticket #1 removido
+[22/05/2026 19:07] admin | LOGOUT | Logout do administrador
+[22/05/2026 19:07] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 19:07] SISTEMA | LOAD | Dados carregados
+[22/05/2026 19:07] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 19:07] admin | LOGOUT | Logout do administrador
+[22/05/2026 19:07] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 19:33] SISTEMA | LOAD | Dados carregados
+[22/05/2026 19:33] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 19:33] admin | FILTRAR_TICKETS | Filtro por prioridade
+[22/05/2026 19:33] admin | FILTRAR_TICKETS | Filtro por tipo
+[22/05/2026 19:33] admin | FILTRAR_TICKETS | Filtro por estado
+[22/05/2026 19:33] admin | LOGOUT | Logout do administrador
+[22/05/2026 19:33] SISTEMA | BACKUP | Dados guardados

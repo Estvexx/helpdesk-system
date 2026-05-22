@@ -135,7 +135,6 @@ int updateTicket(int ticketId, int logged_userId );       // Ainda alterações 
 int deleteTicket(int ticketId);       // Retorna 1 se for cancelado pelo user
 void listAllTickets();                // feito
 void listPendentTickts();               // FEITO
-int existeUserbyId(int id);           // feito
 int showTicketById(int id);          // feito
 void showTicketPendentByTechnician(int id); //feito
 int getTicketCount();                 // feito
@@ -150,6 +149,7 @@ void printInfoFormatTable(TICKET_INFO ticket); // Feito
 int addComment(int ticket_id, int logged_userId); // Feito
 
 // Listar Tickets com Filtros
+void listTicketsByFilter(int value, char filter); // feito
 void listTicketsByStatus(int status);     // Feito
 void listTicketsByPriority(int priority); // Feito
 void listTicketsByType(int type);         // Feito

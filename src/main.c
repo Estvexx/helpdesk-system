@@ -28,7 +28,7 @@ void menuAdminFilter(const char *username) {
     case 1:
       filterValue = readIntRange(
           "\nQual a prioridade? (1-Baixa, 2-Media, 3-Alta, 4-Critica): ", 1, 4);
-      listTicketsByPriority(filterValue);
+      listTicketsByFilter(filterValue, 'P');
       logEvent(username, "FILTRAR_TICKETS", "Filtro por prioridade");
 
       waitForKey();
@@ -53,7 +53,7 @@ void menuAdminFilter(const char *username) {
 
       } while (realId == -1);
 
-      listTicketsByType(realId);
+      listTicketsByFilter(realId, 'T');
       logEvent(username, "FILTRAR_TICKETS", "Filtro por tipo");
 
       waitForKey();
@@ -64,7 +64,7 @@ void menuAdminFilter(const char *username) {
           "Qual o estado? (1-Aberto, 2-Em Atendimento, 3-Espera User, "
           "4-Resolvido, 5-Fechado): ",
           1, 5);
-      listTicketsByStatus(filterValue);
+      listTicketsByFilter(filterValue, 'S');
       logEvent(username, "FILTRAR_TICKETS", "Filtro por estado");
       waitForKey();
       break;
@@ -347,7 +347,8 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       ticketId = readInt("Introduza o ticket que deseja remover: ");
       if (deleteTicket(ticketId) == 0) {
         char details[80];
-        snprintf(details, sizeof(details), "Ticket #%d removido", ticketId);
+        snprintf(details, sizeof(details), "Ticket #%d removido",
+                 ticketId); // Para guardar no log
         logSuccess(username, "REMOVER_TICKET", details);
         printf("\nSUCESSO: Ticket #%d removido com sucesso.\n", ticketId);
       } else {
