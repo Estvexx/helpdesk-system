@@ -44,3 +44,86 @@
 [21/05/2026 22:24] franc | ACEITAR_TICKET | Operacao cancelada
 [21/05/2026 22:24] franc | LOGOUT | Logout do tecnico
 [21/05/2026 22:24] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:24] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:25] ERRO | admin | LOGIN | Credenciais invalidas
+[22/05/2026 10:25] ERRO | admin | LOGIN | Password invalida
+[22/05/2026 10:25] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:25] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:26] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:26] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:26] ERRO | admin | LOGIN | Credenciais invalidas
+[22/05/2026 10:26] ERRO | admin | LOGIN | Password invalida
+[22/05/2026 10:26] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:26] SUCESSO | admin | CRIAR_TICKET | Ticket criado para 1212
+[22/05/2026 10:28] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:28] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:28] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:28] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:31] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:31] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:31] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:31] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:31] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:31] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:32] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:32] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:32] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:32] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:32] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:32] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:34] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:34] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:34] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:34] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:35] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:35] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:35] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:35] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:41] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:41] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:41] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:41] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:42] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:42] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:42] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:42] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:44] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:44] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:45] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:45] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:45] SUCESSO | admin | CRIAR_TICKET | Ticket criado para 234567
+[22/05/2026 10:48] ERRO | admin | EDITAR_TICKET | Erro ao atualizar ticket
+[22/05/2026 10:48] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:48] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:48] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:48] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:48] ERRO | admin | EDITAR_TICKET | Erro ao atualizar ticket
+[22/05/2026 10:51] ERRO | admin | REMOVER_TICKET | Erro ao remover ticket
+[22/05/2026 10:51] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:51] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:51] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:51] ERRO | ADMIN | LOGIN | Credenciais invalidas
+[22/05/2026 10:51] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:51] ERRO | admin | REMOVER_TICKET | Erro ao remover ticket
+[22/05/2026 10:52] admin | FILTRAR_TICKETS | Filtro por prioridade
+[22/05/2026 10:52] ERRO | admin | ATRIBUIR_TECNICO | Erro ao atribuir tecnico
+[22/05/2026 10:54] admin | VER_HISTORICO | Historico de ticket consultado
+[22/05/2026 10:55] admin | TEMPO_MEDIO | Tempo medio por tecnico consultado
+[22/05/2026 10:55] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:55] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:55] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:55] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:55] admin | TEMPO_MEDIO | Tempo medio por tecnico consultado
+[22/05/2026 10:55] admin | TEMPO_MEDIO | Tempo medio por categoria consultado
+[22/05/2026 10:56] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:56] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:56] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:56] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:56] admin | TEMPO_MEDIO | Tempo medio por tecnico consultado
+[22/05/2026 10:56] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:56] SISTEMA | BACKUP | Dados guardados
+[22/05/2026 10:56] SISTEMA | LOAD | Dados carregados
+[22/05/2026 10:56] SUCESSO | admin | LOGIN | Autenticado como administrador
+[22/05/2026 10:56] admin | TEMPO_MEDIO | Tempo medio por tecnico consultado
+[22/05/2026 10:56] admin | LOGOUT | Logout do administrador
+[22/05/2026 10:56] SISTEMA | BACKUP | Dados guardados

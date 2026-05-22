@@ -1,7 +1,7 @@
 #include "funcoes.h"
+#include "input/input.h"
 #include <stdio.h>
 #include <string.h>
-#include "input/input.h"
 
 void clearBuffer() {
   int c;
@@ -98,11 +98,13 @@ int getSLA(int priority) {
 }
 
 void tableHeaders() {
-  printf("\n%-5s | %-9s | %-12s | %-10s | %-15s | %-10s | %-16s | %-5s\n", "ID",
+  printf("\n%-5s | %-18s | %-20s | %-10s | %-18s | %6s | %-16s | %-5s\n", "ID",
          "Tipo", "Estado", "Prioridade", "Utilizador", "Tecnico",
          "Data Abertura", "SLA");
-  printf("------+-----------+--------------+------------+-----------------+----"
-         "--------+------------------+-------\n");
+  printf("------+--------------------+----------------------+------------+-----"
+         "------"
+         "---------+----"
+         "-----+------------------+-------\n");
 }
 
 int confirmDelete() {

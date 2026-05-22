@@ -225,7 +225,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
   do {
     system("cls");
     Navbar();
-    Title("PAINEL ADMIN", "⚙️");
+    Title("PAINEL ADMIN", "🔑");
     puts("1  - Adicionar ticket");
     puts("2  - Editar ticket");
     puts("3  - Listar todos os tickets");
@@ -300,7 +300,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
     case 2: {
       system("cls");
       Navbar();
-      Title("EDITAR TICKET", "✏️");
+      Title("EDITAR TICKET", "📝");
       listAllTickets();
       int ticketId;
       ticketId = readInt("Introduza o #ID do ticket que deseja editar: ");
@@ -341,7 +341,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
     case 5: {
       system("cls");
       Navbar();
-      Title("ELIMINAR TICKET", "🗑️");
+      Title("ELIMINAR TICKET", "🚫");
       listAllTickets();
       int ticketId;
       ticketId = readInt("Introduza o ticket que deseja remover: ");
@@ -402,23 +402,8 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
     case 11:
       system("cls");
       Navbar();
-      Title("VALIDAR TECNICOS", "✅");
+      Title("TICKETS SEM TECNICOS", "📊");
       listPendentTickts();
-
-      int userId;
-      userId = readInt("ID do tecnico a validar (0 para cancelar): ");
-
-      if (userId != 0) {
-        if (validateTechnician(userId) == 0) {
-          char details[80];
-          snprintf(details, sizeof(details), "Tecnico #%d validado", userId);
-          logSuccess(username, "VALIDAR_TECNICO", details);
-          puts("\nSUCESSO: Técnico validado com sucesso.");
-        } else {
-          logError(username, "VALIDAR_TECNICO", "Erro ao validar tecnico");
-          puts("\nERRO: Não foi possível validar o técnico.");
-        }
-      }
       waitForKey();
       break;
     case 12: {
@@ -453,6 +438,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       system("cls");
       Navbar();
       Title("HISTORICO TICKETS", "📜");
+      listAllTickets();
       int id;
       id = readInt("ID do ticket: ");
       printTicketHistory(id);
@@ -463,7 +449,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
     case 14:
       system("cls");
       Navbar();
-      Title("TEMPO MÉDIO", "⏳");
+      Title("TEMPO MEDIO", "📊");
       averageTimePerTechnician();
       logEvent(username, "TEMPO_MEDIO", "Tempo medio por tecnico consultado");
       waitForKey();
@@ -471,7 +457,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
     case 15:
       system("cls");
       Navbar();
-      Title("TEMPO MÉDIO", "⏳");
+      Title("TEMPO MEDIO", "📊");
       averageTimePerType();
       logEvent(username, "TEMPO_MEDIO", "Tempo medio por categoria consultado");
       waitForKey();
@@ -878,6 +864,8 @@ int main() {
         }
         waitForKey();
         system("cls");
+        Navbar();
+        Title("TROCAR PASSWORD", "🔄");
 
         if (isLogged != 1 && needNewPass == 0) {
           Navbar();

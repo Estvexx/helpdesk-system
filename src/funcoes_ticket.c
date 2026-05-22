@@ -192,7 +192,7 @@ int updateTicket(int ticketId, int logged_userId) {
       do {
         system("cls");
         Navbar();
-        Title("EDITAR TICKET", "✏️");
+        Title("EDITAR TICKET", "📝");
         printInfosTicket(temp->data);
         puts("\n\n1 - Alterar Tipo");
         puts("2 - Alterar Descrição");
@@ -206,14 +206,14 @@ int updateTicket(int ticketId, int logged_userId) {
           // Alterar Tipo
           system("cls");
           Navbar();
-          Title("EDITAR TICKET", "✏️");
+          Title("EDITAR TICKET", "📝");
           printInfosTicket(temp->data);
 
           int realId, displayId;
           do {
             system("cls");
             Navbar();
-            Title("EDITAR TICKET", "✏️");
+            Title("EDITAR TICKET", "📝");
             printInfosTicket(temp->data);
             printf("\nNovo tipo:\n");
             listTicketTypes();
@@ -234,7 +234,7 @@ int updateTicket(int ticketId, int logged_userId) {
           // Alterar Descrição
           system("cls");
           Navbar();
-          Title("EDITAR TICKET", "✏️");
+          Title("EDITAR TICKET", "📝");
           printInfosTicket(temp->data);
           do {
             readString("Descrição: ", temp->data.description,
@@ -248,7 +248,7 @@ int updateTicket(int ticketId, int logged_userId) {
           // Alterar Prioridade
           system("cls");
           Navbar();
-          Title("EDITAR TICKET", "✏️");
+          Title("EDITAR TICKET", "📝");
           do {
             printInfosTicket(temp->data);
             temp->data.priority = readIntRange(
@@ -261,7 +261,7 @@ int updateTicket(int ticketId, int logged_userId) {
         case 4:
           system("cls");
           Navbar();
-          Title("EDITAR TICKET", "✏️");
+          Title("EDITAR TICKET", "📝");
           updateTicketStatus(ticketId, logged_userId);
           break;
         case 0:
@@ -270,7 +270,7 @@ int updateTicket(int ticketId, int logged_userId) {
         default:
           system("cls");
           Navbar();
-          Title("EDITAR TICKET", "✏️");
+          Title("EDITAR TICKET", "📝");
           puts("Opção Inválida!");
           break;
         }
@@ -303,7 +303,7 @@ void printInfoFormatTable(TICKET_INFO ticket) {
           ticket.openedAt.month, ticket.openedAt.year, ticket.openedAt.hour,
           ticket.openedAt.min);
 
-  printf("%-5d | %-9s | %-12s | %-10s | %-15s | %-10s | %-16s | %-5d\n",
+  printf("%-5d | %-18s | %-20s | %-10s | %-18s | %-7s | %-16s | %-5d\n",
          ticket.id, typeStr, statusStr, priorityStr, ticket.user, techStr,
          dataStr, getSLA(ticket.priority));
 }
