@@ -4,7 +4,6 @@
 #include "persistencia.h"
 #include "ui/ui.h"
 
-#include <securitybaseapi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>

@@ -36,7 +36,13 @@ int readIntRange(const char *prompt, int min, int max) {
 void readString(const char *prompt, char *buffer, int maxLen) {
   printf("%s", prompt);
   fgets(buffer, maxLen, stdin);
-  buffer[strcspn(buffer, "\n")] = 0;
+
+  size_t newlineIndex = strcspn(buffer, "\n");
+  if (buffer[newlineIndex] == '\n') {
+    buffer[newlineIndex] = 0;
+  } else {
+    clearBuffer();
+  }
 }
 
 int validateStringLength(char *str, size_t numMin, size_t numMax) {

@@ -150,9 +150,6 @@ int addComment(int ticket_id, int logged_userId); // Feito
 
 // Listar Tickets com Filtros
 void listTicketsByFilter(int value, char filter); // feito
-void listTicketsByStatus(int status);     // Feito
-void listTicketsByPriority(int priority); // Feito
-void listTicketsByType(int type);         // Feito
 
 // Ordenar lista
 // PERIGOSO TENHO DE CORRIGIR A ESTRUTURA DO HISTORY
@@ -197,7 +194,6 @@ int getTicketTypeCount();                                   // Feito
 void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTickets); // Feito
 void getStatus(int status, char *str); // Feito
 void getPriority(int prioridade, char *texto); // Feito
-void clearBuffer(); // Feito
 void waitForKey(); // Feito
 int validateStringLength(char *str, size_t numMin, size_t numMax);
 
@@ -212,7 +208,6 @@ int confirmDelete(); // 0 - confirma / 1 - cancela
 void tableHeaders(); // Feito
 
 int deleteType(int typeId); // Feito
-void headTypes(int typeId, char *str); // Feito
 void getTypeUtil(int typeId, char *str); // Feito
 int getSLA(int priority);
 

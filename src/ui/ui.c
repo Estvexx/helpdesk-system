@@ -42,10 +42,6 @@ void Title(const char *title, const char *icon) {
   printf("\n");
 }
 
-void Separator() {
-  printf("──────────────────────────────────────────────────\n");
-}
-
 void printInfoFormatTable(TICKET_INFO ticket) {
   char typeStr[9], statusStr[20], priorityStr[10], techStr[20], dataStr[20];
 

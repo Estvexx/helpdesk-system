@@ -69,6 +69,7 @@ int createTicket(TICKET_INFO ticket) {
   new->data.closedAt.year = 0;
   new->data.closedAt.hour = 0;
   new->data.closedAt.min = 0;
+  new->data.estimatedConclusion = (DateTime){0};
   strcpy(new->data.actions, "");
   strcpy(new->data.tools, "");
   new->history = NULL;
@@ -825,10 +826,8 @@ int addComment(int ticket_id, int logged_userId) {
 }
 
 void averageTimePerTechnician() {
-  if (headTickets == NULL) {
-    puts("Nenhum ticket registado");
+  if (hasTickets() == -1)
     return;
-  }
 
   long minutos[100] = {0};
   int contagem[100] = {0};
@@ -869,11 +868,8 @@ void averageTimePerTechnician() {
 }
 
 void averageTimePerType() {
-  if (headTickets == NULL) {
-    puts("Nenhum ticket registado");
+  if (hasTickets() == -1)
     return;
-  }
-
   long minutos[100] = {0};
   int contagem[100] = {0};
 
@@ -916,10 +912,8 @@ void averageTimePerType() {
 }
 
 int exportTicketsCSV(char *username, int userId) {
-  if (headTickets == NULL) {
-    puts("Não existem tickets registados no sistema");
+  if (hasTickets() == -1)
     return -1;
-  }
 
   char fileName[60];
 
@@ -1197,6 +1191,8 @@ void printAlertsSLA() {
 }
 
 int saveTicketsToFile(const char *filename) {
+  if (hasTickets() == -1)
+    return -1;
   FILE *fp = fopen(filename, "wb");
   if (fp == NULL) {
     printf("\nERRO: Não foi possível guardar tickets\n");
@@ -1209,6 +1205,7 @@ int saveTicketsToFile(const char *filename) {
 
   ELEM_TICKET *temp = headTickets;
   while (temp != NULL) {
+    // Guarda ja
     fwrite(&(temp->data), sizeof(TICKET_INFO), 1, fp);
 
     // AQui so verifico a quantidade de historicos que tem nesse ticket
