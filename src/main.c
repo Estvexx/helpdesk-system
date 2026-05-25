@@ -16,7 +16,7 @@ void menuAdminFilter(const char *username) {
   do {
     system("cls");
     Navbar();
-    Title("FILTRAR TICKET", "🔎");
+    Title("FILTRAR TICKET", "⌕");
     puts("1  - Filtrar tickets por prioridade");
     puts("2  - Filtrar tickets por tipo");
     puts("3  - Filtrar tickets por estado");
@@ -83,7 +83,7 @@ void menuAdminFilter(const char *username) {
 void menuAdminOrder(const char *username) {
 
   int orderOption;
-  int running;
+  int running = 0;
 
   do {
     system("cls");

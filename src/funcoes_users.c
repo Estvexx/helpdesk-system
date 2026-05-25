@@ -1,5 +1,6 @@
 #include "funcoes.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 ELEM_USER *head = NULL;
@@ -291,7 +292,12 @@ int loadUsersFromFile(const char *filename) {
   }
 
   int count;
-  fread(&count, sizeof(int), 1, fp);
+  if (fread(&count, sizeof(int), 1, fp) != 1) {
+    fclose(fp);
+    return -1;
+  }
+
+  ELEM_USER *lastUser = NULL;
 
   for (int i = 0; i < count; i++) {
     ELEM_USER *new = malloc(sizeof(ELEM_USER));
@@ -300,10 +306,22 @@ int loadUsersFromFile(const char *filename) {
       return -1;
     }
 
-    fread(&(new->info), sizeof(USER_INFO), 1, fp);
+    if (fread(&(new->info), sizeof(USER_INFO), 1, fp) != 1) {
+      fclose(fp);
+      free(new);
+      return -1;
+    }
 
-    new->next = head;
-    head = new;
+    new->next = NULL;
+
+    // inserçao no fim da lista
+    if (head == NULL) {
+      head = new;
+      lastUser = new;
+    } else {
+      lastUser->next = new;
+      lastUser = new;
+    }
   }
 
   fclose(fp);

@@ -225,7 +225,13 @@ int loadCategoryTypesFromFile(const char *filename) {
   }
 
   int count;
-  fread(&count, sizeof(int), 1, fp);
+  if (fread(&count, sizeof(int), 1, fp) != 1) {
+    printf("Erro a ler o número de categorias\n");
+    fclose(fp);
+    return -1;
+  }
+
+  ELEM_TICKET_TYPE *last = NULL;
 
   for (int i = 0; i < count; i++) {
     ELEM_TICKET_TYPE *new = malloc(sizeof(ELEM_TICKET_TYPE));
@@ -234,19 +240,20 @@ int loadCategoryTypesFromFile(const char *filename) {
       return -1;
     }
 
-    fread(&(new->data), sizeof(TICKET_TYPE), 1, fp);
+    if (fread(&(new->data), sizeof(TICKET_TYPE), 1, fp) != 1) {
+      free(new);
+      fclose(fp);
+      return -1;
+    }
 
+    new->next = NULL;
     // Adicionar ao final (para manter ordem)
     if (headTicketsTypes == NULL) {
-      new->next = NULL;
       headTicketsTypes = new;
+      last = new;
     } else {
-      ELEM_TICKET_TYPE *temp = headTicketsTypes;
-      while (temp->next != NULL) {
-        temp = temp->next;
-      }
-      temp->next = new;
-      new->next = NULL;
+      last->next = new;
+      last = new;
     }
   }
 

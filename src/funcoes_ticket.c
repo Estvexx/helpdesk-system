@@ -1242,17 +1242,12 @@ int loadTicketsFromFile(const char *filename) {
   }
 
   int count;
-  fread(&count, sizeof(int), 1, fp);
-
-  ELEM_TICKET *last = NULL; // ponteiro para o último nó da lista
-
-  // Encontrar o último nó atual (se a lista já tiver elementos)
-  if (headTickets != NULL) {
-    last = headTickets;
-    while (last->next != NULL) {
-      last = last->next;
-    }
+  if (fread(&count, sizeof(int), 1, fp) != 1) {
+    fclose(fp);
+    return -1;
   }
+
+  ELEM_TICKET *last = NULL;
 
   for (int i = 0; i < count; i++) {
     ELEM_TICKET *new = malloc(sizeof(ELEM_TICKET));
@@ -1262,11 +1257,18 @@ int loadTicketsFromFile(const char *filename) {
     }
 
     // Ler dados do ticket
-    fread(&(new->data), sizeof(TICKET_INFO), 1, fp);
+    if (fread(&(new->data), sizeof(TICKET_INFO), 1, fp) != 1) {
+      free(new);
+      fclose(fp);
+      return -1;
+    }
 
     // Ler histórico
     int histCount;
-    fread(&histCount, sizeof(int), 1, fp);
+    if (fread(&histCount, sizeof(int), 1, fp) != 1) {
+      fclose(fp);
+      return -1;
+    }
 
     new->history = NULL;
     ELEM_HISTORY *lastHist = NULL; // para manter ordem do histórico também
@@ -1278,7 +1280,11 @@ int loadTicketsFromFile(const char *filename) {
         return -1;
       }
 
-      fread(&(newHist->data), sizeof(HISTORY_INFO), 1, fp);
+      if (fread(&(newHist->data), sizeof(HISTORY_INFO), 1, fp) != 1) {
+        free(newHist);
+        fclose(fp);
+        return -1;
+      }
       newHist->next = NULL;
 
       // Inserir no FINAL do histórico (mantém ordem original)
