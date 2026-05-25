@@ -22,18 +22,6 @@ int hasTickets(void) {
   return 0;
 }
 
-DateTime getCurrentDateTime() {
-  DateTime d;
-  time_t t = time(NULL);
-  struct tm *tm = localtime(&t);
-  d.day = tm->tm_mday;
-  d.month = tm->tm_mon + 1;
-  d.year = tm->tm_year + 1900;
-  d.hour = tm->tm_hour;
-  d.min = tm->tm_min;
-  return d;
-}
-
 // ========================= HISTORY
 void printTicketHistory(int ticketId) { printHistory(ticketId, headTickets); }
 int deleteType(int typeId) { return deleteTicketType(typeId, headTickets); }
@@ -241,9 +229,9 @@ int updateTicket(int ticketId, int logged_userId) {
   return -1;
 }
 
-void listAllTickets() {
+int listAllTickets() {
   if (hasTickets() == -1)
-    return;
+    return -1;
 
   ELEM_TICKET *temp = headTickets;
   tableHeaders();
@@ -253,6 +241,7 @@ void listAllTickets() {
     temp = temp->next;
   }
   puts(""); // Só para dar enter
+  return 0;
 }
 
 int showTicketById(int id) {
@@ -1162,6 +1151,11 @@ int alertTicketSLA(int *alertSLA) {
 
   fclose(fp);
 
+  if(*alertSLA) {
+    puts("Nenhum ticket violou o SLA");
+    remove("alertSLA.dat"); 
+    return -1;
+  }
   return 0;
 }
 

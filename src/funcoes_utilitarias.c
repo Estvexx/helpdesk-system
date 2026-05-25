@@ -2,12 +2,25 @@
 #include "input/input.h"
 #include <stdio.h>
 #include <string.h>
+#include <time.h>  
+#include <stdlib.h>
 
 void waitForKey() {
   puts("\nCarregue numa tecla para continuar ...");
   getchar();
 }
 
+DateTime getCurrentDateTime() {
+  DateTime d;
+  time_t t = time(NULL);
+  struct tm *tm = localtime(&t);
+  d.day = tm->tm_mday;
+  d.month = tm->tm_mon + 1;
+  d.year = tm->tm_year + 1900;
+  d.hour = tm->tm_hour;
+  d.min = tm->tm_min;
+  return d;
+}
 // Retorna 1 se d1 > d2, 0 se igual, -1 se d1 < d2
 int compareDates(DateTime d1, DateTime d2) {
   if (d1.year > d2.year)
@@ -102,14 +115,10 @@ void tableHeaders() {
 }
 
 int confirmDelete() {
-  do {
-    puts("Confirmar remoção?");
-    puts("0 - Continuar");
-    puts("1 - Cancelar");
-    int confirmDelete = readIntRange("\nOpção: ", 0, 1);
-    return confirmDelete;
-
-  } while (1);
+  puts("Confirmar remoção?");
+  puts("0 - Continuar");
+  puts("1 - Cancelar");
+  return readIntRange("\nOpção: ", 0, 1);
 }
 
 void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTicketsTypes) {

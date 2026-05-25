@@ -149,3 +149,18 @@
 [22/05/2026 19:33] admin | FILTRAR_TICKETS | Filtro por estado
 [22/05/2026 19:33] admin | LOGOUT | Logout do administrador
 [22/05/2026 19:33] SISTEMA | BACKUP | Dados guardados
+[25/05/2026 21:25] SISTEMA | LOAD | Dados carregados
+[25/05/2026 21:25] ERRO | admin | LOGIN | Credenciais invalidas
+[25/05/2026 21:25] ERRO | admin | LOGIN | Password invalida
+[25/05/2026 21:25] ERRO | admin | LOGIN | Credenciais invalidas
+[25/05/2026 21:25] ERRO | admin | LOGIN | Password invalida
+[25/05/2026 21:25] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
+[25/05/2026 21:25] SISTEMA | SEED | Dados iniciais criados
+[25/05/2026 21:25] SUCESSO | admin | LOGIN | Autenticado como administrador
+[25/05/2026 21:25] SUCESSO | admin | ALTERAR_PW | Password alterada
+[25/05/2026 21:27] SUCESSO | admin | ALERTAS_SLA | Alertas SLA gerados
+[25/05/2026 21:28] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
+[25/05/2026 21:28] SISTEMA | SEED | Dados iniciais criados
+[25/05/2026 21:28] SUCESSO | admin | LOGIN | Autenticado como administrador
+[25/05/2026 21:28] SUCESSO | admin | ALTERAR_PW | Password alterada
+[25/05/2026 21:28] ERRO | admin | ALERTAS_SLA | Erro ao gerar alertas SLA

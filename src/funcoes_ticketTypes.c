@@ -153,10 +153,10 @@ int updateTicketType(int typeId) {
   return -1;
 }
 
-void listTicketTypes() {
+int listTicketTypes() {
   if (headTicketsTypes == NULL) {
     puts("Nenhuma categoria registada.");
-    return;
+    return -1;
   }
 
   ELEM_TICKET_TYPE *temp = headTicketsTypes;
@@ -168,6 +168,7 @@ void listTicketTypes() {
     temp = temp->next;
     displayIndex++;
   }
+  return 0;
 }
 
 int getRealTypeId(int displayIndex) {

@@ -133,7 +133,7 @@ void listAllTechnicians();                             // Feito
 int createTicket(TICKET_INFO ticket); // Feito
 int updateTicket(int ticketId, int logged_userId );       // Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
 int deleteTicket(int ticketId);       // Retorna 1 se for cancelado pelo user
-void listAllTickets();                // feito
+int listAllTickets();                // feito
 void listPendentTickts();               // FEITO
 int showTicketById(int id);          // feito
 void showTicketPendentByTechnician(int id); //feito
@@ -185,7 +185,7 @@ void printTicketHistory(int ticketId);
 int createTicketType(TICKET_TYPE ticketType);
 int deleteTicketType(int typeId, ELEM_TICKET *headTickets); // Feito
 int updateTicketType(int typeId);                           // Feito
-void listTicketTypes();                                     // Feito
+int listTicketTypes();                                     // Feito
 int getRealTypeId(int displayIndex);                        // Feito
 int getTicketTypeCount();                                   // Feito
 
