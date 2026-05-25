@@ -133,7 +133,7 @@ void listAllTechnicians();                             // Feito
 int createTicket(TICKET_INFO ticket); // Feito
 int updateTicket(int ticketId, int logged_userId );       // Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
 int deleteTicket(int ticketId);       // Retorna 1 se for cancelado pelo user
-void listAllTickets();                // feito
+int listAllTickets();                // feito
 void listPendentTickts();               // FEITO
 int showTicketById(int id);          // feito
 void showTicketPendentByTechnician(int id); //feito
@@ -185,7 +185,7 @@ void printTicketHistory(int ticketId);
 int createTicketType(TICKET_TYPE ticketType);
 int deleteTicketType(int typeId, ELEM_TICKET *headTickets); // Feito
 int updateTicketType(int typeId);                           // Feito
-void listTicketTypes();                                     // Feito
+int listTicketTypes();                                     // Feito
 int getRealTypeId(int displayIndex);                        // Feito
 int getTicketTypeCount();                                   // Feito
 
@@ -195,7 +195,6 @@ void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTickets); // Feito
 void getStatus(int status, char *str); // Feito
 void getPriority(int prioridade, char *texto); // Feito
 void waitForKey(); // Feito
-int validateStringLength(char *str, size_t numMin, size_t numMax);
 
 // Datas                   -------
 DateTime addTimeToDateTime(DateTime dt, int hours, int minutes); // Feito
@@ -220,9 +219,9 @@ void seederTickets(); // Feito
 // ======================= PARTE EXIT =======================
 
 // Privadas
-void cleanupTickets(ELEM_TICKET *headTickets);
-void cleanupUsers(ELEM_USER *headUsers);
-void cleanupTicketTypes(ELEM_TICKET_TYPE *headTicketsTypes);
+void cleanupTickets(ELEM_TICKET **headTickets);
+void cleanupUsers(ELEM_USER **headUsers);
+void cleanupTicketTypes(ELEM_TICKET_TYPE **headTicketsTypes);
 
 // Publicas / INtermediárias
 void cleanupIntermediateUsers();
@@ -246,7 +245,4 @@ int backupAllData(void);
 int loadAllData(void);
 
 int checkAdminValidated();
-
-int validateStringLength(char *str, size_t numMin, size_t numMax);
-
 #endif

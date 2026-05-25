@@ -43,7 +43,7 @@ void Title(const char *title, const char *icon) {
 }
 
 void printInfoFormatTable(TICKET_INFO ticket) {
-  char typeStr[9], statusStr[20], priorityStr[10], techStr[20], dataStr[20];
+  char typeStr[50], statusStr[20], priorityStr[10], techStr[20], dataStr[20];
 
   getTypeUtil(ticket.typeId, typeStr);
   getStatus(ticket.status, statusStr);
@@ -100,8 +100,9 @@ void printInfosTicket(TICKET_INFO ticket) {
     strcpy(estimatedConclusionDateStr, "N/D");
   } else {
     sprintf(estimatedConclusionDateStr, "%02d/%02d/%04d %02d:%02d",
-            ticket.closedAt.day, ticket.closedAt.month, ticket.closedAt.year,
-            ticket.closedAt.hour, ticket.closedAt.min);
+            ticket.estimatedConclusion.day, ticket.estimatedConclusion.month,
+            ticket.estimatedConclusion.year, ticket.estimatedConclusion.hour,
+            ticket.estimatedConclusion.min);
   }
 
   printf("===============================================================\n");

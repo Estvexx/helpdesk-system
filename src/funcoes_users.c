@@ -5,7 +5,7 @@
 
 ELEM_USER *head = NULL;
 
-void cleanupIntermediateUsers() { cleanupUsers(head); };
+void cleanupIntermediateUsers() { cleanupUsers(&head); };
 
 int nextUserId = 1;
 

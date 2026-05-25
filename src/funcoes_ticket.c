@@ -3,7 +3,6 @@
 #include "ui/ui.h"
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 
 #define REPORTS_PATH "reports\\"
 
@@ -11,7 +10,7 @@ ELEM_TICKET *headTickets = NULL;
 
 int createStatsToReports(char *fileName, char *fileHeader, ReportStats stats);
 
-void cleanupIntermediateTickets() { cleanupTickets(headTickets); }
+void cleanupIntermediateTickets() { cleanupTickets(&headTickets); }
 
 // Retorna 0 se existem tickets, -1 se a lista estiver vazia
 int hasTickets(void) {
@@ -20,18 +19,6 @@ int hasTickets(void) {
     return -1;
   }
   return 0;
-}
-
-DateTime getCurrentDateTime() {
-  DateTime d;
-  time_t t = time(NULL);
-  struct tm *tm = localtime(&t);
-  d.day = tm->tm_mday;
-  d.month = tm->tm_mon + 1;
-  d.year = tm->tm_year + 1900;
-  d.hour = tm->tm_hour;
-  d.min = tm->tm_min;
-  return d;
 }
 
 // ========================= HISTORY
@@ -241,9 +228,9 @@ int updateTicket(int ticketId, int logged_userId) {
   return -1;
 }
 
-void listAllTickets() {
+int listAllTickets() {
   if (hasTickets() == -1)
-    return;
+    return -1;
 
   ELEM_TICKET *temp = headTickets;
   tableHeaders();
@@ -253,6 +240,7 @@ void listAllTickets() {
     temp = temp->next;
   }
   puts(""); // Só para dar enter
+  return 0;
 }
 
 int showTicketById(int id) {
@@ -643,6 +631,7 @@ int updateTicketStatus(int ticket_id, int logged_userId) {
 
     snprintf(h.description, 800, "Ticket fechado. Ações: %s | Ferramentas: %s",
              temp->data.actions, temp->data.tools);
+    temp->data.closedAt = getCurrentDateTime();
   }
 
   temp->data.status = newStatus;
@@ -698,7 +687,7 @@ int acceptTicket(int tecnicoId, int ticketId) {
       strcpy(h.actionType, "ACEITACAO DO TECNICO");
       snprintf(h.currentTechnician, 30, "%d", tecnicoId);
       snprintf(h.previousTechnician, 30, "%d", tecnicoId);
-      getStatus(STATUS_OPEN, h.previousStatus);
+      getStatus(STATUS_WAITING_USER, h.previousStatus);
       getStatus(STATUS_IN_PROGRESS, h.currentStatus);
       snprintf(
           h.description, 300,
@@ -829,6 +818,7 @@ void averageTimePerTechnician() {
   if (hasTickets() == -1)
     return;
 
+  // Projeto académico, para testar nao vamos ate 100 users
   long minutos[100] = {0};
   int contagem[100] = {0};
 
@@ -870,6 +860,7 @@ void averageTimePerTechnician() {
 void averageTimePerType() {
   if (hasTickets() == -1)
     return;
+  // Projeto académico, para testar nao vamos ate 100 users
   long minutos[100] = {0};
   int contagem[100] = {0};
 
@@ -1162,6 +1153,11 @@ int alertTicketSLA(int *alertSLA) {
 
   fclose(fp);
 
+  if (*alertSLA) {
+    puts("Nenhum ticket violou o SLA");
+    remove("alertSLA.dat");
+    return -1;
+  }
   return 0;
 }
 

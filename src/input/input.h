@@ -1,3 +1,4 @@
+#ifndef INPUT_H
 #define INPUT_H
 
 #include <stdio.h>
@@ -10,3 +11,4 @@ int readIntRange(const char *prompt, int min, int max);
 void readString(const char *prompt, char *buffer, int maxLen);
 int validateStringLength(char *str, size_t numMin, size_t numMax);
 
+#endif

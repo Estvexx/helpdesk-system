@@ -38,9 +38,9 @@ void menuAdminFilter(const char *username) {
       int displayId;
 
       do {
+        int max = getTicketTypeCount();
         puts("\nTipos disponíveis:");
         listTicketTypes();
-        int max = getTicketTypeCount();
 
         displayId = readIntRange("Opção: ", 1, max);
 
@@ -169,6 +169,12 @@ void menuManagmentTypes(const char *username) {
     }
     case 3: {
       int displayId;
+
+      if (listTicketTypes() == -1) {
+        puts("ERRO: Nenhuma categoria para editar.");
+        waitForKey();
+        break;
+      }
       displayId = readInt("\nIntroduza o #ID do ticket que deseja editar: ");
       int realId = getRealTypeId(displayId);
 
@@ -189,6 +195,14 @@ void menuManagmentTypes(const char *username) {
     }
     case 4: {
       int displayId;
+      puts("\n=== REMOVER CATEGORIA ===");
+
+      if (listTicketTypes() == -1) {
+        puts("ERRO: Nenhuma categoria para remover.");
+        waitForKey();
+        break;
+      }
+
       displayId = readInt("\nIntroduza o #ID do ticket que deseja eliminar: ");
       int realId = getRealTypeId(displayId);
 
@@ -252,10 +266,17 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       Navbar();
       Title("CRIAR TICKET", "➕");
       TICKET_INFO ticket;
-      int realId, displayId;
+      int realId, displayId, existTypes = 0;
       do {
         puts("\nTipos disponíveis:");
-        listTicketTypes();
+
+        if (listTicketTypes() == -1) {
+          puts("ERRO: Nenhuma categoria disponível.");
+          existTypes = -1;
+          waitForKey();
+          break;
+        }
+
         int max = getTicketTypeCount();
 
         displayId = readIntRange("Opção: ", 1, max);
@@ -267,6 +288,10 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
         }
 
       } while (realId == -1);
+
+      if (existTypes == -1) {
+        break;
+      }
 
       ticket.typeId = realId;
 
@@ -300,7 +325,13 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       system("cls");
       Navbar();
       Title("EDITAR TICKET", "📝");
-      listAllTickets();
+
+      if (listAllTickets() == -1) {
+        puts("ERRO: Nenhum ticket para editar.");
+        waitForKey();
+        break;
+      }
+
       int ticketId;
       ticketId = readInt("Introduza o #ID do ticket que deseja editar: ");
       if (updateTicket(ticketId, logged_userId) == 0) {
@@ -327,7 +358,13 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       system("cls");
       Navbar();
       Title("VER TICKET", "🎫");
-      listAllTickets();
+
+      if (listAllTickets() == -1) {
+        puts("ERRO: Nenhum ticket para visualizar.");
+        waitForKey();
+        break;
+      }
+
       int ticketId = 0;
       ticketId = readInt("Digita o id do ticket a visualizar: ");
       if (showTicketById(ticketId) == -1) {
@@ -341,7 +378,11 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       system("cls");
       Navbar();
       Title("ELIMINAR TICKET", "🚫");
-      listAllTickets();
+      if (listAllTickets() == -1) {
+        puts("ERRO: Nenhum ticket para remover.");
+        waitForKey();
+        break;
+      }
       int ticketId;
       ticketId = readInt("Introduza o ticket que deseja remover: ");
       if (deleteTicket(ticketId) == 0) {
@@ -411,7 +452,11 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       Navbar();
       Title("ATRIBUIR TECNICOS", "📝");
       int ticketId, tecnicoId;
-      listAllTickets();
+      if (listAllTickets() == -1) {
+        puts("ERRO: Nenhum ticket para atribuir.");
+        waitForKey();
+        break;
+      }
       ticketId = readInt("ID do ticket: ");
       system("cls");
       Navbar();
@@ -463,13 +508,14 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       waitForKey();
       break;
     case 16: {
-      system("cls");
-      Navbar();
-      Title("RELATORIO", "📋");
+
       int optionReport;
       int isRunning = 0;
 
       do {
+        system("cls");
+        Navbar();
+        Title("RELATORIO", "📋");
         puts("Tipo de relatório:");
         puts("1 - Mensal Estatístico");
         puts("2 - Semanal Estatístico");
@@ -546,7 +592,6 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
                      "Erro ao gerar relatorio periodico");
             puts("\nERRO: Não foi possível gerar relatório.");
           }
-
         } break;
         case 0: {
           isRunning = 1;
@@ -566,7 +611,6 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       system("cls");
       Navbar();
       Title("ALERTAS", "👁️");
-      puts("\nERRO: A criar alertas SLA .");
       if (alertTicketSLA(alertSLA) == 0) {
         logSuccess(username, "ALERTAS_SLA", "Alertas SLA gerados");
         puts("\nSUCESSO: Alerta gerado com sucesso.");
