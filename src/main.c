@@ -271,7 +271,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
         puts("\nTipos disponíveis:");
 
         if (listTicketTypes() == -1) {
-          puts("ERRO: Nenhuma categoria disponível.");
+          puts("ERRO: Nenhuma categoria disponível. Registe primeiro uma categoria.");
           existTypes = -1;
           waitForKey();
           break;
@@ -421,7 +421,11 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       system("cls");
       Navbar();
       Title("VALIDAR TECNICOS", "✅");
-      listPendingTechnicians();
+      if(listPendingTechnicians() == -1) {
+        puts("ERRO: Nenhum técnico pendente para validar.");
+        waitForKey();
+        break;
+      }
 
       int userId;
       userId = readInt("ID do tecnico a validar (0 para cancelar): ");
@@ -444,7 +448,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       system("cls");
       Navbar();
       Title("TICKETS SEM TECNICOS", "📊");
-      listPendentTickts();
+      listPendentTickets();
       waitForKey();
       break;
     case 12: {
@@ -592,7 +596,10 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
                      "Erro ao gerar relatorio periodico");
             puts("\nERRO: Não foi possível gerar relatório.");
           }
-        } break;
+          isRunning = 1;
+          waitForKey();
+          break;
+        } 
         case 0: {
           isRunning = 1;
           break;
@@ -807,9 +814,9 @@ int main() {
     logError("SISTEMA", "LOAD",
              "Dados carregados parcialmente ou ficheiros inexistentes");
   }
-  inicializarIds_Ticket();
-  inicializarIds_TicketType();
-  inicializarIds_Users();
+  initializeTicketIds();
+  initializeTicketIdsType();
+  initializeUserIds();
 
   if (getUserCount() == 0) {
     if (createAdmin() != 0) {
@@ -823,8 +830,8 @@ int main() {
   }
 
   if (getTicketCount() == 0) {
-    seederTypes();
-    seederTickets();
+    /* seederTypes();
+    seederTickets(); */
     logEvent("SISTEMA", "SEED", "Dados iniciais criados");
   }
 
@@ -908,11 +915,10 @@ int main() {
         }
         waitForKey();
         system("cls");
-        Navbar();
-        Title("TROCAR PASSWORD", "🔄");
-
+        
         if (isLogged != 1 && needNewPass == 0) {
           Navbar();
+          Title("TROCAR PASSWORD", "🔄");
           puts("\n=== Primeiro login: altere a password! ===\n");
           do {
             readString("\nNova password: ", newPassword, MAX_STR);

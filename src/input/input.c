@@ -46,12 +46,12 @@ void readString(const char *prompt, char *buffer, int maxLen) {
 }
 
 int validateStringLength(char *str, size_t numMin, size_t numMax) {
-  size_t lenght = strlen(str);
+  size_t length = strlen(str);
 
-  if (lenght < numMin) {
+  if (length < numMin) {
     printf("\nInvalido, minimo %zu caracteres.\n", numMin);
     return -1;
-  } else if (lenght > numMax) {
+  } else if (length > numMax) {
     printf("\nInvalido, maximo %zu caracteres.\n", numMax);
     return -1;
   } else {

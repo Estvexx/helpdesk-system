@@ -1,5 +1,6 @@
 #include "funcoes.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void addHistory(ELEM_TICKET *ticket, HISTORY_INFO history) {
   ELEM_HISTORY *newHistory = malloc(sizeof(ELEM_HISTORY));

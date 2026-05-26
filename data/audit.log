@@ -167,3 +167,53 @@
 [25/05/2026 23:09] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
 [25/05/2026 23:09] SISTEMA | SEED | Dados iniciais criados
 [25/05/2026 23:09] SISTEMA | BACKUP | Dados guardados
+[26/05/2026 07:00] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
+[26/05/2026 07:00] SISTEMA | SEED | Dados iniciais criados
+[26/05/2026 07:01] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 07:01] SUCESSO | admin | ALTERAR_PW | Password alterada
+[26/05/2026 07:01] admin | LOGOUT | Logout do administrador
+[26/05/2026 07:01] SUCESSO | anao | REGISTAR | Utilizador criado
+[26/05/2026 07:01] SUCESSO | rodas | REGISTAR | Utilizador criado
+[26/05/2026 07:01] SUCESSO | teste2 | REGISTAR | Utilizador criado
+[26/05/2026 07:01] SUCESSO | teste4 | REGISTAR | Utilizador criado
+[26/05/2026 07:01] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 07:03] admin | LOGOUT | Logout do administrador
+[26/05/2026 07:03] SISTEMA | BACKUP | Dados guardados
+[26/05/2026 07:03] SISTEMA | LOAD | Dados carregados
+[26/05/2026 07:03] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 07:04] admin | LOGOUT | Logout do administrador
+[26/05/2026 07:04] SISTEMA | BACKUP | Dados guardados
+[26/05/2026 07:04] SISTEMA | LOAD | Dados carregados
+[26/05/2026 07:04] SUCESSO | testeanao | REGISTAR | Utilizador criado
+[26/05/2026 07:04] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 07:11] ERRO | admin | EDITAR_TICKET | Erro ao atualizar ticket
+[26/05/2026 07:11] admin | LOGOUT | Logout do administrador
+[26/05/2026 07:13] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
+[26/05/2026 07:13] SISTEMA | SEED | Dados iniciais criados
+[26/05/2026 07:14] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
+[26/05/2026 07:14] SISTEMA | SEED | Dados iniciais criados
+[26/05/2026 07:15] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 07:15] SUCESSO | admin | ALTERAR_PW | Password alterada
+[26/05/2026 07:16] admin | VER_HISTORICO | Historico de ticket consultado
+[26/05/2026 07:16] SUCESSO | admin | GERAR_RELATORIO | Relatorio mensal gerado
+[26/05/2026 07:16] SUCESSO | admin | GERAR_RELATORIO | Relatorio semanal gerado
+[26/05/2026 07:16] ERRO | admin | GERAR_RELATORIO | Erro ao gerar relatorio periodico
+[26/05/2026 07:17] ERRO | admin | GERAR_RELATORIO | Erro ao gerar relatorio periodico
+[26/05/2026 07:17] admin | LOGOUT | Logout do administrador
+[26/05/2026 07:17] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
+[26/05/2026 07:17] SISTEMA | SEED | Dados iniciais criados
+[26/05/2026 07:17] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 07:17] SUCESSO | admin | ALTERAR_PW | Password alterada
+[26/05/2026 07:17] ERRO | admin | GERAR_RELATORIO | Erro ao gerar relatorio periodico
+[26/05/2026 07:20] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
+[26/05/2026 07:20] SISTEMA | SEED | Dados iniciais criados
+[26/05/2026 07:20] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 07:20] SUCESSO | admin | ALTERAR_PW | Password alterada
+[26/05/2026 07:20] ERRO | admin | GERAR_RELATORIO | Erro ao gerar relatorio periodico
+[26/05/2026 07:40] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
+[26/05/2026 07:40] SISTEMA | SEED | Dados iniciais criados
+[26/05/2026 07:40] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 07:41] SUCESSO | admin | ALTERAR_PW | Password alterada
+[26/05/2026 07:41] admin | LOGOUT | Logout do administrador
+[26/05/2026 07:41] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 07:41] admin | LOGOUT | Logout do administrador

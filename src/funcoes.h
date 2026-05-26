@@ -111,9 +111,9 @@ typedef struct {
 
 
 // INICIALIZADOR DE IDS
-void inicializarIds_Users();
-void inicializarIds_Ticket();
-void inicializarIds_TicketType();
+void initializeUserIds();
+void initializeTicketIds();
+void initializeTicketIdsType();
 // Retorna -1 se der erro e 0 sucesso
 //             GERAL : -1 ERRO -> 0 SUCESSO
 // ======================= PARTE INICIAL USERS =======================
@@ -126,7 +126,7 @@ int changePassword(char *username, char *newPassword); // Feito
 int login(char *username, char *password, int *id);    // Retorn -2 se tecnic não está validado             // Feito
 int validateTechnician(int userId);                    // Feito, colocar tecnico como validado
 int isTechnicianValidated(int userId);                 // Feito, verificar se tecnico esta validado ou nao
-void listPendingTechnicians();                         // Feito
+int listPendingTechnicians();                         // Feito
 void listAllTechnicians();                             // Feito
 
 // ======================= PARTE TICKETS =======================
@@ -134,7 +134,7 @@ int createTicket(TICKET_INFO ticket); // Feito
 int updateTicket(int ticketId, int logged_userId );       // Ainda alterações necessárias (preciso tirar duvidas ctg) *preciso alterar logica para perguntar o que ele deseja alterar
 int deleteTicket(int ticketId);       // Retorna 1 se for cancelado pelo user
 int listAllTickets();                // feito
-void listPendentTickts();               // FEITO
+void listPendentTickets();               // FEITO
 int showTicketById(int id);          // feito
 void showTicketPendentByTechnician(int id); //feito
 int getTicketCount();                 // feito

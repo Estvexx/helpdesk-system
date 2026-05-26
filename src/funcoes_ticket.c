@@ -27,7 +27,7 @@ int deleteType(int typeId) { return deleteTicketType(typeId, headTickets); }
 
 int nextTicketId = 1;
 
-void inicializarIds_Ticket() {
+void initializeTicketIds() {
   // AQUI NAO PRECISO DE VERIFICAR SE A LSITA ESTA VAZIA
   ELEM_TICKET *temp = headTickets;
   while (temp != NULL) {
@@ -282,7 +282,7 @@ void showTicketByTechnician(int id) {
   printf("\n");
 }
 
-void listPendentTickts() {
+void listPendentTickets() {
   if (hasTickets() == -1)
     return;
 
@@ -1316,7 +1316,11 @@ int createPeriodicReports() {
   }
 
   char fileName[100];
-  snprintf(fileName, sizeof(fileName), REPORTS_PATH "Relatorio_Periodico_.txt");
+  DateTime currentDate;
+  currentDate = getCurrentDateTime();
+
+  snprintf(fileName, sizeof(fileName), REPORTS_PATH "Relatorio_Periodico_%02d-%02d-%04d.txt", currentDate.day, currentDate.month, currentDate.year);
+  
   FILE *fp = fopen(fileName, "w");
   if (fp == NULL) {
     puts("Erro ao criar ficheiro de relatorio periodico");

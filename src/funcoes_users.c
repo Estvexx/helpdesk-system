@@ -9,7 +9,7 @@ void cleanupIntermediateUsers() { cleanupUsers(&head); };
 
 int nextUserId = 1;
 
-void inicializarIds_Users() {
+void initializeUserIds() {
   // AQUI NAO PRECISO DE VERIFICAR SE A LSITA ESTA VAZIA
   ELEM_USER *temp = head;
   while (temp != NULL) {
@@ -189,7 +189,7 @@ int validateTechnician(int userId) {
 
 void listAllTechnicians() {
   ELEM_USER *temp = head;
-  int encontrou = 0;
+  int found = 0;
 
   printf("\n%-5s | %-20s | %-15s | %-10s\n", "ID", "Nome", "Username",
          "Validado");
@@ -206,20 +206,20 @@ void listAllTechnicians() {
         printf("\x1b[31m%c\x1b[0m\n", 'X');
       }
 
-      encontrou = 1;
+      found = 1;
     }
     temp = temp->next;
   }
 
-  if (!encontrou) {
+  if (!found) {
     puts("Nenhum tecnico registado.");
   }
   printf("\n");
 }
 
-void listPendingTechnicians() {
+int listPendingTechnicians() {
   ELEM_USER *temp = head;
-  int encontrou = 0;
+  int found = 0;
 
   printf("\n%-5s | %-20s | %-15s | %-10s\n", "ID", "Nome", "Username",
          "Validado");
@@ -229,15 +229,17 @@ void listPendingTechnicians() {
     if (temp->info.perfil == PERFIL_TECNICO && temp->info.isValidated == 0) {
       printf("%-5d | %-20s | %-15s | \x1b[31mX\x1b[0m\n", temp->info.id,
              temp->info.name, temp->info.username);
-      encontrou = 1;
+      found = 1;
     }
     temp = temp->next;
   }
 
-  if (!encontrou) {
+  if (!found) {
     puts("Nenhum tecnico pendente de validacao.");
+    return -1;
   }
-  printf("\n");
+  printf("\n\n");
+  return 0;
 }
 
 // Retorna 1 -> validado; retorna 0 -> pendente; retorna -1 utilizador nao

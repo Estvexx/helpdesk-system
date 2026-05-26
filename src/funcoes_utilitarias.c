@@ -159,12 +159,11 @@ DateTime addTimeToDateTime(DateTime dt, int hours, int minutes) {
   while (result.day > daysInMonth(result.month, result.year)) {
     result.day -= daysInMonth(result.month, result.year);
     result.month++;
-  }
 
-  // Ajustar meses
-  while (result.month > 12) {
-    result.month -= 12;
-    result.year++;
+    if (result.month > 12) {
+        result.month = 1;
+        result.year++;
+    }
   }
 
   return result;

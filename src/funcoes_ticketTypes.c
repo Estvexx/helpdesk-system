@@ -14,7 +14,7 @@ void getTypeUtil(int typeId, char *str) {
 
 int nextTicketTypeId = 1;
 
-void inicializarIds_TicketType() {
+void initializeTicketIdsType() {
   // AQUI NAO PRECISO DE VERIFICAR SE A LSITA ESTA VAZIA
   ELEM_TICKET_TYPE *temp = headTicketsTypes;
   while (temp != NULL) {
