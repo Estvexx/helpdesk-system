@@ -101,21 +101,25 @@ void menuAdminOrder(const char *username) {
       sortTicketsByDate();
       listAllTickets();
       logEvent(username, "ORDENAR_TICKETS", "Ordenacao por data");
+      waitForKey();
       break;
     case 2:
       sortTicketsByPriority();
       listAllTickets();
       logEvent(username, "ORDENAR_TICKETS", "Ordenacao por prioridade");
+      waitForKey();
       break;
     case 3:
       sortTicketsByTechnician();
       listAllTickets();
       logEvent(username, "ORDENAR_TICKETS", "Ordenacao por tecnico");
+      waitForKey();
       break;
     case 4:
       sortTicketsById();
       listAllTickets();
       logEvent(username, "ORDENAR_TICKETS", "Ordenacao por ID");
+      waitForKey();
       break;
     case 0:
       running = 1;
@@ -271,7 +275,8 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
         puts("\nTipos disponíveis:");
 
         if (listTicketTypes() == -1) {
-          puts("ERRO: Nenhuma categoria disponível. Registe primeiro uma categoria.");
+          puts("ERRO: Nenhuma categoria disponível. Registe primeiro uma "
+               "categoria.");
           existTypes = -1;
           waitForKey();
           break;
@@ -421,7 +426,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
       system("cls");
       Navbar();
       Title("VALIDAR TECNICOS", "✅");
-      if(listPendingTechnicians() == -1) {
+      if (listPendingTechnicians() == -1) {
         puts("ERRO: Nenhum técnico pendente para validar.");
         waitForKey();
         break;
@@ -599,7 +604,7 @@ void adminMenu(int *alertSLA, int logged_userId, const char *username) {
           isRunning = 1;
           waitForKey();
           break;
-        } 
+        }
         case 0: {
           isRunning = 1;
           break;
@@ -830,8 +835,8 @@ int main() {
   }
 
   if (getTicketCount() == 0) {
-    /* seederTypes();
-    seederTickets(); */
+    seederTypes();
+    seederTickets();
     logEvent("SISTEMA", "SEED", "Dados iniciais criados");
   }
 
@@ -915,11 +920,10 @@ int main() {
         }
         waitForKey();
         system("cls");
-        
+
         if (isLogged != 1 && needNewPass == 0) {
           Navbar();
           Title("TROCAR PASSWORD", "🔄");
-          puts("\n=== Primeiro login: altere a password! ===\n");
           do {
             readString("\nNova password: ", newPassword, MAX_STR);
 

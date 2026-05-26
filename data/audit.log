@@ -217,3 +217,46 @@
 [26/05/2026 07:41] admin | LOGOUT | Logout do administrador
 [26/05/2026 07:41] SUCESSO | admin | LOGIN | Autenticado como administrador
 [26/05/2026 07:41] admin | LOGOUT | Logout do administrador
+[26/05/2026 09:56] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
+[26/05/2026 09:56] SISTEMA | SEED | Dados iniciais criados
+[26/05/2026 09:56] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 09:57] SUCESSO | admin | ALTERAR_PW | Password alterada
+[26/05/2026 09:58] admin | LOGOUT | Logout do administrador
+[26/05/2026 09:58] ERRO | SISTEMA | BACKUP | Erro ao guardar dados
+[26/05/2026 09:58] ERRO | SISTEMA | LOAD | Dados carregados parcialmente ou ficheiros inexistentes
+[26/05/2026 09:58] SISTEMA | SEED | Dados iniciais criados
+[26/05/2026 09:58] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 09:59] SUCESSO | admin | CRIAR_TICKET | Ticket criado para Fernando
+[26/05/2026 09:59] SUCESSO | admin | CRIAR_TICKET | Ticket criado para Mario
+[26/05/2026 10:00] SUCESSO | admin | EDITAR_TICKET | Ticket #7 atualizado
+[26/05/2026 10:00] admin | FILTRAR_TICKETS | Filtro por prioridade
+[26/05/2026 10:00] admin | FILTRAR_TICKETS | Filtro por prioridade
+[26/05/2026 10:00] admin | FILTRAR_TICKETS | Filtro por tipo
+[26/05/2026 10:00] admin | ORDENAR_TICKETS | Ordenacao por data
+[26/05/2026 10:01] admin | ORDENAR_TICKETS | Ordenacao por prioridade
+[26/05/2026 10:01] admin | LOGOUT | Logout do administrador
+[26/05/2026 10:01] SISTEMA | BACKUP | Dados guardados
+[26/05/2026 10:01] SISTEMA | LOAD | Dados carregados
+[26/05/2026 10:02] SUCESSO | admin | LOGIN | Autenticado como administrador
+[26/05/2026 10:02] admin | FILTRAR_TICKETS | Filtro por prioridade
+[26/05/2026 10:02] admin | FILTRAR_TICKETS | Filtro por tipo
+[26/05/2026 10:02] admin | ORDENAR_TICKETS | Ordenacao por data
+[26/05/2026 10:02] admin | ORDENAR_TICKETS | Ordenacao por prioridade
+[26/05/2026 10:02] admin | LISTAR_CATEGORIAS | Categorias listadas
+[26/05/2026 10:02] SUCESSO | admin | CRIAR_CATEGORIA | TipoTeste
+[26/05/2026 10:02] admin | LISTAR_CATEGORIAS | Categorias listadas
+[26/05/2026 10:03] SUCESSO | admin | EDITAR_CATEGORIA | Categoria atualizada
+[26/05/2026 10:03] admin | LISTAR_CATEGORIAS | Categorias listadas
+[26/05/2026 10:06] SUCESSO | admin | CRIAR_CATEGORIA | rodirigo
+[26/05/2026 10:06] admin | LISTAR_CATEGORIAS | Categorias listadas
+[26/05/2026 10:06] SUCESSO | admin | EDITAR_CATEGORIA | Categoria atualizada
+[26/05/2026 10:06] admin | LISTAR_CATEGORIAS | Categorias listadas
+[26/05/2026 10:06] admin | LISTAR_CATEGORIAS | Categorias listadas
+[26/05/2026 10:06] SUCESSO | admin | CRIAR_CATEGORIA | asdtrfgty
+[26/05/2026 10:06] admin | LISTAR_CATEGORIAS | Categorias listadas
+[26/05/2026 10:07] SUCESSO | admin | EDITAR_CATEGORIA | Categoria atualizada
+[26/05/2026 10:07] admin | LISTAR_CATEGORIAS | Categorias listadas
+[26/05/2026 10:08] SUCESSO | admin | CRIAR_TICKET | Ticket criado para Andre
+[26/05/2026 10:08] SUCESSO | admin | EDITAR_CATEGORIA | Categoria atualizada
+[26/05/2026 10:08] admin | LOGOUT | Logout do administrador
+[26/05/2026 10:08] SISTEMA | BACKUP | Dados guardados
