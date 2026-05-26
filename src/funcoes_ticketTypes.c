@@ -122,8 +122,6 @@ int deleteTicketType(int typeId, ELEM_TICKET *headTickets) {
 
   free(temp);
 
-  puts("Tipo removido com sucesso!");
-
   return 0;
 }
 
@@ -137,7 +135,7 @@ int updateTicketType(int typeId) {
 
   while (temp != NULL) {
     if (temp->data.id == typeId) {
-      printf("ID: %d | Nome Atual: %s\n", temp->data.id, temp->data.name);
+      printf("Nome Atual: %s\n", temp->data.name);
 
       do {
         readString("Novo nome: ", temp->data.name, sizeof(temp->data.name));

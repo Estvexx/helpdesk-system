@@ -5,12 +5,14 @@
 #include <string.h>
 #include <time.h>
 
-void waitForKey() {
+void waitForKey()
+{
   puts("\nCarregue numa tecla para continuar ...");
   getchar();
 }
 
-DateTime getCurrentDateTime() {
+DateTime getCurrentDateTime()
+{
   DateTime d;
   time_t t = time(NULL);         // Converte para segundos o "t"
   struct tm *tm = localtime(&t); // converte para o tipo da data_hora do pc
@@ -23,7 +25,8 @@ DateTime getCurrentDateTime() {
 }
 
 // Retorna 1 se d1 > d2, 0 se igual, -1 se d1 < d2
-int compareDates(DateTime d1, DateTime d2) {
+int compareDates(DateTime d1, DateTime d2)
+{
   if (d1.year > d2.year)
     return 1;
   if (d1.year < d2.year)
@@ -47,8 +50,10 @@ int compareDates(DateTime d1, DateTime d2) {
   return 0;
 }
 
-void getStatus(int status, char *str) {
-  switch (status) {
+void getStatus(int status, char *str)
+{
+  switch (status)
+  {
   case STATUS_OPEN:
     strcpy(str, "Aberto");
     break;
@@ -70,8 +75,10 @@ void getStatus(int status, char *str) {
   }
 }
 
-void getPriority(int priority, char *str) {
-  switch (priority) {
+void getPriority(int priority, char *str)
+{
+  switch (priority)
+  {
   case 1:
     strcpy(str, "Baixa");
     break;
@@ -90,8 +97,10 @@ void getPriority(int priority, char *str) {
   }
 }
 
-int getSLA(int priority) {
-  switch (priority) {
+int getSLA(int priority)
+{
+  switch (priority)
+  {
   case 1:
     return 2880; // Baixa
   case 2:
@@ -105,7 +114,8 @@ int getSLA(int priority) {
   }
 }
 
-void tableHeaders() {
+void tableHeaders()
+{
   printf("\n%-5s | %-18s | %-20s | %-10s | %-18s | %6s | %-16s | %-5s\n", "ID",
          "Tipo", "Estado", "Prioridade", "Utilizador", "Tecnico",
          "Data Abertura", "SLA");
@@ -115,18 +125,22 @@ void tableHeaders() {
          "-----+------------------+-------\n");
 }
 
-int confirmDelete() {
+int confirmDelete()
+{
   puts("Confirmar remoção?");
   puts("0 - Continuar");
   puts("1 - Cancelar");
   return readIntRange("\nOpção: ", 0, 1);
 }
 
-void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTicketsTypes) {
+void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTicketsTypes)
+{
   ELEM_TICKET_TYPE *temp = headTicketsTypes;
 
-  while (temp != NULL) {
-    if (temp->data.id == typeId) {
+  while (temp != NULL)
+  {
+    if (temp->data.id == typeId)
+    {
       strcpy(str, temp->data.name);
       return;
     }
@@ -135,7 +149,8 @@ void getType(int typeId, char *str, ELEM_TICKET_TYPE *headTicketsTypes) {
   strcpy(str, "???");
 }
 
-DateTime addTimeToDateTime(DateTime dt, int hours, int minutes) {
+DateTime addTimeToDateTime(DateTime dt, int hours, int minutes)
+{
   DateTime result = dt;
 
   // EX -> Hora atual(result) = 12:30
@@ -145,23 +160,27 @@ DateTime addTimeToDateTime(DateTime dt, int hours, int minutes) {
   result.hour += hours;
 
   // Aqui enquanto for maior ou igual a 60 subtraio 60 e aumenta 1 hora
-  while (result.min >= 60) {
+  while (result.min >= 60)
+  {
     result.min -= 60;
     result.hour++;
   }
 
   // O mesmo para as horas, se tiver mais de 24h passo para o dia seguite
-  while (result.hour >= 24) {
+  while (result.hour >= 24)
+  {
     result.hour -= 24;
     result.day++;
   }
 
   // Já tá feita a logica para os meses 31/30 direitinho
-  while (result.day > daysInMonth(result.month, result.year)) {
+  while (result.day > daysInMonth(result.month, result.year))
+  {
     result.day -= daysInMonth(result.month, result.year);
     result.month++;
 
-    if (result.month > 12) {
+    if (result.month > 12)
+    {
       result.month = 1;
       result.year++;
     }
@@ -170,8 +189,10 @@ DateTime addTimeToDateTime(DateTime dt, int hours, int minutes) {
   return result;
 }
 
-int daysInMonth(int month, int year) {
-  switch (month) {
+int daysInMonth(int month, int year)
+{
+  switch (month)
+  {
   case 1:
     return 31; // janeiro
   case 2:      // fevereiro - verificar ano bissexto
@@ -204,25 +225,31 @@ int daysInMonth(int month, int year) {
   }
 }
 
-void cleanAllLists() {
+void cleanAllLists()
+{
   cleanupIntermediateTickets();
   cleanupIntermediateTicketsTypes();
   cleanupIntermediateUsers();
 }
 
-int calculateHoursMinutes(DateTime startDate, DateTime endDate) {
+int calculateHoursMinutes(DateTime startDate, DateTime endDate)
+{
   int minutesToRemove = ((24 - startDate.hour) + endDate.hour) * 60;
   int minuteDifference = startDate.min - endDate.min;
-  if (minuteDifference < 0) {
+  if (minuteDifference < 0)
+  {
     minuteDifference = abs(minuteDifference);
     minutesToRemove += minuteDifference;
-  } else {
+  }
+  else
+  {
     minutesToRemove -= minuteDifference;
   }
   return minutesToRemove;
 }
 
-long calculateDaysMinutes(DateTime startDate, DateTime endDate) {
+long calculateDaysMinutes(DateTime startDate, DateTime endDate)
+{
   long totalMinutes = 0;
   int remainingMonthDays =
       daysInMonth(startDate.month, startDate.year) - startDate.day - 1;
@@ -232,7 +259,8 @@ long calculateDaysMinutes(DateTime startDate, DateTime endDate) {
   return totalMinutes;
 }
 
-long differenceInMinutes(DateTime startDate, DateTime endDate) {
+long differenceInMinutes(DateTime startDate, DateTime endDate)
+{
   long totalMinutes = 0;
 
   // Caso Base -> Datas iguais retorna logo 0
@@ -243,23 +271,27 @@ long differenceInMinutes(DateTime startDate, DateTime endDate) {
 
   // Segundo caso -> Exatamente o mesmo dia porem em horas diferentes
   if (startDate.year == endDate.year && startDate.month == endDate.month &&
-      startDate.day == endDate.day) {
+      startDate.day == endDate.day)
+  {
     return ((endDate.hour - startDate.hour) * 60) +
            (endDate.min - startDate.min);
   }
 
   // Terceiro Caso -> Exatamente mesmo ano/mes porem dias e horas diferentes
-  if (startDate.year == endDate.year && startDate.month == endDate.month) {
+  if (startDate.year == endDate.year && startDate.month == endDate.month)
+  {
     int minutesToRemove = calculateHoursMinutes(startDate, endDate);
     minutesToRemove += (endDate.day - startDate.day - 1) * 24 * 60;
     return minutesToRemove;
   }
 
   // Quarto Caso -> Mesmo ano mas mes diferente
-  if (startDate.year == endDate.year) {
+  if (startDate.year == endDate.year)
+  {
     totalMinutes += calculateHoursMinutes(startDate, endDate);
     totalMinutes += calculateDaysMinutes(startDate, endDate);
-    for (int month = startDate.month + 1; month < endDate.month; month++) {
+    for (int month = startDate.month + 1; month < endDate.month; month++)
+    {
       totalMinutes += (long)daysInMonth(month, startDate.year) * 24 * 60;
     }
     return totalMinutes;
@@ -268,13 +300,16 @@ long differenceInMinutes(DateTime startDate, DateTime endDate) {
   // Quinto Caso -> Anos diferentes
   totalMinutes += calculateHoursMinutes(startDate, endDate);
   totalMinutes += calculateDaysMinutes(startDate, endDate);
-  for (int month = startDate.month + 1; month <= 12; month++) {
+  for (int month = startDate.month + 1; month <= 12; month++)
+  {
     totalMinutes += (long)daysInMonth(month, startDate.year) * 24 * 60;
   }
-  for (int month = 1; month < endDate.month; month++) {
+  for (int month = 1; month < endDate.month; month++)
+  {
     totalMinutes += (long)daysInMonth(month, endDate.year) * 24 * 60;
   }
-  for (int year = startDate.year + 1; year < endDate.year; year++) {
+  for (int year = startDate.year + 1; year < endDate.year; year++)
+  {
     int daysInYear =
         ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) ? 366 : 365;
     totalMinutes += (long)daysInYear * 24 * 60;

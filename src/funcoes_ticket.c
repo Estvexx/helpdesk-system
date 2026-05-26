@@ -1176,6 +1176,7 @@ void printAlertsSLA() {
   int found = 0;
 
   while (fread(&temp, sizeof(TICKET_INFO), 1, fp) == 1) {
+    puts("Tickets que excederam o SLA\n");
     printInfoFormatTable(temp);
     found = 1;
   }
