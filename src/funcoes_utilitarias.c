@@ -1,9 +1,9 @@
 #include "funcoes.h"
 #include "input/input.h"
 #include <stdio.h>
-#include <string.h>
-#include <time.h>  
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 void waitForKey() {
   puts("\nCarregue numa tecla para continuar ...");
@@ -12,15 +12,16 @@ void waitForKey() {
 
 DateTime getCurrentDateTime() {
   DateTime d;
-  time_t t = time(NULL);
-  struct tm *tm = localtime(&t);
-  d.day = tm->tm_mday;
-  d.month = tm->tm_mon + 1;
-  d.year = tm->tm_year + 1900;
-  d.hour = tm->tm_hour;
-  d.min = tm->tm_min;
+  time_t t = time(NULL);         // Converte para segundos o "t"
+  struct tm *tm = localtime(&t); // converte para o tipo da data_hora do pc
+  d.day = tm->tm_mday;           // Extrai o dia do mês (1-31)
+  d.month = tm->tm_mon + 1;      // Extrai o mês (0-11)
+  d.year = tm->tm_year + 1900;   // Extrai o ano (desde 1900)
+  d.hour = tm->tm_hour;          // Extrai a hora (0-23) da estrutura tm
+  d.min = tm->tm_min;            // Extrai os minutos (0-59)
   return d;
 }
+
 // Retorna 1 se d1 > d2, 0 se igual, -1 se d1 < d2
 int compareDates(DateTime d1, DateTime d2) {
   if (d1.year > d2.year)
@@ -161,8 +162,8 @@ DateTime addTimeToDateTime(DateTime dt, int hours, int minutes) {
     result.month++;
 
     if (result.month > 12) {
-        result.month = 1;
-        result.year++;
+      result.month = 1;
+      result.year++;
     }
   }
 

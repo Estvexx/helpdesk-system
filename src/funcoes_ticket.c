@@ -51,11 +51,12 @@ int createTicket(TICKET_INFO ticket) {
   new->data.technicianId = -1; // deixar -1 porque nao tem tecnico associado
   new->data.status = STATUS_OPEN;
   new->data.openedAt = getCurrentDateTime();
-  new->data.closedAt.day = 0;
+  /* new->data.closedAt.day = 0;
   new->data.closedAt.month = 0;
   new->data.closedAt.year = 0;
   new->data.closedAt.hour = 0;
-  new->data.closedAt.min = 0;
+  new->data.closedAt.min = 0; */
+  new->data.closedAt = (DateTime){0};
   new->data.estimatedConclusion = (DateTime){0};
   strcpy(new->data.actions, "");
   strcpy(new->data.tools, "");
@@ -1319,8 +1320,10 @@ int createPeriodicReports() {
   DateTime currentDate;
   currentDate = getCurrentDateTime();
 
-  snprintf(fileName, sizeof(fileName), REPORTS_PATH "Relatorio_Periodico_%02d-%02d-%04d.txt", currentDate.day, currentDate.month, currentDate.year);
-  
+  snprintf(fileName, sizeof(fileName),
+           REPORTS_PATH "Relatorio_Periodico_%02d-%02d-%04d.txt",
+           currentDate.day, currentDate.month, currentDate.year);
+
   FILE *fp = fopen(fileName, "w");
   if (fp == NULL) {
     puts("Erro ao criar ficheiro de relatorio periodico");
